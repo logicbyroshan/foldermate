@@ -99,3 +99,35 @@ Testing performed:
 Important decisions:
 - PowerShell `Set-Content` without explicit `-Encoding UTF8` corrupts Unicode bullet characters; always use `-Encoding UTF8 -NoNewline` or avoid Set-Content for source files.
 - The `StatCard` component with `useAnimatedCount` hook (no external lib) was chosen over a library approach to keep the bundle lean.
+
+## 2026-09-17 — PR #15 & #16: Standalone Neo-Brutalist Landing Page
+Task: Build and polish a standalone, self-contained landing page for FolderMate at `apps/landing` inspired by trypixie.io neo-brutalist aesthetic with deep mobile responsiveness, reviews, blogs, and interactive key generator.
+Reason: Users needed a public web showcase and download portal completely separate from the desktop app and backend daemon.
+Files/areas affected:
+- `apps/landing/` (all files: `App.tsx`, `index.css`, `main.tsx`, `vite.config.ts`, `package.json`, `index.html`)
+- `apps/landing/src/components/Navbar.tsx`
+- `apps/landing/src/components/Hero.tsx`
+- `apps/landing/src/components/OdometerCounter.tsx`
+- `apps/landing/src/components/TrustedBy.tsx`
+- `apps/landing/src/components/FeatureGrid.tsx`
+- `apps/landing/src/components/SplitFeature.tsx`
+- `apps/landing/src/components/BenefitsSection.tsx`
+- `apps/landing/src/components/ReviewsSection.tsx`
+- `apps/landing/src/components/BlogSection.tsx`
+- `apps/landing/src/components/CtaBanner.tsx`
+- `apps/landing/src/components/FaqSection.tsx`
+- `apps/landing/src/components/Footer.tsx`
+- `package.json`
+What changed:
+- Built complete standalone React + Vite + Vanilla CSS app running at `http://localhost:5200`.
+- Applied trypixie.io neo-brutalist design system: warm cream `#EDEAE0`, vanilla `#EDE7D1`, amber `#E89B00`, solid 2px black borders, drop shadows (`4px 4px 0 #1a1a1a`), serif display headlines (`DM Serif Display`), pill badges.
+- Guaranteed single-line hero highlight (`organized — automatically.`) with `white-space: nowrap` and responsive clamp sizing.
+- Added responsive mobile navigation drawer with hamburger toggle button (`☰` / `✕`).
+- Added Reviews/Testimonials section with 6 verified reviews, star ratings, and community score summary card.
+- Added Workflow Guides & Blog section with 3 article cards.
+- Added interactive 3-task activation key generator with progress bar and copy-to-clipboard functionality.
+Testing performed:
+- `npm run build --workspace=apps/landing` succeeded with 0 errors.
+- End-to-end browser subagent verification on Desktop (1440x900) and Mobile (390x844).
+Important decisions:
+- The landing page is kept in `apps/landing` as an independent workspace, with zero runtime dependencies on the engine or database packages.

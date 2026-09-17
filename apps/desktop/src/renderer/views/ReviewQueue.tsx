@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { CheckCircle, ArrowRight, FileQuestion } from "lucide-react";
+import { CheckCircle, ArrowRight, FileQuestion, Plus, Sparkles, UserPlus } from "lucide-react";
 import { Card } from "../components/ui/Card.js";
 import { Badge } from "../components/ui/Badge.js";
 import { Button } from "../components/ui/Button.js";
 import { Select } from "../components/ui/Select.js";
+import { Input } from "../components/ui/Input.js";
+import { Modal } from "../components/ui/Modal.js";
 import { EmptyState } from "../components/ui/EmptyState.js";
+import { FolderColorPicker } from "../components/ui/FolderColorPicker.js";
 import { useToast } from "../components/ui/Toast.js";
 
 export const ReviewQueue: React.FC = () => {
@@ -16,6 +19,14 @@ export const ReviewQueue: React.FC = () => {
   const [selectedProjectMap, setSelectedProjectMap] = useState<Record<string, string>>({});
   const [learnAliasMap, setLearnAliasMap] = useState<Record<string, boolean>>({});
   const [isResolving, setIsResolving] = useState<string | null>(null);
+
+  // Quick Client Creation Modal State
+  const [showAddClientModal, setShowAddClientModal] = useState(false);
+  const [activeReviewItemId, setActiveReviewItemId] = useState<string | null>(null);
+  const [newClientName, setNewClientName] = useState("");
+  const [newClientCode, setNewClientCode] = useState("");
+  const [newClientColor, setNewClientColor] = useState("Amber");
+  const [isCreatingClient, setIsCreatingClient] = useState(false);
 
   const loadData = async () => {
     try {
@@ -34,8 +45,12 @@ export const ReviewQueue: React.FC = () => {
         const lMap: Record<string, boolean> = {};
 
         for (const item of queueRes || []) {
-          if (item.proposedClientId) cMap[item.id] = item.proposedClientId;
-          if (item.proposedProjectId) pMap[item.id] = item.proposedProjectId;
+          if (item.proposedClientId || item.suggestedClientId) {
+            cMap[item.id] = item.proposedClientId || item.suggestedClientId;
+          }
+          if (item.proposedProjectId) {
+            pMap[item.id] = item.proposedProjectId;
+          }
           lMap[item.id] = true;
         }
 
@@ -45,6 +60,44 @@ export const ReviewQueue: React.FC = () => {
       }
     } catch (err) {
       console.error("Failed to load review queue:", err);
+    }
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const handleQuickAddClient = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newClientName.trim()) return;
+
+    setIsCreatingClient(true);
+    try {
+      if ((window as any).foldermate) {
+        const createdClient = await (window as any).foldermate.call("clients.create", {
+          name: newClientName.trim(),
+          code: newClientCode.trim() || newClientName.replace(/\s+/g, "").toUpperCase().slice(0, 6),
+          color: newClientColor,
+          initialProjectName: "Design Deliverable",
+          initialProjectCategory: "Design",
+          initialProjectYear: new Date().getFullYear(),
+        });
+
+        showToast(`Created client "${newClientName}" with initial project subfolder`, "success");
+        await loadData();
+
+        if (activeReviewItemId && createdClient?.id) {
+          setSelectedClientMap((prev) => ({ ...prev, [activeReviewItemId]: createdClient.id }));
+        }
+
+        setNewClientName("");
+        setNewClientCode("");
+        setShowAddClientModal(false);
+      }
+    } catch (err: any) {
+      showToast(err.message || "Failed to create client", "error");
+    } finally {
+      setIsCreatingClient(false);
     }
   };
 
@@ -232,8 +285,29 @@ export const ReviewQueue: React.FC = () => {
                       padding: "8px 10px 10px",
                     }}
                   >
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
+                      <span style={{ fontSize: 11, fontWeight: 600, color: "var(--text-secondary)" }}>Assign Client:</span>
+                      <button
+                        onClick={() => {
+                          setActiveReviewItemId(item.id);
+                          setShowAddClientModal(true);
+                        }}
+                        style={{
+                          background: "none",
+                          border: "none",
+                          color: "var(--accent-amber)",
+                          fontSize: 10,
+                          fontWeight: 600,
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 2,
+                        }}
+                      >
+                        <Plus size={11} /> New Client
+                      </button>
+                    </div>
                     <Select
-                      label="Assign Client:"
                       value={selectedClientMap[item.id] || ""}
                       onChange={(val) => setSelectedClientMap({ ...selectedClientMap, [item.id]: val })}
                       options={[
@@ -307,6 +381,53 @@ export const ReviewQueue: React.FC = () => {
           })}
         </div>
       )}
+
+      {/* Quick Add Client Modal */}
+      <Modal
+        isOpen={showAddClientModal}
+        onClose={() => setShowAddClientModal(false)}
+        title="Quick Add New Client"
+        description="Add a new client on the fly and immediately assign to this review queue file."
+      >
+        <form onSubmit={handleQuickAddClient} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          <Input
+            label="CLIENT NAME"
+            value={newClientName}
+            onChange={(e) => {
+              setNewClientName(e.target.value);
+              if (!newClientCode) {
+                setNewClientCode(e.target.value.replace(/\s+/g, "").toUpperCase().slice(0, 6));
+              }
+            }}
+            placeholder="e.g. Horizon Builders"
+            autoFocus
+            required
+          />
+
+          <Input
+            label="CLIENT SHORT CODE"
+            value={newClientCode}
+            onChange={(e) => setNewClientCode(e.target.value.toUpperCase())}
+            placeholder="e.g. HORIZON"
+          />
+
+          <div>
+            <label style={{ fontSize: 11, fontWeight: 600, color: "var(--text-secondary)", display: "block", marginBottom: 6 }}>
+              WINDOWS EXPLORER FOLDER COLOR
+            </label>
+            <FolderColorPicker selectedColor={newClientColor} onSelectColor={setNewClientColor} />
+          </div>
+
+          <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 8 }}>
+            <Button variant="secondary" size="md" onClick={() => setShowAddClientModal(false)}>
+              Cancel
+            </Button>
+            <Button variant="primary" size="md" isLoading={isCreatingClient}>
+              Create & Assign Client
+            </Button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 };

@@ -53,6 +53,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         flexDirection: "column",
         justifyContent: "space-between",
         padding: "12px 8px 10px",
+        position: "relative",
       }}
     >
       <div>
@@ -107,24 +108,36 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   alignItems: "center",
                   justifyContent: "space-between",
                   padding: "7px 9px",
-                  borderRadius: "2px",
+                  borderRadius: "var(--radius-sm)",
                   border: "none",
                   cursor: "pointer",
-                  backgroundColor: isActive ? "var(--accent-amber-subtle)" : "transparent",
+                  backgroundColor: isActive ? "rgba(247,199,29,0.10)" : "transparent",
                   color: isActive ? "var(--accent-amber-text)" : "var(--text-secondary)",
-                  fontWeight: isActive ? 600 : 500,
+                  fontWeight: isActive ? 700 : 500,
                   fontSize: 13,
-                  transition: "all 0.12s ease-in-out",
+                  transition: "all 0.14s cubic-bezier(0.16, 1, 0.3, 1)",
                   textAlign: "left",
                   outline: "none",
+                  position: "relative",
+                  overflow: "hidden",
                 }}
                 onMouseEnter={(e) => {
                   if (!isActive) e.currentTarget.style.backgroundColor = "var(--bg-hover)";
+                  if (!isActive) e.currentTarget.style.color = "var(--text-primary)";
                 }}
                 onMouseLeave={(e) => {
                   if (!isActive) e.currentTarget.style.backgroundColor = "transparent";
+                  if (!isActive) e.currentTarget.style.color = "var(--text-secondary)";
                 }}
               >
+                {/* Active left accent bar */}
+                {isActive && (
+                  <div style={{
+                    position: "absolute", left: 0, top: "20%", bottom: "20%",
+                    width: 2, borderRadius: 2,
+                    background: "linear-gradient(180deg, var(--brand-primary), var(--brand-secondary))",
+                  }} />
+                )}
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   <Icon size={17} color={isActive ? "var(--accent-amber)" : "currentColor"} />
                   <span>{item.label}</span>

@@ -191,8 +191,31 @@ export const Rules: React.FC = () => {
               value={namingTemplate}
               onChange={(e) => setNamingTemplate(e.target.value)}
               className="mono-font"
-              style={{ marginBottom: 12 }}
+              style={{ marginBottom: 8 }}
             />
+
+            {/* Quick Token Pills */}
+            <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 12 }}>
+              <span style={{ fontSize: 11, color: "var(--text-muted)", alignSelf: "center" }}>Insert Token:</span>
+              {["{Client}", "{ClientCode}", "{Project}", "{ProjectCode}", "{Year}", "{Version}", "{Month}"].map((token) => (
+                <button
+                  key={token}
+                  onClick={() => setNamingTemplate((prev) => `${prev} ${token}`.trim())}
+                  style={{
+                    padding: "3px 8px",
+                    borderRadius: "var(--radius-sm)",
+                    backgroundColor: "var(--bg-elevated)",
+                    border: "1px solid var(--border-subtle)",
+                    color: "var(--accent-amber-text)",
+                    fontSize: 11,
+                    fontWeight: 600,
+                    cursor: "pointer",
+                  }}
+                >
+                  + {token}
+                </button>
+              ))}
+            </div>
 
             <div
               style={{

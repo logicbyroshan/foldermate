@@ -425,6 +425,88 @@ export function setupBrowserMockBridge() {
         case "system.triggerScan":
           return { status: "OK", scannedFiles: 0, newFilesOrganized: 0 };
 
+        case "system.simulateIngest": {
+          const rawName = (payload?.filename || "Sample file.cdr").trim();
+          const ext = rawName.split(".").pop()?.toLowerCase() || "cdr";
+          const lower = rawName.toLowerCase();
+
+          // Check if matches any existing client
+          let matchedClient = clients.find(
+            (c) =>
+              lower.includes(c.name.toLowerCase()) ||
+              lower.includes(c.code.toLowerCase()) ||
+              c.aliases.some((a) => lower.includes(a.toLowerCase()))
+          );
+
+          if (matchedClient) {
+            const yearMatch = rawName.match(/\b(202[0-9])\b/);
+            const year = yearMatch ? Number(yearMatch[1]) : 2026;
+            const versionMatch = rawName.match(/\bv?([0-9]+)\b/i);
+            const ver = versionMatch ? Number(versionMatch[1]) : 1;
+            const category = lower.includes("card") ? "ID Card" : lower.includes("sign") ? "Signage" : lower.includes("magazine") ? "Publication" : "Design";
+
+            const newFile = {
+              id: `file-${Date.now()}`,
+              clientId: matchedClient.id,
+              projectId: `proj-sim-${Date.now()}`,
+              filename: `${matchedClient.name} ${category} ${year} v${ver}.${ext}`,
+              originalName: rawName,
+              currentName: `${matchedClient.name} ${category} ${year} v${ver}.${ext}`,
+              path: `${settings.storage.organizationRoot}\\${matchedClient.name}\\${year}\\${category}\\${matchedClient.name} ${category} ${year} v${ver}.${ext}`,
+              currentPath: `${settings.storage.organizationRoot}\\${matchedClient.name}\\${year}\\${category}\\${matchedClient.name} ${category} ${year} v${ver}.${ext}`,
+              extension: ext,
+              fileSizeBytes: payload?.sizeBytes || 18500000,
+              sizeBytes: payload?.sizeBytes || 18500000,
+              version: ver,
+              versionNumber: ver,
+              status: "ORGANIZED",
+              classificationConfidence: 0.96,
+              clientName: matchedClient.name,
+              projectName: `${category} Project`,
+              category: category,
+              categoryName: category,
+              year: year,
+              sha256Hash: "b6c97a5f3d2e1048491827461928471928374619283746192837461928374619",
+              versionChain: [
+                { version: ver, name: `${matchedClient.name} ${category} ${year} v${ver}.${ext}`, date: "Just now", isCurrent: true },
+              ],
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+            };
+
+            files.unshift(newFile);
+            listeners.forEach((cb) => cb({ eventType: "FILE_ORGANIZED", file: newFile }));
+            return { outcome: "ORGANIZED", file: newFile };
+          } else {
+            // Low confidence -> Review Queue
+            const newItem = {
+              id: `review-${Date.now()}`,
+              filePath: `C:\\FolderMate\\Inbox\\${rawName}`,
+              originalName: rawName,
+              originalPath: `C:\\FolderMate\\Inbox\\${rawName}`,
+              reason: "Unrecognized client name in filename",
+              reasons: ["No confident client alias match found in local database", "Confidence score 0.45 below threshold (0.85)"],
+              suggestedClientId: clients[0]?.id,
+              suggestedClientName: clients[0]?.name,
+              suggestedProjectName: "General Deliverable",
+              suggestedCategory: "Design",
+              suggestedYear: 2026,
+              suggestedVersion: 1,
+              suggestedConfidence: 0.45,
+              confidenceScore: 0.45,
+              detectedMetadata: {
+                extension: ext,
+                sizeBytes: payload?.sizeBytes || 8400000,
+              },
+              createdAt: new Date().toISOString(),
+            };
+
+            reviewQueue.unshift(newItem);
+            listeners.forEach((cb) => cb({ eventType: "REVIEW_REQUIRED", item: newItem }));
+            return { outcome: "REVIEW_REQUIRED", item: newItem };
+          }
+        }
+
         case "files.list": {
           let res = [...files];
           if (payload?.clientId) {

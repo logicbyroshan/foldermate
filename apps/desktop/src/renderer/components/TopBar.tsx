@@ -27,15 +27,17 @@ export const TopBar: React.FC<TopBarProps> = ({
   return (
     <header
       style={{
-        height: 56,
+        height: 54,
         borderBottom: "1px solid var(--border-subtle)",
-        backgroundColor: "rgba(15, 23, 42, 0.6)",
-        backdropFilter: "blur(12px)",
+        background: "linear-gradient(180deg, rgba(13,19,34,0.85) 0%, rgba(7,9,15,0.7) 100%)",
+        backdropFilter: "blur(20px) saturate(180%)",
+        WebkitBackdropFilter: "blur(20px) saturate(180%)",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
         padding: "0 18px",
         userSelect: "none",
+        flexShrink: 0,
       }}
     >
       {/* Search Bar Trigger */}
@@ -45,15 +47,16 @@ export const TopBar: React.FC<TopBarProps> = ({
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          backgroundColor: "var(--bg-surface)",
+          backgroundColor: "rgba(7,9,15,0.6)",
           border: "1px solid var(--border-subtle)",
           padding: "6px 12px",
-          borderRadius: "var(--radius-sm)",
+          borderRadius: "var(--radius-md)",
           cursor: "pointer",
-          width: 320,
+          width: 340,
           color: "var(--text-muted)",
           fontSize: 12,
-          transition: "border-color 0.15s ease",
+          transition: "all 0.15s ease",
+          backdropFilter: "blur(8px)",
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.borderColor = "var(--border-medium)";

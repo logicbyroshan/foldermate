@@ -176,7 +176,7 @@ kbd {
   border-right: 1px solid var(--border-subtle);
   display: flex;
   flex-direction: column;
-  justifyContent: space-between;
+  justify-content: space-between;
   padding: 12px 10px 10px;
   user-select: none;
 }

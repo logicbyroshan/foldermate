@@ -49,3 +49,34 @@ Testing performed:
 Important decisions:
 - The app identity should be visually consistent across window chrome, tray, browser favicon, and packaged installer icon.
 - Production asset generation should be kept in tracked app resources rather than left as temporary local files.
+
+## 2026-09-17
+### Onboarding & Free Community Activation Key System
+Task: Implement a step-by-step onboarding wizard, free 3-task community key generator (GitHub, Blog comments, LinkedIn, X/Twitter), and Sponsor/Superchat VIP universal key support.
+Reason: The application is open-source and offline-first; users needed an engaging onboarding experience and an activation mechanism that promotes community engagement and provides direct sponsor perks.
+Files/areas affected:
+- `packages/shared/src/types.ts`
+- `apps/desktop/src/renderer/utils/license-validator.ts`
+- `apps/desktop/src/renderer/components/ActivationModal.tsx`
+- `apps/desktop/src/renderer/App.tsx`
+- `apps/desktop/src/renderer/components/Sidebar.tsx`
+- `apps/desktop/src/renderer/components/TopBar.tsx`
+- `apps/desktop/src/renderer/views/Settings.tsx`
+- `apps/desktop/src/renderer/mock-bridge.ts`
+- `apps/desktop/vite.config.ts`
+- `package.json`
+- `tests/license-validator.test.ts`
+What changed:
+- Created offline cryptographic license validator and key generator supporting Community, Sponsor, and Lifetime VIP keys.
+- Built a multi-step modal (`ActivationModal.tsx`) with product value tour, choice selection, interactive task checklist with live progress tracking, key generation, and validation.
+- Integrated license state into `Sidebar`, `TopBar`, and `Settings`.
+- Updated browser mock RPC bridge to support persistent license operations in standalone web dev mode.
+- Added unit tests in `tests/license-validator.test.ts` (all 39 tests passing).
+Testing performed:
+- Vitest automated test suite: `npm test` (13 test files, 39 tests passed).
+- Vite renderer build: `npm run build:renderer --workspace=apps/desktop`.
+- End-to-end browser subagent verification on `http://localhost:5188` verifying full activation flow, task completion, key generation, dashboard unlock, and settings integration.
+Important decisions:
+- The key validation algorithm is 100% offline-first using HMAC checksums to ensure zero cloud dependency or telemetry.
+- Community keys are single-use per device, while Sponsor keys provide reusable lifetime VIP perks.
+

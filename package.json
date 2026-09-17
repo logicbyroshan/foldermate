@@ -13,6 +13,7 @@
     "dev": "npm run dev --workspaces --if-present",
     "dev:engine": "npm run dev --workspace=apps/engine",
     "dev:desktop": "npm run dev --workspace=apps/desktop",
+    "dev:browser": "npm run dev --workspace=apps/desktop",
     "build": "npm run build --workspaces --if-present",
     "build:bridge": "dotnet build bridges/coreldraw-bridge -c Release",
     "test": "vitest run",

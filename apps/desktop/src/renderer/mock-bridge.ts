@@ -339,6 +339,24 @@ export function setupBrowserMockBridge() {
     },
   };
 
+  let licenseStatus = (() => {
+    try {
+      const saved = localStorage.getItem("foldermate_license");
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    return {
+      isActivated: false,
+      licenseType: "TRIAL",
+      features: {
+        unlimitedOrganize: true,
+        folderCustomization: true,
+        versionLineage: true,
+        corelDrawBridge: true,
+        priorityUpdates: false,
+      },
+    };
+  })();
+
   const listeners: Array<(event: any) => void> = [];
 
   (window as any).foldermate = {
@@ -346,6 +364,50 @@ export function setupBrowserMockBridge() {
       console.log(`[Browser Mock RPC] ${method}`, payload);
 
       switch (method) {
+        case "system.getLicenseStatus":
+          return licenseStatus;
+
+        case "system.activateLicense": {
+          const type = payload?.licenseType || "COMMUNITY";
+          licenseStatus = {
+            isActivated: true,
+            licenseType: type,
+            key: payload?.key || "FM-COMMUNITY-MOCK-KEY",
+            activatedAt: new Date().toISOString(),
+            sponsorTier: type === "VIP" ? "Universal Lifetime VIP" : type === "SPONSOR" ? "Project Sponsor" : "Community License",
+            donorName: payload?.donorName || undefined,
+            features: {
+              unlimitedOrganize: true,
+              folderCustomization: true,
+              versionLineage: true,
+              corelDrawBridge: true,
+              priorityUpdates: type === "SPONSOR" || type === "VIP",
+            },
+          };
+          try {
+            localStorage.setItem("foldermate_license", JSON.stringify(licenseStatus));
+          } catch {}
+          return licenseStatus;
+        }
+
+        case "system.resetLicense": {
+          licenseStatus = {
+            isActivated: false,
+            licenseType: "TRIAL",
+            features: {
+              unlimitedOrganize: true,
+              folderCustomization: true,
+              versionLineage: true,
+              corelDrawBridge: true,
+              priorityUpdates: false,
+            },
+          };
+          try {
+            localStorage.removeItem("foldermate_license");
+          } catch {}
+          return licenseStatus;
+        }
+
         case "system.getStatus":
           return {
             status: "RUNNING",
@@ -357,6 +419,7 @@ export function setupBrowserMockBridge() {
             totalOrganized: files.length + 144,
             activeRulesCount: folderRules.filter((r) => r.isActive).length,
             memoryUsageMB: 31.4,
+            license: licenseStatus,
           };
 
         case "system.triggerScan":

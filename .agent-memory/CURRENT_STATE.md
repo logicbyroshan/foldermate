@@ -17,6 +17,7 @@ Major implementation areas are present:
 - Classification pipeline, versioning, and review queue logic exist.
 - IPC auth handshake and RPC dispatch are implemented.
 - Desktop shell and renderer infrastructure are present.
+- Multi-step Onboarding, Free Community Tasks Key Generator, and Supporter VIP Activation system implemented.
 - Documentation and ADRs are included in the repo.
 
 ## Work in progress / active risks
@@ -33,3 +34,5 @@ Major implementation areas are present:
 ## Recent important changes
 - Initial bootstrap documentation and persistent project memory system were created.
 - Added the branded desktop shell assets, theme palette, and app icon/favicons for the production-ready app identity.
+- Built the interactive Onboarding Wizard with Free Community Tasks (Star repo, comment on blog, follow LinkedIn/X), offline cryptographic key validation, and Supporter/Sponsor lifetime VIP key portals.
+

@@ -1,7 +1,9 @@
 import React from "react";
-import { Search, Play, FolderOpen } from "lucide-react";
+import { Search, Play, FolderOpen, Heart, Star, ShieldCheck, Key } from "lucide-react";
 import { CorelStatusWidget } from "./CorelStatusWidget.js";
 import { Button } from "./ui/Button.js";
+import { Badge } from "./ui/Badge.js";
+import { LicenseStatus } from "@foldermate/shared";
 
 interface TopBarProps {
   onSearchFocus: () => void;
@@ -9,6 +11,8 @@ interface TopBarProps {
   onOpenInbox: () => void;
   onOpenStorage: () => void;
   onOpenCommandPalette: () => void;
+  licenseStatus?: LicenseStatus | null;
+  onOpenActivation?: () => void;
 }
 
 export const TopBar: React.FC<TopBarProps> = ({
@@ -17,6 +21,8 @@ export const TopBar: React.FC<TopBarProps> = ({
   onOpenInbox,
   onOpenStorage,
   onOpenCommandPalette,
+  licenseStatus,
+  onOpenActivation,
 }) => {
   return (
     <header
@@ -77,7 +83,68 @@ export const TopBar: React.FC<TopBarProps> = ({
       </div>
 
       {/* Center / Right Integrations & Action Buttons */}
-      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        {/* Supporter / License Badge */}
+        {licenseStatus && (
+          <button
+            onClick={onOpenActivation}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+              padding: "4px 10px",
+              borderRadius: "var(--radius-sm)",
+              border: `1px solid ${
+                licenseStatus.isActivated
+                  ? licenseStatus.licenseType === "VIP" || licenseStatus.licenseType === "SPONSOR"
+                    ? "var(--border-focus)"
+                    : "rgba(16, 185, 129, 0.3)"
+                  : "rgba(239, 68, 68, 0.35)"
+              }`,
+              backgroundColor: licenseStatus.isActivated
+                ? licenseStatus.licenseType === "VIP" || licenseStatus.licenseType === "SPONSOR"
+                  ? "var(--accent-amber-subtle)"
+                  : "rgba(16, 185, 129, 0.08)"
+                : "rgba(239, 68, 68, 0.1)",
+              color: licenseStatus.isActivated
+                ? licenseStatus.licenseType === "VIP" || licenseStatus.licenseType === "SPONSOR"
+                  ? "var(--accent-amber-text)"
+                  : "var(--status-success-text)"
+                : "var(--status-danger-text)",
+              fontSize: 11,
+              fontWeight: 600,
+              cursor: "pointer",
+              transition: "all 0.15s ease",
+              outline: "none",
+            }}
+            title={licenseStatus.isActivated ? "Click to view license & supporter details" : "Click to activate FolderMate"}
+          >
+            {licenseStatus.isActivated ? (
+              licenseStatus.licenseType === "VIP" ? (
+                <>
+                  <Star size={12} color="var(--accent-amber)" fill="var(--accent-amber)" />
+                  <span>VIP Patron</span>
+                </>
+              ) : licenseStatus.licenseType === "SPONSOR" ? (
+                <>
+                  <Heart size={12} color="#f43f5e" fill="#f43f5e" />
+                  <span>Sponsor Supporter</span>
+                </>
+              ) : (
+                <>
+                  <ShieldCheck size={12} color="var(--status-success)" />
+                  <span>Community Active</span>
+                </>
+              )
+            ) : (
+              <>
+                <Key size={12} color="var(--status-danger)" />
+                <span>Activate License</span>
+              </>
+            )}
+          </button>
+        )}
+
         <CorelStatusWidget />
 
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>

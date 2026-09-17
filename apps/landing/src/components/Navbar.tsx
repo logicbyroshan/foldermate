@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 10);
@@ -9,42 +10,108 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handler);
   }, []);
 
+  const closeMenu = () => setMobileMenuOpen(false);
+
   return (
-    <nav className="navbar" style={{ boxShadow: scrolled ? '0 2px 0 #1a1a1a' : undefined }}>
+    <nav className="navbar" style={{ boxShadow: scrolled ? '0 3px 0 #1a1a1a' : undefined }}>
       <div className="navbar-inner">
         {/* Logo */}
-        <a href="#" className="navbar-logo">
+        <a href="#" className="navbar-logo" onClick={closeMenu}>
           <div className="navbar-logo-icon">📁</div>
-          FolderMate
+          <span className="navbar-brand-name">FolderMate</span>
         </a>
 
-        {/* Nav links */}
+        {/* Desktop Nav links */}
         <ul className="navbar-links">
           <li><a href="#features">Features</a></li>
           <li><a href="#how-it-works">How It Works</a></li>
+          <li><a href="#reviews">Reviews</a></li>
+          <li><a href="#blog">Guides</a></li>
           <li><a href="#faq">FAQ</a></li>
           <li>
-            <a href="https://github.com/logicbyroshan/foldermate" target="_blank" rel="noreferrer">
-              GitHub
+            <a
+              href="https://github.com/logicbyroshan/foldermate"
+              target="_blank"
+              rel="noreferrer"
+              className="navbar-ext-link"
+            >
+              GitHub ↗
             </a>
           </li>
         </ul>
 
-        {/* Actions */}
+        {/* Desktop Actions */}
         <div className="navbar-actions">
           <a
             href="https://github.com/logicbyroshan/foldermate"
             target="_blank"
             rel="noreferrer"
-            className="btn btn-outline btn-outline-sm"
+            className="btn btn-outline btn-outline-sm desktop-only"
           >
             ⭐ Star on GitHub
           </a>
-          <a href="#download" className="btn btn-primary" style={{ padding: '9px 20px', fontSize: '0.78rem' }}>
+          <a
+            href="#download"
+            className="btn btn-primary btn-outline-sm"
+          >
             FREE DOWNLOAD
           </a>
+
+          {/* Mobile Menu Hamburger Toggle */}
+          <button
+            type="button"
+            className="mobile-menu-toggle"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle navigation menu"
+            aria-expanded={mobileMenuOpen}
+          >
+            {mobileMenuOpen ? '✕' : '☰'}
+          </button>
         </div>
       </div>
+
+      {/* Mobile Drawer Menu */}
+      {mobileMenuOpen && (
+        <div className="mobile-drawer">
+          <ul className="mobile-drawer-links">
+            <li><a href="#features" onClick={closeMenu}>⚡ Features</a></li>
+            <li><a href="#how-it-works" onClick={closeMenu}>🔄 How It Works</a></li>
+            <li><a href="#reviews" onClick={closeMenu}>⭐ Reviews & Ratings</a></li>
+            <li><a href="#blog" onClick={closeMenu}>📚 Guides & Blog</a></li>
+            <li><a href="#faq" onClick={closeMenu}>❓ FAQ</a></li>
+            <li>
+              <a
+                href="https://github.com/logicbyroshan/foldermate"
+                target="_blank"
+                rel="noreferrer"
+                onClick={closeMenu}
+              >
+                ⭐ GitHub Repository ↗
+              </a>
+            </li>
+          </ul>
+          <div className="mobile-drawer-actions">
+            <a
+              href="#download"
+              className="btn btn-primary"
+              style={{ width: '100%', justifyContent: 'center' }}
+              onClick={closeMenu}
+            >
+              📥 FREE DOWNLOAD (WINDOWS)
+            </a>
+            <a
+              href="https://github.com/logicbyroshan/foldermate"
+              target="_blank"
+              rel="noreferrer"
+              className="btn btn-outline"
+              style={{ width: '100%', justifyContent: 'center' }}
+              onClick={closeMenu}
+            >
+              ⭐ Star on GitHub
+            </a>
+          </div>
+        </div>
+      )}
     </nav>
   );
 }

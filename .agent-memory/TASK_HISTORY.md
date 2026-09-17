@@ -181,6 +181,25 @@ What changed:
 Testing performed:
 - `npm run build --workspace=apps/landing` passed.
 - Browser subagent visual verification (`hero_bg_decorations_1789647404781.png`) at 1920x953 viewport.
+## 2026-09-17 — Navbar Enhancement & Interactive Background Stickers
+Task: Upgrade the Navbar to top-tier quality and make all hero background floating stickers fully interactive.
+Reason: User requested making the navbar the best and ensuring background floating stickers are interactive with hover physics and click navigation.
+Files/areas affected:
+- `apps/landing/src/components/Navbar.tsx`
+- `apps/landing/src/components/Hero.tsx`
+- `apps/landing/src/index.css`
+What changed:
+- **Navbar Upgrade**:
+  - Added `v1.0 · Free` brand status pill next to the FolderMate logo with subtle icon hover tilt.
+  - Upgraded navigation links with pill hover background highlights (`.nav-link-item`).
+  - Added dedicated `⭐ Star 1.4k` GitHub badge button with star counter pill and drop shadow.
+  - Added translucent blur effect on scroll (`backdrop-filter: blur(14px)`).
+- **Interactive Floating Stickers**:
+  - Converted floating stickers into interactive anchor links with hover elevation (`transform: translateY(-4px) scale(1.05)` and `box-shadow: 5px 5px 0 #1a1a1a`), active click feedback, and tooltips.
+  - Linked each sticker to its respective feature section (`#how-it-works`, `#features`).
+Testing performed:
+- `npm run build --workspace=apps/landing` passed.
+- Browser subagent verification (`navbar_and_stickers_desktop_1789648837982.png`).
 Important decisions:
-- The background dotted pattern uses `rgba(26,26,26,0.08)` to stay subtle and architectural without competing with the typography.
+- Pausing the CSS float animation on hover (`animation-play-state: paused`) provides smooth, predictable interaction for users clicking the floating stickers.
 

@@ -161,13 +161,19 @@ section {
   position: sticky;
   top: 0;
   z-index: 200;
-  background: var(--cream);
+  background: rgba(237, 234, 224, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border-bottom: var(--border);
   padding: 0 24px;
-  height: 68px;
+  height: 70px;
   display: flex;
   align-items: center;
-  transition: box-shadow 0.2s ease;
+  transition: box-shadow 0.2s ease, background 0.2s ease;
+}
+.navbar-scrolled {
+  box-shadow: 0 4px 0 #1a1a1a;
+  background: rgba(237, 234, 224, 0.98);
 }
 .navbar-inner {
   max-width: 1180px;
@@ -187,6 +193,11 @@ section {
   font-weight: 400;
   color: var(--black);
   flex-shrink: 0;
+  text-decoration: none;
+  transition: transform 0.15s ease;
+}
+.navbar-logo:hover {
+  transform: translateY(-1px);
 }
 .navbar-logo-icon {
   width: 36px;
@@ -198,67 +209,143 @@ section {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
+  transition: transform 0.15s ease;
+}
+.navbar-logo:hover .navbar-logo-icon {
+  transform: rotate(-6deg) scale(1.05);
 }
 .navbar-brand-name {
-  font-size: 1.3rem;
+  font-size: 1.35rem;
   letter-spacing: -0.01em;
+  color: #1a1a1a;
 }
+.navbar-version-badge {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1.5px solid #1a1a1a;
+  box-shadow: 1.5px 1.5px 0 #1a1a1a;
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-left: 2px;
+}
+
 .navbar-links {
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: 6px;
   list-style: none;
 }
-.navbar-links a {
+.nav-link-item {
   font-size: 0.88rem;
-  font-weight: 600;
-  color: #222;
-  transition: color 0.15s;
+  font-weight: 700;
+  color: #333;
+  padding: 8px 14px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  display: inline-block;
 }
-.navbar-links a:hover {
+.nav-link-item:hover {
   color: #000;
-  text-decoration: underline;
-  text-underline-offset: 4px;
+  background: rgba(26, 26, 26, 0.08);
+  transform: translateY(-1px);
 }
 .navbar-ext-link {
   color: #555 !important;
 }
+
 .navbar-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   flex-shrink: 0;
 }
+.navbar-github-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 2px solid #1a1a1a;
+  border-radius: 8px;
+  box-shadow: 2px 2px 0px #1a1a1a;
+  padding: 7px 12px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #1a1a1a;
+  text-decoration: none;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+}
+.navbar-github-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0px #1a1a1a;
+  background: #fffdfa;
+}
+.navbar-github-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px #1a1a1a;
+}
+.github-star-icon {
+  font-size: 0.95rem;
+  line-height: 1;
+}
+.github-btn-label {
+  font-weight: 800;
+}
+.github-star-count {
+  background: var(--vanilla);
+  border: 1.5px solid #1a1a1a;
+  border-radius: 5px;
+  padding: 1px 6px;
+  font-size: 0.72rem;
+  font-weight: 900;
+  color: #1a1a1a;
+}
+
+.navbar-download-btn {
+  padding: 10px 20px;
+  font-size: 0.82rem;
+}
+
 .mobile-menu-toggle {
   display: none;
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   background: #fff;
   border: var(--border);
-  border-radius: 8px;
+  border-radius: 9px;
   box-shadow: var(--shadow-sm);
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   font-weight: 800;
   cursor: pointer;
   align-items: center;
   justify-content: center;
+  transition: transform 0.1s ease;
+}
+.mobile-menu-toggle:active {
+  transform: translate(1px, 1px);
 }
 .mobile-drawer {
   display: none;
   position: absolute;
-  top: 68px;
+  top: 70px;
   left: 0;
   width: 100%;
   background: var(--cream);
-  border-bottom: var(--border);
-  box-shadow: var(--shadow-lg);
+  border-bottom: 3px solid #1a1a1a;
+  box-shadow: 0 8px 0 rgba(0,0,0,0.15);
   padding: 24px;
   z-index: 199;
-  animation: fadeDown 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.animate-fade-down {
+  animation: fadeDown 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 @keyframes fadeDown {
-  from { opacity: 0; transform: translateY(-8px); }
+  from { opacity: 0; transform: translateY(-10px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 .mobile-drawer-links {
@@ -277,6 +364,13 @@ section {
   box-shadow: var(--shadow-sm);
   font-weight: 700;
   font-size: 0.95rem;
+  text-decoration: none;
+  color: #1a1a1a;
+  transition: transform 0.1s ease, background 0.15s ease;
+}
+.mobile-drawer-links a:hover {
+  background: var(--amber-light);
+  transform: translateX(4px);
 }
 .mobile-drawer-actions {
   display: flex;
@@ -306,15 +400,31 @@ section {
   z-index: 2;
 }
 
-/* Floating Sticker Badges */
+/* Interactive Floating Sticker Badges */
 .hero-floating-badge {
   position: absolute;
   z-index: 3;
   pointer-events: auto;
-  transition: transform 0.2s ease;
+  cursor: pointer;
+  text-decoration: none;
 }
-.hero-floating-badge:hover {
-  transform: scale(1.06) !important;
+.interactive-sticker {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.interactive-sticker:hover {
+  animation-play-state: paused;
+  z-index: 10;
+}
+.interactive-sticker:hover .floating-sticker,
+.interactive-sticker:hover .floating-pill {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 5px 5px 0px #1a1a1a;
+  border-color: #000;
+}
+.interactive-sticker:active .floating-sticker,
+.interactive-sticker:active .floating-pill {
+  transform: translate(1px, 1px) scale(0.97);
+  box-shadow: 2px 2px 0px #1a1a1a;
 }
 
 .float-top-left {
@@ -347,6 +457,7 @@ section {
   border-radius: 10px;
   box-shadow: 3px 3px 0px #1a1a1a;
   user-select: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 .sticker-amber {
   background: var(--amber);
@@ -373,8 +484,8 @@ section {
 }
 .sticker-sub {
   font-size: 0.68rem;
-  font-weight: 600;
-  color: #444;
+  font-weight: 700;
+  color: #333;
 }
 .sticker-pulse {
   width: 8px;
@@ -396,6 +507,7 @@ section {
   font-weight: 800;
   letter-spacing: 0.03em;
   user-select: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 .pill-green {
   background: #ecfdf5;

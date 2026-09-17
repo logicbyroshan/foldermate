@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Redesigned `Footer.tsx` in cohesive dark neo-brutalist styling with top CTA callout banner, 4-column directory, and bottom system status pills.
   - Refactored `FaqSection.tsx` into independent vertical column stacks with `align-items: start`, preventing unopened FAQ cards from stretching vertically when an adjacent card is opened.
   - Added subtle dotted matrix grid pattern across the page background with floating neo-brutalist stickers (Inbox Watcher, Atomic Move, SHA-256 Verified, Supported Formats), rotating sparkle stars, and ambient aura glows.
+  - Enhanced `Navbar.tsx` with `v1.0 · Free` brand status badge, pill-hover navigation links, `⭐ Star 1.4k` GitHub badge counter button, and made all hero floating stickers fully interactive with hover elevation, tooltips, and smooth scroll anchors.
 - Added the branded FolderMate app icon, favicon set, and desktop theme refresh.
 
 ## [1.0.0] - 2026-09-12

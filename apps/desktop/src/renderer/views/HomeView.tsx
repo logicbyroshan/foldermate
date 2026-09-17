@@ -228,24 +228,27 @@ export const HomeView: React.FC<HomeViewProps> = ({
         </div>
 
         <div className="home-activity-list">
-          {recentEvents.map((evt) => (
-            <div key={evt.id} className="activity-item">
-              <div className="activity-icon-badge">
-                {evt.type === "organized" ? (
-                  <FileCheck2 size={14} color="var(--status-success)" />
-                ) : evt.type === "review" ? (
-                  <AlertCircle size={14} color="var(--brand-primary)" />
-                ) : (
-                  <ShieldCheck size={14} color="var(--status-info)" />
-                )}
+          {recentEvents.map((evt) => {
+            const t = (evt.type || "").toLowerCase();
+            return (
+              <div key={evt.id} className="activity-item">
+                <div className="activity-icon-badge">
+                  {t === "organized" ? (
+                    <FileCheck2 size={14} color="var(--status-success)" />
+                  ) : t === "review" ? (
+                    <AlertCircle size={14} color="var(--brand-primary)" />
+                  ) : (
+                    <ShieldCheck size={14} color="var(--status-info)" />
+                  )}
+                </div>
+                <div className="activity-info">
+                  <span className="activity-title">{evt.title}</span>
+                  <span className="activity-subtitle">{evt.subtitle}</span>
+                </div>
+                <span className="activity-time">{evt.time}</span>
               </div>
-              <div className="activity-info">
-                <span className="activity-title">{evt.title}</span>
-                <span className="activity-subtitle">{evt.subtitle}</span>
-              </div>
-              <span className="activity-time">{evt.time}</span>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
     </div>

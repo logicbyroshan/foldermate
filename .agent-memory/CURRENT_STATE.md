@@ -44,11 +44,5 @@ Major implementation areas are present:
 - **PR #24**: FAQ accordion layout refactored into two independent vertical columns (`.faq-column`) with `align-items: start`, eliminating row-height stretching and preventing unopened cards from expanding into tall empty boxes when adjacent cards open.
 - **PR #25**: Enriched landing page background with a subtle neo-brutalist dotted grid matrix, floating animated feature badges (Inbox Watcher with pulse, 2-Phase Atomic Move, SHA-256 Verified, Supported Formats), rotating sparkle stars (✦, ★), and soft warm ambient aura glows.
 - **PR #26**: Enhanced Navbar with `v1.0 · Free` status badge, pill-hover navigation links, `⭐ Star 1.4k` GitHub counter button, and made all floating background stickers fully interactive with hover physics, tooltips, and smooth-scroll anchors.
-- **PR #27 (Current)**: **Windows-Native File Explorer Architecture & UI Transformation**:
-  - Replaced card-based dashboards with Windows File Explorer paradigm + FolderMate background automation intelligence.
-  - Added `ExplorerHeader` with breadcrumbs, address bar, history navigation (`Alt+Left/Right`), view switcher (`Ctrl+1/2/3`), and search filter (`Ctrl+F`).
-  - Added `InspectorPanel` details pane displaying format badges, version DAG tree, SHA-256 hash, client metadata, and file actions.
-  - Added `ExplorerView` with sortable Details table, Compact list, and Icons grid views.
-  - Added `BackgroundAutomation` with live daemon metrics (CPU, Memory, SQLite WAL, Queue depth), pause controls (1h/tomorrow/indefinite), and resource profiles (Battery Saver, Balanced, Performance).
-  - Added `KeyboardShortcuts` with custom key remapping and real-time conflict detection.
-  - Refactored `ReviewQueue` into Explorer table with right-side classification heuristics inspector.
+- **PR #27**: Windows-Native File Explorer Architecture & UI Transformation.
+- **PR #28 (Current)**: UI Consistency & Component Polish Overhaul — restored complete styling tokens in `index.css`, eliminated CSS property warnings, resolved UTF-8 formatting anomalies in `Dashboard.tsx`, unified table styles across `Clients.tsx`, made event type handling case-insensitive in `HomeView.tsx`, and verified all 39 tests and browser subagent flows.

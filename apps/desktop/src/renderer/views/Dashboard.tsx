@@ -146,8 +146,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
     try {
       if ((window as any).foldermate) {
         const res = await (window as any).foldermate.call("system.simulateIngest", { filename: name });
-        if (res?.outcome === "ORGANIZED") showToast(`âœ“ Organized â†’ ${res.file.currentName} (v${res.file.version})`, "success");
-        else if (res?.outcome === "REVIEW_REQUIRED") showToast(`âš  Low confidence â€“ routed to Review Queue`, "warning");
+        if (res?.outcome === "ORGANIZED") showToast(`✓ Organized → ${res.file.currentName} (v${res.file.version})`, "success");
+        else if (res?.outcome === "REVIEW_REQUIRED") showToast(`⚠ Low confidence – routed to Review Queue`, "warning");
         setSimFilename("");
         await loadData();
       }
@@ -159,13 +159,13 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
   const QUICK = [
     { label: "+ ABC School ID (v9)", file: "ABC School ID Card 2026 v9.cdr" },
     { label: "+ Apex Banner (v2)",   file: "Apex Healthcare Emergency Banner 2026 v2.ai" },
-    { label: "+ Unknown â†’ Review",  file: "unknown studio poster draft final.pdf" },
+    { label: "+ Unknown → Review",   file: "unknown studio poster draft final.pdf" },
   ];
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
 
-      {/* â”€â”€â”€ Stat Cards â”€â”€â”€ */}
+      {/* ─── Stat Cards ─── */}
       <div className="stagger-children" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 }}>
         <StatCard title="Organized Files"   value={files.length}    icon={FileCheck2} iconColor="#10b981"              iconBg="rgba(16,185,129,0.14)"   gradient="linear-gradient(90deg,#10b981,#34d399)"  trend={files.length > 0 ? `${files.length} total` : undefined} delay={0} />
         <StatCard title="Needs Review"      value={pending}          icon={Inbox}      iconColor={pending > 0 ? "var(--accent-amber)" : "var(--text-muted)"} iconBg={pending > 0 ? "rgba(247,199,29,0.14)" : "rgba(255,255,255,0.05)"} gradient={pending > 0 ? "linear-gradient(90deg,#f7c71d,#f5b000)" : "linear-gradient(90deg,#334155,#475569)"} badge={pending > 0 ? <Badge variant="amber" size="sm" dot>{pending} item{pending !== 1 ? "s" : ""} waiting</Badge> : undefined} onClick={() => onNavigate("review")} delay={45} />
@@ -173,7 +173,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
         <StatCard title="Project Subfolders" value={projectsCount}  icon={Layers}     iconColor="var(--accent-amber)" iconBg="var(--accent-amber-subtle)" gradient="linear-gradient(90deg,#f7c71d,#f5b000)" onClick={() => onNavigate("clients")} delay={135} />
       </div>
 
-      {/* â”€â”€â”€ Ingestion Sandbox â”€â”€â”€ */}
+      {/* ─── Ingestion Sandbox ─── */}
       <div className="animate-fade-in" style={{ animationDelay: "180ms", opacity: 0, borderRadius: "var(--radius-md)", border: "1px dashed rgba(247,199,29,0.22)", background: "linear-gradient(135deg, rgba(13,19,34,0.92), rgba(7,9,15,0.96))", padding: "14px 18px", display: "flex", flexDirection: "column", gap: 10, position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", top: -20, right: -20, width: 100, height: 100, background: "radial-gradient(circle, rgba(247,199,29,0.07) 0%, transparent 70%)", pointerEvents: "none" }} />
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 }}>
@@ -205,7 +205,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
         </div>
       </div>
 
-      {/* â”€â”€â”€ Recent Organized Files â”€â”€â”€ */}
+      {/* ─── Recent Organized Files ─── */}
       <div className="animate-fade-in" style={{ animationDelay: "220ms", opacity: 0, borderRadius: "var(--radius-md)", background: "var(--bg-card)", border: "1px solid var(--border-subtle)", overflow: "hidden" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "13px 18px 11px", borderBottom: "1px solid var(--border-subtle)" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -215,7 +215,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <Button variant="secondary" size="sm" leftIcon={<Search size={12} />} onClick={() => onNavigate("search")}>Search Files</Button>
-            <button onClick={() => onNavigate("search")} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 12, color: "var(--text-muted)", fontWeight: 600, transition: "color 0.12s ease" }} onMouseEnter={e => (e.currentTarget.style.color = "var(--accent-amber-text)")} onMouseLeave={e => (e.currentTarget.style.color = "var(--text-muted)")}>View all â†’</button>
+            <button onClick={() => onNavigate("search")} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 12, color: "var(--text-muted)", fontWeight: 600, transition: "color 0.12s ease" }} onMouseEnter={e => (e.currentTarget.style.color = "var(--accent-amber-text)")} onMouseLeave={e => (e.currentTarget.style.color = "var(--text-muted)")}>View all →</button>
           </div>
         </div>
 

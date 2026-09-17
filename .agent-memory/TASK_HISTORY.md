@@ -240,4 +240,29 @@ Important decisions:
 - Folders are represented as folders with client color swatches; files display vector/raster format badges (CDR=amber, PDF=red, AI=orange, PSD=blue, PNG=cyan, SVG=purple).
 - The desktop shell acts as a lightweight presentation client while the background engine daemon manages file ingestion, classification, versioning, and SQLite persistence independently.
 
+## 2026-09-17 — UI Consistency & Component Polish Overhaul
+Task: Deeply audit all desktop views and components for visual consistency, rich content, responsive layouts, and UI polish.
+Reason: User request to thoroughly review components, eliminate visual inconsistencies, and ensure supreme design quality across all views.
+Files/areas affected:
+- `apps/desktop/src/renderer/index.css`
+- `apps/desktop/src/renderer/views/Clients.tsx`
+- `apps/desktop/src/renderer/views/Dashboard.tsx`
+- `apps/desktop/src/renderer/views/HomeView.tsx`
+- `CHANGELOG.md`
+- `.agent-memory/CURRENT_STATE.md`
+- `.agent-memory/TASK_HISTORY.md`
+What changed:
+- Restored complete CSS tokens and utility classes in `apps/desktop/src/renderer/index.css` and fixed CSS property warning (`justifyContent` → `justify-content`).
+- Unified Client Directories view (`Clients.tsx`) with consistent Explorer multi-column table layout, project subfolder cards, and subfolder creation modal.
+- Fixed corrupted UTF-8 unicode characters in `Dashboard.tsx` (arrows, symbols, quotes).
+- Made activity log event type matching case-insensitive in `HomeView.tsx`.
+- Ran full automated Vitest test suite (`npm test`) — all 13 test files and 39 tests passing.
+- Verified desktop renderer build with zero warnings (`npm run build:renderer --workspace=apps/desktop`).
+Testing performed:
+- Vitest automated test suite: `npm test` (39 tests passed).
+- Build verification: `npm run build:renderer --workspace=apps/desktop` (0 warnings).
+- Browser subagent visual verification across Home, Explorer, Clients, Review Queue, Background Daemon, Keyboard Shortcuts, Settings, and Activation Modal.
+Important decisions:
+- Component styles adhere strictly to global design tokens and Windows Explorer design patterns rather than ad-hoc inline styles.
+
 

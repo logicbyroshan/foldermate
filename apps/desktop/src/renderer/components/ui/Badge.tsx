@@ -2,7 +2,7 @@ import React from "react";
 
 export interface BadgeProps {
   children: React.ReactNode;
-  variant?: "default" | "amber" | "success" | "warning" | "danger" | "info" | "neutral";
+  variant?: "default" | "amber" | "success" | "warning" | "danger" | "info" | "neutral" | "emerald" | "zinc";
   size?: "sm" | "md";
   dot?: boolean;
   style?: React.CSSProperties;
@@ -23,6 +23,18 @@ export const Badge: React.FC<BadgeProps> = ({
       text: "var(--text-secondary)",
       border: "var(--border-subtle)",
       dotColor: "var(--text-muted)",
+    },
+    zinc: {
+      bg: "rgba(255, 255, 255, 0.06)",
+      text: "var(--text-secondary)",
+      border: "var(--border-subtle)",
+      dotColor: "var(--text-muted)",
+    },
+    emerald: {
+      bg: "var(--status-success-bg)",
+      text: "var(--status-success-text)",
+      border: "rgba(16, 185, 129, 0.3)",
+      dotColor: "var(--status-success)",
     },
     amber: {
       bg: "var(--accent-amber-subtle)",

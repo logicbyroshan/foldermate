@@ -10,7 +10,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- **Premium UI Visual Overhaul** (PR #13):
+- **Windows-Native File Explorer Architecture & UI Transformation**:
+  - Re-architected FolderMate desktop UI from card-heavy dashboard views into a **Windows File Explorer-inspired desktop utility** with FolderMate background intelligence.
+  - Implemented `ExplorerHeader.tsx` featuring back/forward/up/refresh navigation history, interactive breadcrumb address bar with `Ctrl+L` direct filesystem path mode, instant search filter (`Ctrl+F`), Details/List/Icons view mode switchers (`Ctrl+1`, `Ctrl+2`, `Ctrl+3`), inspector toggle, and live engine status dropdown with pause controls.
+  - Implemented `InspectorPanel.tsx` collapsible right-side inspector displaying rich file metadata, application extension badges (CDR, AI, PSD, PDF, XLSX, PNG, SVG), DAG version history tree, SHA-256 integrity hash, client/project lineage, and action buttons (`Open`, `Show in Explorer`, `Create Version`).
+  - Implemented `ExplorerView.tsx` supporting sortable Details multi-column table (Name, Type, Client, Project, Year, Modified Date, Size, Version), Compact List, and Large Icons grid with folder color accents and format recognition.
+  - Implemented practical `HomeView.tsx` starting point with Quick Access cards (`Inbox`, `Organized Clients`, `Review Queue`, `Archive`), Recent Files details table, Needs Review alert banner, and live background daemon event stream.
+  - Added dedicated **Background & Automation** settings page (`BackgroundAutomation.tsx`) with real-time daemon telemetry (CPU usage %, memory footprint MB, SQLite WAL status, queue depth, watcher status), pause controls (1 hour, until tomorrow, indefinitely, resume), file monitoring & debounce delay controls, and background resource usage modes (**Battery Saver**, **Balanced**, **Performance**).
+  - Added dedicated **Keyboard Shortcuts** page (`KeyboardShortcuts.tsx`) with full shortcut reference (`Ctrl+K`, `Ctrl+F`, `Ctrl+L`, `Ctrl+1/2/3`, `Alt+Left/Right`, `Backspace`, `F2`, `Enter`, `F5`), category filtering, and custom shortcut remapping with interactive conflict detection.
+  - Redesigned `ReviewQueue.tsx` into a clean Explorer details table with confidence score badges and a right-side classification & destination heuristic inspector.
+  - Updated `Sidebar.tsx` navigation tree to mirror Windows Explorer navigation pane structure (Explorer, Automation & Safety, System sections).
+  - Expanded `mock-bridge.ts` RPC methods for `system.getBackgroundMetrics`, `system.pauseAutomation`, `system.resumeAutomation`, `system.setResourceMode`, and `explorer.browse`.
   - New `StatCard` component on Dashboard with per-type gradient accent bars (green/amber/blue/gold), animated number counters using `requestAnimationFrame` cubic-bezier easing, and colored icon bubbles.
   - File extension type badges in the Recently Organized list (CDR=amber, PDF=red, AI=orange, PSD=blue, PNG/JPG=cyan, SVG=purple) with `TrendingUp` micro-indicator for growth.
   - Ingestion Sandbox redesigned as a dashed-border glassmorphic panel with Zap icon, radial glow, and quick-test pill buttons.

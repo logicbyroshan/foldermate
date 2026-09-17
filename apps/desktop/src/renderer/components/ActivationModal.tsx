@@ -743,7 +743,7 @@ export const ActivationModal: React.FC<ActivationModalProps> = ({
                 <div style={{ display: "flex", gap: 8 }}>
                   <Input
                     value={inputKey}
-                    onChange={setInputKey}
+                    onChange={(e) => setInputKey(e.target.value)}
                     placeholder="e.g. FM-COMMUNITY-XXXX-XXXX-XXXX or FM-SPONSOR-XXXX..."
                     autoFocus
                   />
@@ -793,7 +793,7 @@ export const ActivationModal: React.FC<ActivationModalProps> = ({
                 </label>
                 <Input
                   value={donorName}
-                  onChange={setDonorName}
+                  onChange={(e) => setDonorName(e.target.value)}
                   placeholder="e.g. Apex Graphic Studio"
                 />
               </div>

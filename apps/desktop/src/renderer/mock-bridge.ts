@@ -357,6 +357,10 @@ export function setupBrowserMockBridge() {
     };
   })();
 
+  let isAutomationPaused = false;
+  let pauseExpiresAt: string | null = null;
+  let resourceMode: "battery" | "balanced" | "performance" = "balanced";
+
   const listeners: Array<(event: any) => void> = [];
 
   (window as any).foldermate = {
@@ -410,7 +414,7 @@ export function setupBrowserMockBridge() {
 
         case "system.getStatus":
           return {
-            status: "RUNNING",
+            status: isAutomationPaused ? "PAUSED" : "RUNNING",
             isIdle: true,
             inboxPath: settings.ingestion.inboxPath,
             organizationRoot: settings.storage.organizationRoot,
@@ -418,9 +422,132 @@ export function setupBrowserMockBridge() {
             pendingReviewCount: reviewQueue.length,
             totalOrganized: files.length + 144,
             activeRulesCount: folderRules.filter((r) => r.isActive).length,
-            memoryUsageMB: 31.4,
+            memoryUsageMB: 42.8,
             license: licenseStatus,
           };
+
+        case "system.getBackgroundMetrics":
+          return {
+            status: isAutomationPaused ? "PAUSED" : "RUNNING",
+            pauseExpiresAt,
+            pauseReason: isAutomationPaused ? "User requested pause" : undefined,
+            uptimeSeconds: 14820,
+            cpuPercent: isAutomationPaused ? 0.1 : resourceMode === "battery" ? 0.2 : resourceMode === "performance" ? 1.4 : 0.6,
+            memoryMb: 42.8,
+            dbWalStatus: "OPTIMAL",
+            dbSizeBytes: 14200000,
+            activeQueueSize: isAutomationPaused ? 1 : 0,
+            filesIndexedCount: 12482,
+            totalOrganizedCount: files.length + 144,
+            watcherStatus: isAutomationPaused ? "IDLE" : "ACTIVE",
+            inboxPath: settings.ingestion.inboxPath,
+            organizationRoot: settings.storage.organizationRoot,
+            lastActivityTimestamp: new Date(Date.now() - 1000 * 60 * 2).toISOString(),
+            resourceMode,
+          };
+
+        case "system.pauseAutomation": {
+          isAutomationPaused = true;
+          const dur = payload?.duration || "1h";
+          const ms = dur === "1h" ? 3600000 : dur === "tomorrow" ? 86400000 : 0;
+          pauseExpiresAt = ms > 0 ? new Date(Date.now() + ms).toISOString() : null;
+          return { success: true, status: "PAUSED", pauseExpiresAt };
+        }
+
+        case "system.resumeAutomation": {
+          isAutomationPaused = false;
+          pauseExpiresAt = null;
+          return { success: true, status: "RUNNING" };
+        }
+
+        case "system.setResourceMode": {
+          if (payload?.mode) resourceMode = payload.mode;
+          return { success: true, resourceMode };
+        }
+
+        case "explorer.browse": {
+          const currentPath = payload?.path || "D:\\Clients";
+          // If at root
+          if (currentPath === "D:\\Clients" || currentPath === "root") {
+            const folderItems = clients.map((c) => ({
+              id: c.id,
+              name: c.name,
+              type: "folder" as const,
+              folderType: "client" as const,
+              path: `D:\\Clients\\${c.name}`,
+              color: c.color || "Amber",
+              itemCount: projects.filter((p) => p.clientId === c.id).length,
+              fileCount: files.filter((f) => f.clientId === c.id).length,
+              modifiedDate: "Today, 12:45 PM",
+            }));
+
+            const rootFiles = files.slice(0, 2).map((f) => ({
+              id: f.id,
+              name: f.filename,
+              type: "file" as const,
+              extension: f.extension,
+              path: f.path,
+              sizeBytes: f.fileSizeBytes,
+              version: f.version,
+              clientName: f.clientName,
+              projectName: f.projectName,
+              category: f.category,
+              year: f.year,
+              modifiedDate: "Today, 12:45 PM",
+              sha256Hash: f.sha256Hash,
+            }));
+
+            return {
+              path: "D:\\Clients",
+              items: [...folderItems, ...rootFiles],
+            };
+          }
+
+          // If browsing a specific client folder
+          const matchedClient = clients.find((c) => currentPath.includes(c.name));
+          if (matchedClient) {
+            const clientProjects = projects.filter((p) => p.clientId === matchedClient.id);
+            const clientFolders = clientProjects.map((p) => ({
+              id: p.id,
+              name: `${p.year} \\ ${p.name}`,
+              type: "folder" as const,
+              folderType: "project" as const,
+              path: `D:\\Clients\\${matchedClient.name}\\${p.year}\\${p.name}`,
+              color: matchedClient.color || "Amber",
+              itemCount: files.filter((f) => f.projectId === p.id).length,
+              fileCount: files.filter((f) => f.projectId === p.id).length,
+              modifiedDate: "Yesterday",
+            }));
+
+            const clientFiles = files
+              .filter((f) => f.clientId === matchedClient.id)
+              .map((f) => ({
+                id: f.id,
+                name: f.filename,
+                type: "file" as const,
+                extension: f.extension,
+                path: f.path,
+                sizeBytes: f.fileSizeBytes,
+                version: f.version,
+                clientName: f.clientName,
+                projectName: f.projectName,
+                category: f.category,
+                year: f.year,
+                modifiedDate: "Today, 12:45 PM",
+                sha256Hash: f.sha256Hash,
+              }));
+
+            return {
+              path: currentPath,
+              items: [...clientFolders, ...clientFiles],
+            };
+          }
+
+          return {
+            path: currentPath,
+            items: [],
+          };
+        }
 
         case "system.triggerScan":
           return { status: "OK", scannedFiles: 0, newFilesOrganized: 0 };

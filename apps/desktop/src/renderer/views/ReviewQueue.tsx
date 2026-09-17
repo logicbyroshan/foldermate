@@ -1,28 +1,40 @@
 import React, { useState, useEffect } from "react";
-import { CheckCircle, ArrowRight, FileQuestion, Plus, Sparkles, UserPlus } from "lucide-react";
-import { Card } from "../components/ui/Card.js";
+import {
+  CheckCircle,
+  ArrowRight,
+  FileQuestion,
+  Plus,
+  Sparkles,
+  UserPlus,
+  Check,
+  AlertTriangle,
+  FileText,
+  Layers,
+  Calendar,
+  FolderTree,
+  ExternalLink,
+} from "lucide-react";
 import { Badge } from "../components/ui/Badge.js";
-import { Button } from "../components/ui/Button.js";
-import { Select } from "../components/ui/Select.js";
-import { Input } from "../components/ui/Input.js";
 import { Modal } from "../components/ui/Modal.js";
 import { EmptyState } from "../components/ui/EmptyState.js";
-import { FolderColorPicker } from "../components/ui/FolderColorPicker.js";
 import { useToast } from "../components/ui/Toast.js";
 
 export const ReviewQueue: React.FC = () => {
-  const { showToast } = useToast();
+  const { showToast, addToast } = useToast();
   const [items, setItems] = useState<any[]>([]);
   const [clients, setClients] = useState<any[]>([]);
   const [projects, setProjects] = useState<any[]>([]);
+  const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
+
   const [selectedClientMap, setSelectedClientMap] = useState<Record<string, string>>({});
   const [selectedProjectMap, setSelectedProjectMap] = useState<Record<string, string>>({});
+  const [yearMap, setYearMap] = useState<Record<string, number>>({});
+  const [versionMap, setVersionMap] = useState<Record<string, number>>({});
   const [learnAliasMap, setLearnAliasMap] = useState<Record<string, boolean>>({});
   const [isResolving, setIsResolving] = useState<string | null>(null);
 
   // Quick Client Creation Modal State
   const [showAddClientModal, setShowAddClientModal] = useState(false);
-  const [activeReviewItemId, setActiveReviewItemId] = useState<string | null>(null);
   const [newClientName, setNewClientName] = useState("");
   const [newClientCode, setNewClientCode] = useState("");
   const [newClientColor, setNewClientColor] = useState("Amber");
@@ -42,21 +54,31 @@ export const ReviewQueue: React.FC = () => {
 
         const cMap: Record<string, string> = {};
         const pMap: Record<string, string> = {};
+        const yMap: Record<string, number> = {};
+        const vMap: Record<string, number> = {};
         const lMap: Record<string, boolean> = {};
 
         for (const item of queueRes || []) {
-          if (item.proposedClientId || item.suggestedClientId) {
-            cMap[item.id] = item.proposedClientId || item.suggestedClientId;
+          if (item.suggestedClientId || item.proposedClientId) {
+            cMap[item.id] = item.suggestedClientId || item.proposedClientId;
           }
-          if (item.proposedProjectId) {
-            pMap[item.id] = item.proposedProjectId;
+          if (item.suggestedProjectId || item.proposedProjectId) {
+            pMap[item.id] = item.suggestedProjectId || item.proposedProjectId;
           }
+          yMap[item.id] = item.suggestedYear || item.proposedYear || 2026;
+          vMap[item.id] = item.suggestedVersion || item.proposedVersion || 1;
           lMap[item.id] = true;
         }
 
         setSelectedClientMap(cMap);
         setSelectedProjectMap(pMap);
+        setYearMap(yMap);
+        setVersionMap(vMap);
         setLearnAliasMap(lMap);
+
+        if (queueRes?.length > 0 && !selectedItemId) {
+          setSelectedItemId(queueRes[0].id);
+        }
       }
     } catch (err) {
       console.error("Failed to load review queue:", err);
@@ -83,11 +105,16 @@ export const ReviewQueue: React.FC = () => {
           initialProjectYear: new Date().getFullYear(),
         });
 
-        showToast(`Created client "${newClientName}" with initial project subfolder`, "success");
+        addToast({
+          title: "Client Created",
+          message: `Created client "${newClientName}" with initial project structure.`,
+          variant: "success",
+        });
+
         await loadData();
 
-        if (activeReviewItemId && createdClient?.id) {
-          setSelectedClientMap((prev) => ({ ...prev, [activeReviewItemId]: createdClient.id }));
+        if (selectedItemId && createdClient?.id) {
+          setSelectedClientMap((prev) => ({ ...prev, [selectedItemId]: createdClient.id }));
         }
 
         setNewClientName("");
@@ -95,27 +122,21 @@ export const ReviewQueue: React.FC = () => {
         setShowAddClientModal(false);
       }
     } catch (err: any) {
-      showToast(err.message || "Failed to create client", "error");
+      addToast({ title: "Failed to create client", message: err.message, variant: "danger" });
     } finally {
       setIsCreatingClient(false);
     }
   };
 
-  useEffect(() => {
-    loadData();
-  }, []);
-
   const handleResolve = async (item: any) => {
-    const clientId = selectedClientMap[item.id] || item.proposedClientId;
-    const projectId = selectedProjectMap[item.id] || item.proposedProjectId;
+    const clientId = selectedClientMap[item.id] || item.suggestedClientId || item.proposedClientId;
+    const projectId = selectedProjectMap[item.id] || item.suggestedProjectId || item.proposedProjectId;
+    const year = yearMap[item.id] || 2026;
+    const version = versionMap[item.id] || 1;
+    const learnAlias = learnAliasMap[item.id] ?? true;
 
     if (!clientId) {
-      showToast("Please select a target client", "warning");
-      return;
-    }
-
-    if (!projectId) {
-      showToast("Please select a target project", "warning");
+      addToast({ title: "Target Client Required", message: "Please select a target client folder.", variant: "warning" });
       return;
     }
 
@@ -124,307 +145,365 @@ export const ReviewQueue: React.FC = () => {
       if ((window as any).foldermate) {
         await (window as any).foldermate.call("reviewQueue.resolve", {
           reviewQueueId: item.id,
+          queueId: item.id,
           clientId,
-          projectId,
-          year: item.proposedYear || 2026,
-          versionNumber: item.proposedVersion || 1,
-          learnAlias: learnAliasMap[item.id] ?? true,
+          projectId: projectId || projects.find((p) => p.clientId === clientId)?.id,
+          year,
+          versionNumber: version,
+          learnAlias,
         });
 
-        showToast(`Organized ${item.originalName} successfully`, "success");
-        loadData();
+        addToast({
+          title: "File Organized",
+          message: `Successfully classified and moved "${item.originalName}" to client folder.`,
+          variant: "success",
+        });
+
+        const remaining = items.filter((i) => i.id !== item.id);
+        setItems(remaining);
+        if (remaining.length > 0) {
+          setSelectedItemId(remaining[0].id);
+        } else {
+          setSelectedItemId(null);
+        }
       }
     } catch (err: any) {
-      showToast(`Resolution failed: ${err.message}`, "error");
+      addToast({ title: "Resolution Failed", message: err.message, variant: "danger" });
     } finally {
       setIsResolving(null);
     }
   };
 
+  const selectedItem = items.find((i) => i.id === selectedItemId);
+  const filteredProjects = selectedItem
+    ? projects.filter((p) => p.clientId === selectedClientMap[selectedItem.id])
+    : [];
+
+  const getExtBadgeClass = (ext: string) => {
+    const e = (ext || "").toLowerCase().replace(".", "");
+    switch (e) {
+      case "cdr": return "ext-cdr";
+      case "pdf": return "ext-pdf";
+      case "ai": return "ext-ai";
+      case "psd": return "ext-psd";
+      case "xlsx":
+      case "xls": return "ext-xlsx";
+      default: return "ext-other";
+    }
+  };
+
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-      {/* Header */}
-      <Card style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <div>
-          <h2 style={{ fontSize: 18, fontWeight: 700, color: "var(--text-primary)" }}>
-            Review Queue
-          </h2>
-          <p style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 2 }}>
-            Files requiring confirmation before autonomous organization
-          </p>
+    <div className="review-explorer-layout">
+      {/* Left / Main: Windows Explorer Details Table */}
+      <div className="review-table-pane">
+        <div className="table-pane-header">
+          <div>
+            <h2 className="pane-title">Needs Review ({items.length})</h2>
+            <p className="pane-subtitle">
+              Files with ambiguous or sub-threshold classification confidence awaiting confirmation.
+            </p>
+          </div>
+          <Badge variant={items.length > 0 ? "amber" : "emerald"} size="md">
+            {items.length === 0 ? "● Queue Clean" : `● ${items.length} Pending Actions`}
+          </Badge>
         </div>
 
-        <Badge variant={items.length > 0 ? "amber" : "success"} dot size="md">
-          {items.length} Pending
-        </Badge>
-      </Card>
+        {items.length === 0 ? (
+          <div className="empty-table-placeholder">
+            <CheckCircle size={36} color="var(--status-success)" />
+            <div className="empty-title">Review Queue is Empty</div>
+            <div className="empty-desc">
+              All incoming files in the Inbox match client aliases and naming rules with high confidence.
+            </div>
+          </div>
+        ) : (
+          <div className="table-scroll-wrap">
+            <table className="explorer-table">
+              <thead>
+                <tr>
+                  <th style={{ width: "38%" }}>Filename</th>
+                  <th style={{ width: "12%" }}>Type</th>
+                  <th style={{ width: "24%" }}>Suggested Client</th>
+                  <th style={{ width: "14%" }}>Confidence</th>
+                  <th style={{ width: "12%", textAlign: "right" }}>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {items.map((item) => {
+                  const isSelected = selectedItemId === item.id;
+                  const ext = item.originalName.split(".").pop() || "cdr";
+                  const conf = Math.round(
+                    (item.suggestedConfidence || item.confidenceScore || 0.65) * 100
+                  );
 
-      {/* Items List */}
-      {items.length === 0 ? (
-        <Card style={{ padding: "40px 20px" }}>
-          <EmptyState
-            icon={<CheckCircle size={28} color="var(--status-success)" />}
-            title="Review Queue is Empty!"
-            description="All incoming files are matching client & project rules with high confidence."
-          />
-        </Card>
-      ) : (
-        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-          {items.map((item) => {
-            const confPct = Math.round(item.confidenceScore * 100);
-
-            return (
-              <Card
-                key={item.id}
-                style={{
-                  padding: 18,
-                  background: "linear-gradient(180deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.86))",
-                  border: "1px solid rgba(148, 163, 184, 0.18)",
-                  boxShadow: "inset 0 1px 0 rgba(148, 163, 184, 0.08), 0 10px 24px rgba(15, 23, 42, 0.22)",
-                }}
-              >
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16, marginBottom: 12 }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0, flex: 1 }}>
-                    <div
-                      style={{
-                        width: 38,
-                        height: 38,
-                        borderRadius: "var(--radius-md)",
-                        background: "linear-gradient(135deg, rgba(251, 191, 36, 0.14), rgba(245, 158, 11, 0.08))",
-                        border: "1px solid rgba(251, 191, 36, 0.28)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        flexShrink: 0,
-                      }}
+                  return (
+                    <tr
+                      key={item.id}
+                      className={isSelected ? "selected-row" : ""}
+                      onClick={() => setSelectedItemId(item.id)}
                     >
-                      <FileQuestion size={18} color="var(--accent-amber)" />
-                    </div>
-                    <div style={{ minWidth: 0, flex: 1 }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 4 }}>
-                        <span className="mono-font" style={{ fontSize: 15, fontWeight: 700, color: "var(--text-primary)" }}>
-                          {item.originalName}
-                        </span>
-                        <Badge
-                          variant={confPct >= 70 ? "amber" : "danger"}
-                          size="sm"
-                          style={{
-                            padding: "3px 7px",
-                            borderRadius: "var(--radius-sm)",
-                          }}
-                        >
-                          {confPct >= 70 ? "High priority" : "Needs review"}
-                        </Badge>
-                      </div>
-                      <div style={{ fontSize: 11, color: "var(--text-muted)", lineHeight: 1.4, wordBreak: "break-word" }}>
-                        Detected in Inbox • {item.originalPath}
-                      </div>
-                    </div>
-                  </div>
-
-                  <Badge
-                    variant={confPct >= 70 ? "amber" : "danger"}
-                    size="md"
-                    style={{
-                      minWidth: 106,
-                      justifyContent: "center",
-                      borderRadius: "var(--radius-md)",
-                    }}
-                  >
-                    {confPct}% Confidence
-                  </Badge>
-                </div>
-
-                {item.reasons && item.reasons.length > 0 && (
-                  <div
-                    style={{
-                      backgroundColor: "rgba(15, 23, 42, 0.75)",
-                      borderRadius: "var(--radius-md)",
-                      padding: "10px 12px",
-                      marginBottom: 14,
-                      border: "1px solid rgba(148, 163, 184, 0.14)",
-                    }}
-                  >
-                    <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text-secondary)", marginBottom: 6, letterSpacing: "0.02em" }}>
-                      Inference Rationale
-                    </div>
-                    <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-                      {item.reasons.map((reason: string, rIdx: number) => (
-                        <div
-                          key={rIdx}
-                          style={{
-                            fontSize: 11,
-                            color: "var(--text-muted)",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 8,
-                            lineHeight: 1.4,
-                          }}
-                        >
-                          <span style={{ width: 5, height: 5, borderRadius: "50%", backgroundColor: "var(--accent-amber)", display: "inline-block" }} />
-                          <span>{reason}</span>
+                      <td>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                          <span className={`file-badge ${getExtBadgeClass(ext)}`}>
+                            {ext.toUpperCase()}
+                          </span>
+                          <span className="file-name-text" title={item.originalName}>
+                            {item.originalName}
+                          </span>
                         </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                      </td>
+                      <td>
+                        <span className="cell-muted">{ext.toUpperCase()} File</span>
+                      </td>
+                      <td>
+                        <span style={{ fontWeight: 500, color: "var(--text-primary)" }}>
+                          {item.suggestedClientName || "Unrecognized"}
+                        </span>
+                      </td>
+                      <td>
+                        <Badge variant={conf >= 75 ? "amber" : "danger"} size="sm">
+                          {conf}%
+                        </Badge>
+                      </td>
+                      <td style={{ textAlign: "right" }}>
+                        <button
+                          type="button"
+                          className="btn btn-primary btn-sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleResolve(item);
+                          }}
+                          disabled={isResolving === item.id}
+                        >
+                          {isResolving === item.id ? "Moving..." : "Organize"}
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
 
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr) minmax(160px, 0.65fr) auto",
-                    gap: 12,
-                    alignItems: "flex-end",
-                  }}
-                >
-                  <div
-                    style={{
-                      backgroundColor: "rgba(15, 23, 42, 0.72)",
-                      borderRadius: "var(--radius-md)",
-                      border: "1px solid rgba(148, 163, 184, 0.12)",
-                      padding: "8px 10px 10px",
-                    }}
-                  >
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
-                      <span style={{ fontSize: 11, fontWeight: 600, color: "var(--text-secondary)" }}>Assign Client:</span>
-                      <button
-                        onClick={() => {
-                          setActiveReviewItemId(item.id);
-                          setShowAddClientModal(true);
-                        }}
-                        style={{
-                          background: "none",
-                          border: "none",
-                          color: "var(--accent-amber)",
-                          fontSize: 10,
-                          fontWeight: 600,
-                          cursor: "pointer",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 2,
-                        }}
-                      >
-                        <Plus size={11} /> New Client
-                      </button>
-                    </div>
-                    <Select
-                      value={selectedClientMap[item.id] || ""}
-                      onChange={(val) => setSelectedClientMap({ ...selectedClientMap, [item.id]: val })}
-                      options={[
-                        { value: "", label: "-- Select Client --" },
-                        ...clients.map((c) => ({ value: c.id, label: `${c.name} (${c.code})` })),
-                      ]}
-                    />
-                  </div>
+      {/* Right Side: Classification & Destination Inspector Pane */}
+      {selectedItem && (
+        <aside className="review-inspector-pane">
+          <div className="inspector-title-bar">
+            <span style={{ fontWeight: 600, fontSize: 13 }}>Classification Heuristics</span>
+            <Badge variant="amber" size="sm">
+              {Math.round((selectedItem.suggestedConfidence || selectedItem.confidenceScore || 0.65) * 100)}% Match
+            </Badge>
+          </div>
 
-                  <div
-                    style={{
-                      backgroundColor: "rgba(15, 23, 42, 0.72)",
-                      borderRadius: "var(--radius-md)",
-                      border: "1px solid rgba(148, 163, 184, 0.12)",
-                      padding: "8px 10px 10px",
-                    }}
-                  >
-                    <Select
-                      label="Assign Project:"
-                      value={selectedProjectMap[item.id] || ""}
-                      onChange={(val) => setSelectedProjectMap({ ...selectedProjectMap, [item.id]: val })}
-                      options={[
-                        { value: "", label: "-- Select Project --" },
-                        ...projects.map((p) => ({ value: p.id, label: `${p.name} (${p.year})` })),
-                      ]}
-                    />
-                  </div>
-
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 8,
-                      minHeight: 68,
-                      backgroundColor: "rgba(15, 23, 42, 0.72)",
-                      borderRadius: "var(--radius-md)",
-                      border: "1px solid rgba(148, 163, 184, 0.12)",
-                      padding: "0 12px",
-                    }}
-                  >
-                    <input
-                      type="checkbox"
-                      id={`learn_${item.id}`}
-                      checked={learnAliasMap[item.id] ?? true}
-                      onChange={(e) => setLearnAliasMap({ ...learnAliasMap, [item.id]: e.target.checked })}
-                      style={{ accentColor: "var(--accent-amber)", width: 15, height: 15 }}
-                    />
-                    <label htmlFor={`learn_${item.id}`} style={{ fontSize: 11, color: "var(--text-secondary)", cursor: "pointer", lineHeight: 1.2 }}>
-                      Learn Alias
-                    </label>
-                  </div>
-
-                  <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                    <Button
-                      variant="primary"
-                      size="md"
-                      isLoading={isResolving === item.id}
-                      rightIcon={<ArrowRight size={14} />}
-                      onClick={() => handleResolve(item)}
-                      style={{
-                        minWidth: 140,
-                        boxShadow: "0 8px 18px rgba(251, 191, 36, 0.18)",
-                      }}
-                    >
-                      Organize Now
-                    </Button>
-                  </div>
+          <div className="inspector-scroll-area">
+            {/* File identity header */}
+            <div className="file-identity-box">
+              <span className={`file-badge large ${getExtBadgeClass(selectedItem.originalName.split(".").pop() || "")}`}>
+                {(selectedItem.originalName.split(".").pop() || "CDR").toUpperCase()}
+              </span>
+              <div style={{ minWidth: 0, flex: 1 }}>
+                <div className="inspect-filename" title={selectedItem.originalName}>
+                  {selectedItem.originalName}
                 </div>
-              </Card>
-            );
-          })}
-        </div>
+                <div className="inspect-sub">
+                  Detected in Inbox • {selectedItem.filePath || selectedItem.originalPath}
+                </div>
+              </div>
+            </div>
+
+            {/* Inference rationale */}
+            <div className="rationale-box">
+              <div className="rationale-title">
+                <AlertTriangle size={13} color="var(--accent-amber)" />
+                <span>Inference Rationale</span>
+              </div>
+              <p className="rationale-text">
+                {selectedItem.reason ||
+                  (selectedItem.reasons && selectedItem.reasons[0]) ||
+                  "Missing unambiguous client alias match in the current directory."}
+              </p>
+            </div>
+
+            {/* Destination Configuration Form */}
+            <div className="classification-form">
+              <div className="form-field">
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
+                  <label className="field-label">Target Client</label>
+                  <button
+                    type="button"
+                    className="btn-link-action"
+                    onClick={() => setShowAddClientModal(true)}
+                  >
+                    <UserPlus size={12} />
+                    <span>New Client</span>
+                  </button>
+                </div>
+                <select
+                  className="select-input"
+                  value={selectedClientMap[selectedItem.id] || ""}
+                  onChange={(e) =>
+                    setSelectedClientMap((prev) => ({ ...prev, [selectedItem.id]: e.target.value }))
+                  }
+                >
+                  <option value="" disabled>
+                    -- Select Target Client Folder --
+                  </option>
+                  {clients.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name} ({c.code || c.name})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="form-field">
+                <label className="field-label">Project Subfolder</label>
+                <select
+                  className="select-input"
+                  value={selectedProjectMap[selectedItem.id] || ""}
+                  onChange={(e) =>
+                    setSelectedProjectMap((prev) => ({ ...prev, [selectedItem.id]: e.target.value }))
+                  }
+                >
+                  <option value="">Default Design Deliverable</option>
+                  {filteredProjects.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.year ? `${p.year} \\ ` : ""}{p.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+                <div className="form-field">
+                  <label className="field-label">Year</label>
+                  <input
+                    type="number"
+                    className="input-text"
+                    value={yearMap[selectedItem.id] || 2026}
+                    onChange={(e) =>
+                      setYearMap((prev) => ({ ...prev, [selectedItem.id]: Number(e.target.value) }))
+                    }
+                  />
+                </div>
+
+                <div className="form-field">
+                  <label className="field-label">Version Number</label>
+                  <input
+                    type="number"
+                    min={1}
+                    className="input-text"
+                    value={versionMap[selectedItem.id] || 1}
+                    onChange={(e) =>
+                      setVersionMap((prev) => ({ ...prev, [selectedItem.id]: Number(e.target.value) }))
+                    }
+                  />
+                </div>
+              </div>
+
+              {/* Learn alias toggle */}
+              <div className="learn-alias-row">
+                <input
+                  type="checkbox"
+                  id={`learn-${selectedItem.id}`}
+                  checked={learnAliasMap[selectedItem.id] ?? true}
+                  onChange={(e) =>
+                    setLearnAliasMap((prev) => ({ ...prev, [selectedItem.id]: e.target.checked }))
+                  }
+                />
+                <label htmlFor={`learn-${selectedItem.id}`} className="learn-label">
+                  <Sparkles size={13} color="var(--brand-primary)" />
+                  <span>Remember filename alias to auto-classify future files</span>
+                </label>
+              </div>
+
+              {/* Target Final Path Preview */}
+              <div className="target-path-preview">
+                <div className="preview-label">Target Destination:</div>
+                <div className="preview-path code-font">
+                  D:\Clients\
+                  {clients.find((c) => c.id === selectedClientMap[selectedItem.id])?.name || "[Client]"}\
+                  {yearMap[selectedItem.id] || 2026}\
+                  {selectedItem.originalName}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="inspector-footer">
+            <button
+              type="button"
+              className="btn btn-primary"
+              style={{ width: "100%", justifyContent: "center" }}
+              onClick={() => handleResolve(selectedItem)}
+              disabled={isResolving === selectedItem.id}
+            >
+              <Check size={16} />
+              <span>{isResolving === selectedItem.id ? "Moving File..." : "Approve & Move"}</span>
+            </button>
+          </div>
+        </aside>
       )}
 
       {/* Quick Add Client Modal */}
       <Modal
         isOpen={showAddClientModal}
         onClose={() => setShowAddClientModal(false)}
-        title="Quick Add New Client"
-        description="Add a new client on the fly and immediately assign to this review queue file."
+        title="Create New Client Folder"
       >
         <form onSubmit={handleQuickAddClient} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-          <Input
-            label="CLIENT NAME"
-            value={newClientName}
-            onChange={(e) => {
-              setNewClientName(e.target.value);
-              if (!newClientCode) {
-                setNewClientCode(e.target.value.replace(/\s+/g, "").toUpperCase().slice(0, 6));
-              }
-            }}
-            placeholder="e.g. Horizon Builders"
-            autoFocus
-            required
-          />
-
-          <Input
-            label="CLIENT SHORT CODE"
-            value={newClientCode}
-            onChange={(e) => setNewClientCode(e.target.value.toUpperCase())}
-            placeholder="e.g. HORIZON"
-          />
-
-          <div>
-            <label style={{ fontSize: 11, fontWeight: 600, color: "var(--text-secondary)", display: "block", marginBottom: 6 }}>
-              WINDOWS EXPLORER FOLDER COLOR
-            </label>
-            <FolderColorPicker selectedColor={newClientColor} onSelectColor={setNewClientColor} />
+          <div className="form-field">
+            <label className="field-label">Client Name *</label>
+            <input
+              type="text"
+              className="input-text"
+              placeholder="e.g. St. Xavier High School"
+              value={newClientName}
+              onChange={(e) => setNewClientName(e.target.value)}
+              required
+              autoFocus
+            />
           </div>
 
-          <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 8 }}>
-            <Button variant="secondary" size="md" onClick={() => setShowAddClientModal(false)}>
+          <div className="form-field">
+            <label className="field-label">Short Code (Optional)</label>
+            <input
+              type="text"
+              className="input-text"
+              placeholder="e.g. STXAV"
+              value={newClientCode}
+              onChange={(e) => setNewClientCode(e.target.value)}
+            />
+          </div>
+
+          <div className="form-field">
+            <label className="field-label">Folder Color Accent</label>
+            <select
+              className="select-input"
+              value={newClientColor}
+              onChange={(e) => setNewClientColor(e.target.value)}
+            >
+              <option value="Amber">Amber Gold (Default)</option>
+              <option value="Blue">Sapphire Blue</option>
+              <option value="Emerald">Emerald Green</option>
+              <option value="Purple">Royal Purple</option>
+              <option value="Rose">Crimson Rose</option>
+            </select>
+          </div>
+
+          <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 10 }}>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => setShowAddClientModal(false)}
+            >
               Cancel
-            </Button>
-            <Button variant="primary" size="md" isLoading={isCreatingClient}>
-              Create & Assign Client
-            </Button>
+            </button>
+            <button type="submit" className="btn btn-primary" disabled={isCreatingClient}>
+              {isCreatingClient ? "Creating..." : "Create Client"}
+            </button>
           </div>
         </form>
       </Modal>

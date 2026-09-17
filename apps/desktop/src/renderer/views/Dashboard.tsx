@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   FileCheck2,
   Inbox,
@@ -199,7 +199,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
         </div>
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
           <div style={{ flex: 1 }}>
-            <Input value={simFilename} onChange={setSimFilename} placeholder="Custom filename â€” e.g. Zenith Corp Brochure 2026 v1.cdr" onKeyDown={(e) => { if (e.key === "Enter") handleSimulate(); }} />
+            <Input value={simFilename} onChange={(e) => setSimFilename(e.target.value)} placeholder="Custom filename — e.g. Zenith Corp Brochure 2026 v1.cdr" onKeyDown={(e) => { if (e.key === "Enter") handleSimulate(); }} />
           </div>
           <Button variant="primary" size="md" leftIcon={<Play size={13} fill="currentColor" />} onClick={() => handleSimulate()} isLoading={isSimulating} disabled={!simFilename.trim()}>Simulate</Button>
         </div>

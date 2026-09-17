@@ -162,6 +162,25 @@ What changed:
 Testing performed:
 - `npm run build --workspace=apps/landing` passed.
 - Browser subagent end-to-end verification (`faq_column_expansion_verify`): verified single card open (left snug, right expanded), both columns open (both snug to content), and multi-item expansion.
+## 2026-09-17 — Landing Page Background Grid, Floating Badges & Animations
+Task: Add rich background texture, animated floating feature badges, and decorative elements to the landing page.
+Reason: User requested adding background elements and animations as the background felt flat and empty.
+Files/areas affected:
+- `apps/landing/src/components/Hero.tsx`
+- `apps/landing/src/index.css`
+What changed:
+- Added a subtle dotted matrix grid pattern (`radial-gradient(rgba(26,26,26,0.08) 1.25px, transparent 1.25px)`) across the body background.
+- Added floating neo-brutalist stickers and pills in the Hero background:
+  - 📁 **Inbox Watcher** (`Auto Ingestion`) with green pulsing live dot
+  - ⚡ **Atomic Move** (`2-Phase Safety`)
+  - 🔒 **SHA-256 Verified** pill
+  - 🎯 **.CDR · .AI · .PSD · .PDF** pill
+- Added animated 4-point sparkle stars (`✦`, `★`, `✧`) with smooth rotation and pulse keyframe animations.
+- Added soft ambient radial warm amber glow auras behind the hero showcase.
+- Added responsive media queries scaling down / hiding floating badges on smaller screens to keep mobile views pristine.
+Testing performed:
+- `npm run build --workspace=apps/landing` passed.
+- Browser subagent visual verification (`hero_bg_decorations_1789647404781.png`) at 1920x953 viewport.
 Important decisions:
-- Independent column container flex stacks prevent CSS Grid row stretching completely, maintaining a natural layout when answers expand.
+- The background dotted pattern uses `rgba(26,26,26,0.08)` to stay subtle and architectural without competing with the typography.
 

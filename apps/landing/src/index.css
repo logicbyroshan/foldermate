@@ -9,7 +9,9 @@ html {
 }
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: #EDEAE0;
+  background-color: #EDEAE0;
+  background-image: radial-gradient(rgba(26, 26, 26, 0.08) 1.25px, transparent 1.25px);
+  background-size: 24px 24px;
   color: #1a1a1a;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -21,6 +23,7 @@ body {
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
+  position: relative;
 }
 
 /* ─── Typography ────────────────────────────────────────────── */
@@ -285,11 +288,208 @@ section {
 .hero {
   text-align: center;
   padding: 70px 0 40px;
+  position: relative;
+  overflow: visible;
+}
+.hero-bg-decorations {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
 }
 .hero-container {
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+/* Floating Sticker Badges */
+.hero-floating-badge {
+  position: absolute;
+  z-index: 3;
+  pointer-events: auto;
+  transition: transform 0.2s ease;
+}
+.hero-floating-badge:hover {
+  transform: scale(1.06) !important;
+}
+
+.float-top-left {
+  top: 90px;
+  left: calc(50% - 610px);
+  animation: floatSticker1 6s ease-in-out infinite alternate;
+}
+.float-top-right {
+  top: 110px;
+  right: calc(50% - 610px);
+  animation: floatSticker2 7s ease-in-out infinite alternate;
+}
+.float-mid-left {
+  top: 360px;
+  left: calc(50% - 630px);
+  animation: floatSticker3 8s ease-in-out infinite alternate;
+}
+.float-mid-right {
+  top: 380px;
+  right: calc(50% - 630px);
+  animation: floatSticker1 7.5s ease-in-out infinite alternate;
+}
+
+.floating-sticker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  border: 2px solid #1a1a1a;
+  border-radius: 10px;
+  box-shadow: 3px 3px 0px #1a1a1a;
+  user-select: none;
+}
+.sticker-amber {
+  background: var(--amber);
+  color: #1a1a1a;
+}
+.sticker-white {
+  background: #ffffff;
+  color: #1a1a1a;
+}
+.sticker-icon {
+  font-size: 1.3rem;
+  line-height: 1;
+}
+.sticker-content {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  line-height: 1.2;
+}
+.sticker-title {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #1a1a1a;
+}
+.sticker-sub {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #444;
+}
+.sticker-pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 6px #10b981;
+  animation: badgePulse 2s infinite ease-in-out;
+}
+
+.floating-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  border: 2px solid #1a1a1a;
+  border-radius: 999px;
+  box-shadow: 3px 3px 0px #1a1a1a;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  user-select: none;
+}
+.pill-green {
+  background: #ecfdf5;
+  color: #065f46;
+  border-color: #1a1a1a;
+}
+.pill-amber {
+  background: var(--vanilla);
+  color: #1a1a1a;
+  border-color: #1a1a1a;
+}
+
+/* Decorative Sparkle Stars */
+.deco-star {
+  position: absolute;
+  font-size: 1.6rem;
+  line-height: 1;
+  user-select: none;
+  pointer-events: none;
+}
+.star-tl {
+  top: 40px;
+  left: calc(50% - 450px);
+  color: var(--amber);
+  animation: starSpin 14s linear infinite;
+}
+.star-tr {
+  top: 55px;
+  right: calc(50% - 470px);
+  color: #1a1a1a;
+  font-size: 1.4rem;
+  animation: starPulse 4s ease-in-out infinite;
+}
+.star-bl {
+  top: 280px;
+  left: calc(50% - 490px);
+  color: #1a1a1a;
+  font-size: 1.3rem;
+  animation: starPulse 5s ease-in-out infinite 1s;
+}
+.star-br {
+  top: 310px;
+  right: calc(50% - 500px);
+  color: var(--amber);
+  font-size: 1.8rem;
+  animation: starSpin 12s linear infinite reverse;
+}
+
+/* Soft Warm Glow Auroras */
+.deco-circle {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(40px);
+}
+.circle-1 {
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, rgba(232, 155, 0, 0.14) 0%, transparent 70%);
+  top: 140px;
+  left: calc(50% - 450px);
+}
+.circle-2 {
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(circle, rgba(232, 155, 0, 0.12) 0%, transparent 70%);
+  top: 180px;
+  right: calc(50% - 470px);
+}
+
+/* Floating & Rotation Keyframes */
+@keyframes floatSticker1 {
+  0%   { transform: translateY(0px) rotate(-3deg); }
+  100% { transform: translateY(-14px) rotate(-1deg); }
+}
+@keyframes floatSticker2 {
+  0%   { transform: translateY(0px) rotate(4deg); }
+  100% { transform: translateY(-16px) rotate(6deg); }
+}
+@keyframes floatSticker3 {
+  0%   { transform: translateY(0px) rotate(-2deg); }
+  100% { transform: translateY(-12px) rotate(-5deg); }
+}
+@keyframes starSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes starPulse {
+  0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.85; }
+  50%      { transform: scale(1.25) rotate(15deg); opacity: 1; }
+}
+@keyframes badgePulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%      { transform: scale(1.4); opacity: 0.6; }
 }
 .hero-top-badge-wrap {
   margin-bottom: 16px;
@@ -1909,11 +2109,22 @@ section {
 .delay-3 { animation-delay: 0.3s; }
 .delay-4 { animation-delay: 0.4s; }
 
-/* ─── Responsive Media Queries ────────────────────────────────── */
+/* Desktops & Laptops (<= 1280px) */
+@media (max-width: 1280px) {
+  .float-top-left { left: 20px; }
+  .float-top-right { right: 20px; }
+  .float-mid-left { left: 20px; }
+  .float-mid-right { right: 20px; }
+}
 
 /* Tablets & Small Laptops (<= 1024px) */
 @media (max-width: 1024px) {
   .navbar-links { gap: 18px; }
+  .hero-floating-badge { transform: scale(0.85); }
+  .float-top-left { left: 10px; }
+  .float-top-right { right: 10px; }
+  .float-mid-left { left: 10px; }
+  .float-mid-right { right: 10px; }
   .laptop-stats-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -1935,6 +2146,9 @@ section {
   .mobile-menu-toggle { display: inline-flex; }
   .mobile-drawer { display: block; }
   .desktop-only { display: none !important; }
+
+  /* Hide floating badges on tablets to prevent overlapping */
+  .hero-floating-badge { display: none !important; }
 
   /* Laptop responsive screen proportions */
   .laptop-sidebar { display: none !important; }

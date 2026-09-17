@@ -42,6 +42,54 @@ export default function Hero() {
 
   return (
     <section className="hero" id="hero">
+      {/* Background Decorative Animated Elements */}
+      <div className="hero-bg-decorations" aria-hidden="true">
+        {/* Floating Sticker: Inbox Watcher (Top Left) */}
+        <div className="hero-floating-badge float-top-left">
+          <div className="floating-sticker sticker-amber">
+            <span className="sticker-icon">📁</span>
+            <div className="sticker-content">
+              <span className="sticker-title">Inbox Watcher</span>
+              <span className="sticker-sub">Auto Ingestion</span>
+            </div>
+            <span className="sticker-pulse" />
+          </div>
+        </div>
+
+        {/* Floating Sticker: Two-Phase Atomic (Top Right) */}
+        <div className="hero-floating-badge float-top-right">
+          <div className="floating-sticker sticker-white">
+            <span className="sticker-icon">⚡</span>
+            <div className="sticker-content">
+              <span className="sticker-title">Atomic Move</span>
+              <span className="sticker-sub">2-Phase Safety</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Floating Pill: Verified Security (Mid Left) */}
+        <div className="hero-floating-badge float-mid-left">
+          <div className="floating-pill pill-green">
+            <span>🔒 SHA-256 Verified</span>
+          </div>
+        </div>
+
+        {/* Floating Pill: Supported Formats (Mid Right) */}
+        <div className="hero-floating-badge float-mid-right">
+          <div className="floating-pill pill-amber">
+            <span>🎯 .CDR · .AI · .PSD · .PDF</span>
+          </div>
+        </div>
+
+        {/* Neo-brutalist Animated Sparkle Stars */}
+        <div className="deco-star star-tl">✦</div>
+        <div className="deco-star star-tr">★</div>
+        <div className="deco-star star-bl">✧</div>
+        <div className="deco-star star-br">✦</div>
+        <div className="deco-circle circle-1" />
+        <div className="deco-circle circle-2" />
+      </div>
+
       <div className="container hero-container">
         {/* Star badge */}
         <div className="animate-fade-up hero-top-badge-wrap">

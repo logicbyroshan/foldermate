@@ -11,6 +11,7 @@ export interface ToastItem {
 
 interface ToastContextValue {
   showToast: (message: string, type?: ToastType) => void;
+  addToast: (options: { title?: string; message: string; variant?: string }) => void;
 }
 
 const ToastContext = createContext<ToastContextValue | null>(null);
@@ -33,6 +34,17 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }, 4000);
   }, []);
 
+  const addToast = useCallback(
+    (options: { title?: string; message: string; variant?: string }) => {
+      let t: ToastType = "info";
+      if (options.variant === "success" || options.variant === "emerald") t = "success";
+      else if (options.variant === "danger" || options.variant === "error") t = "error";
+      else if (options.variant === "warning" || options.variant === "amber") t = "warning";
+      showToast(options.title ? `${options.title}: ${options.message}` : options.message, t);
+    },
+    [showToast]
+  );
+
   const removeToast = (id: string) => {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   };
@@ -52,7 +64,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   };
 
   return (
-    <ToastContext.Provider value={{ showToast }}>
+    <ToastContext.Provider value={{ showToast, addToast }}>
       {children}
       <div
         style={{

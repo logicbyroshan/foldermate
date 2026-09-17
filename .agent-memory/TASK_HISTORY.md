@@ -203,3 +203,41 @@ Testing performed:
 Important decisions:
 - Pausing the CSS float animation on hover (`animation-play-state: paused`) provides smooth, predictable interaction for users clicking the floating stickers.
 
+## 2026-09-17 — Windows-Native File Explorer Architecture & UI Transformation
+Task: Transform FolderMate from card-heavy web SaaS views into a professional Windows File Explorer-inspired desktop utility with FolderMate background automation.
+Reason: User request to discard generic card grids and web dashboards in favor of a true Windows File Explorer mental model with folders, file format recognition, details tables, address bar navigation, collapsible details inspector, dedicated background daemon controls, and keyboard-first hotkeys.
+Files/areas affected:
+- `apps/desktop/src/renderer/components/ExplorerHeader.tsx`
+- `apps/desktop/src/renderer/components/InspectorPanel.tsx`
+- `apps/desktop/src/renderer/views/ExplorerView.tsx`
+- `apps/desktop/src/renderer/views/HomeView.tsx`
+- `apps/desktop/src/renderer/views/BackgroundAutomation.tsx`
+- `apps/desktop/src/renderer/views/KeyboardShortcuts.tsx`
+- `apps/desktop/src/renderer/views/ReviewQueue.tsx`
+- `apps/desktop/src/renderer/components/Sidebar.tsx`
+- `apps/desktop/src/renderer/mock-bridge.ts`
+- `apps/desktop/src/renderer/App.tsx`
+- `apps/desktop/src/renderer/index.css`
+- `CHANGELOG.md`
+- `.agent-memory/CURRENT_STATE.md`
+- `.agent-memory/TASK_HISTORY.md`
+- `.agent-memory/DECISIONS.md`
+What changed:
+- Built `ExplorerHeader` with back/forward/up/refresh, breadcrumbs address bar (`Ctrl+L`), search (`Ctrl+F`), Details/List/Icons view modes (`Ctrl+1/2/3`), inspector toggle, and live status dropdown with pause controls.
+- Built `InspectorPanel` collapsible details pane with extension badges, DAG version tree, SHA-256 hash, client/project metadata, and file action buttons.
+- Built `ExplorerView` supporting sortable Details table, Compact List, and Icons grid views.
+- Built `HomeView` with Quick Access, Recent Files details table, Needs Review banner, and live activity stream.
+- Built `BackgroundAutomation` with live daemon metrics (CPU %, Memory MB, SQLite WAL status, Queue depth, Watcher status), pause automation controls (1h/tomorrow/indefinite), file monitoring config, and resource usage modes (Battery Saver, Balanced, Performance).
+- Built `KeyboardShortcuts` with shortcut table and key remapping with interactive conflict detection.
+- Refactored `ReviewQueue` into Explorer table with right-side classification heuristics inspector.
+- Updated `Sidebar` to match Windows Explorer navigation tree.
+- Updated `mock-bridge.ts` RPC methods for telemetry, pause/resume, resource mode, and folder hierarchy traversal.
+Testing performed:
+- `npm test` passed 13 test files and 39 tests.
+- `npm run build` passed across all monorepo workspaces (`@foldermate/desktop`, `@foldermate/engine`, `@foldermate/landing`, `@foldermate/config`, `@foldermate/database`, `@foldermate/shared`).
+- Browser subagent verification of Explorer, Inspector, Background Automation, and Shortcuts.
+Important decisions:
+- Folders are represented as folders with client color swatches; files display vector/raster format badges (CDR=amber, PDF=red, AI=orange, PSD=blue, PNG=cyan, SVG=purple).
+- The desktop shell acts as a lightweight presentation client while the background engine daemon manages file ingestion, classification, versioning, and SQLite persistence independently.
+
+

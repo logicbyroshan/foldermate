@@ -19,7 +19,7 @@ Major implementation areas are present:
 - IPC auth handshake and RPC dispatch are implemented.
 - Desktop shell and renderer infrastructure are present.
 - Multi-step Onboarding, Free Community Tasks Key Generator, and Supporter VIP Activation system implemented.
-- Production-grade Standalone Landing Page at `apps/landing` modeled after trypixie.io neo-brutalist aesthetic with single-line hero headline, mobile nav drawer, 6 customer reviews, 3 workflow guide blogs, and interactive 3-task activation key generator.
+- Production-grade Standalone Landing Page at `apps/landing` featuring full-width realistic laptop screen showcase, single-line hero headline, mobile nav drawer, 6 customer reviews, 3 workflow guide blogs, and interactive 3-task activation key generator.
 - Documentation and ADRs are included in the repo.
 
 ## Work in progress / active risks
@@ -39,3 +39,4 @@ Major implementation areas are present:
 - Built the interactive Onboarding Wizard with Free Community Tasks (Star repo, comment on blog, follow LinkedIn/X), offline cryptographic key validation, and Supporter/Sponsor lifetime VIP key portals.
 - **PR #13**: Comprehensive UI visual overhaul — animated StatCards with gradient accent bars and counter animations, file extension type badges (CDR/PDF/AI/PSD/PNG etc), refactored Ingestion Sandbox, vertical gold accent bar on active sidebar items, glassmorphic TopBar with `saturate(180%)` blur.
 - **PR #15 & #16**: Standalone neo-brutalist Landing Page (`apps/landing`) featuring single-line hero headline, mobile drawer navigation, live odometer file counter, customer reviews grid, workflow guides blog section, and interactive 3-task activation key generator.
+- **PR #18 & #19**: Full-width realistic laptop screen showcase mockup in Hero section (with real FolderMate sidebar, stat cards, watcher banner, and file ingestion table), section spacing overhaul, and removal of odometer card.

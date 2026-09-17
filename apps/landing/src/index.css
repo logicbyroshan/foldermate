@@ -47,12 +47,12 @@ a { color: inherit; text-decoration: none; }
 }
 
 section {
-  padding: 96px 0;
+  padding: 80px 0;
   position: relative;
 }
 
 .section-header {
-  margin-bottom: 52px;
+  margin-bottom: 48px;
 }
 .section-header h2 {
   margin-bottom: 14px;
@@ -284,7 +284,7 @@ section {
 /* ─── Hero Section ───────────────────────────────────────────── */
 .hero {
   text-align: center;
-  padding: 70px 0 60px;
+  padding: 70px 0 40px;
 }
 .hero-container {
   display: flex;
@@ -328,7 +328,7 @@ section {
   justify-content: center;
   gap: 14px;
   flex-wrap: wrap;
-  margin-bottom: 44px;
+  margin-bottom: 48px;
 }
 .hero-badge {
   background: #fff;
@@ -362,22 +362,58 @@ section {
   z-index: 1;
 }
 
-/* ─── Hero Unified Desktop App Window Preview ────────────────── */
-.hero-app-window {
+/* ─── Laptop Screen Showcase Device ─────────────────────────── */
+.laptop-wrapper {
   width: 100%;
-  max-width: 860px;
-  background: #fff;
+  max-width: 1060px;
+  margin: 0 auto;
+}
+.laptop-device {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.laptop-screen-lid {
+  width: 100%;
+  background: #1e2022;
   border: var(--border);
-  border-radius: var(--radius);
+  border-radius: 18px 18px 0 0;
+  padding: 12px 14px 14px;
   box-shadow: var(--shadow-lg);
-  overflow: hidden;
+  position: relative;
   text-align: left;
 }
-.app-titlebar {
-  background: var(--vanilla);
-  border-bottom: var(--border);
-  height: 38px;
-  padding: 0 16px;
+.laptop-camera-notch {
+  width: 60px;
+  height: 8px;
+  margin: 0 auto 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.camera-lens {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #0f172a;
+  border: 1px solid #334155;
+  box-shadow: inset 0 0 2px #38bdf8;
+}
+
+.laptop-display-inner {
+  background: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+}
+.laptop-app-chrome {
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+  height: 36px;
+  padding: 0 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -396,222 +432,298 @@ section {
 .dot-red { background: #ff5f57; }
 .dot-yellow { background: #ffbd2e; }
 .dot-green { background: #28c840; }
-.window-title {
-  font-size: 0.82rem;
+
+.laptop-app-title {
+  font-size: 0.78rem;
   font-weight: 700;
-  color: #222;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  color: #334155;
 }
-.window-status-pill {
-  font-size: 0.7rem;
+.laptop-app-badge {
+  font-size: 0.68rem;
   font-weight: 800;
   letter-spacing: 0.04em;
   background: #fff;
-  border: 1.5px solid #1a1a1a;
-  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  border-radius: 5px;
   padding: 2px 8px;
   display: flex;
   align-items: center;
   gap: 6px;
+  color: #0f172a;
 }
 .live-pulse {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: #10b981;
   display: inline-block;
   box-shadow: 0 0 6px #10b981;
 }
 
-.app-table-wrap {
-  overflow-x: auto;
-  background: #fff;
+.laptop-app-body {
+  display: flex;
+  min-height: 380px;
 }
-.app-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.82rem;
+.laptop-sidebar {
+  width: 190px;
+  background: #0f172a;
+  color: #f8fafc;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex-shrink: 0;
 }
-.app-table th {
-  background: #fafafa;
-  border-bottom: 1px solid rgba(0,0,0,0.1);
-  padding: 10px 14px;
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: #777;
-  text-align: left;
+.laptop-sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
 }
-.app-table-row {
-  border-bottom: 1px solid rgba(0,0,0,0.06);
-  transition: background 0.1s ease;
-}
-.app-table-row:hover {
-  background: var(--amber-light);
-}
-.app-table td {
-  padding: 11px 14px;
-  vertical-align: middle;
-}
-.ext-badge {
-  display: inline-block;
-  color: #fff;
-  font-size: 0.68rem;
-  font-weight: 900;
-  padding: 2px 6px;
-  border-radius: 4px;
-  letter-spacing: 0.04em;
-}
-.file-name-text {
-  font-weight: 700;
-  color: #1a1a1a;
-}
-.client-text {
-  color: #555;
-  font-weight: 600;
-}
-.path-text {
-  font-family: monospace;
-  font-size: 0.76rem;
-  color: #666;
-  background: rgba(0,0,0,0.04);
-  padding: 2px 6px;
-  border-radius: 4px;
-}
-.version-pill {
-  display: inline-block;
-  background: #10b981;
-  color: #fff;
-  font-size: 0.72rem;
-  font-weight: 800;
-  padding: 2px 6px;
-  border-radius: 4px;
-}
-.version-pill-amber {
+.brand-icon {
+  width: 28px;
+  height: 28px;
   background: var(--amber);
-  color: #1a1a1a;
-}
-.status-pill {
-  display: inline-block;
-  background: #ecfdf5;
-  color: #065f46;
-  border: 1px solid #a7f3d0;
-  font-size: 0.72rem;
-  font-weight: 800;
-  padding: 2px 8px;
-  border-radius: 4px;
-}
-
-.app-footer-bar {
-  background: var(--vanilla);
-  border-top: var(--border);
-  padding: 10px 16px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: #444;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.footer-status-left {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-.footer-status-left code {
-  font-family: monospace;
-  background: #fff;
-  padding: 1px 5px;
-  border: 1px solid rgba(0,0,0,0.2);
-  border-radius: 4px;
-}
-.footer-status-right {
-  color: #065f46;
-  font-weight: 700;
-}
-
-/* ─── Odometer Counter ───────────────────────────────────────── */
-.odometer-section {
-  padding: 40px 0 70px;
-}
-.odometer-card {
-  background: var(--vanilla);
-  border: var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-lg);
-  padding: 36px 44px;
-  max-width: 760px;
-  margin: 0 auto;
-}
-.odometer-display {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  margin-bottom: 18px;
-  flex-wrap: wrap;
-}
-.odometer-digits {
-  display: flex;
-  gap: 5px;
-}
-.odometer-digit {
-  width: 44px;
-  height: 56px;
-  background: #fff;
-  border: 2px solid var(--black);
-  border-radius: 8px;
-  box-shadow: var(--shadow-sm);
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'DM Serif Display', serif;
-  font-size: 1.85rem;
-  font-weight: 400;
-  color: var(--black);
+  font-size: 0.9rem;
+  color: #000;
 }
-.odometer-label-group {
+.brand-text {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  line-height: 1.15;
 }
-.odometer-label {
-  font-family: 'DM Serif Display', serif;
-  font-size: 1.5rem;
-  color: var(--black);
-}
-.odometer-sublabel {
+.brand-text strong {
   font-size: 0.85rem;
-  color: #666;
-  font-weight: 600;
+  color: #fff;
 }
-.odometer-tagline {
-  font-size: 0.98rem;
-  line-height: 1.65;
-  color: #333;
+.brand-text span {
+  font-size: 0.68rem;
+  color: #94a3b8;
 }
-.odometer-tagline strong {
-  background: var(--amber);
-  padding: 1px 6px;
-  border-radius: 4px;
-  color: #1a1a1a;
+
+.laptop-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
-.odometer-actions {
+.nav-item {
   display: flex;
   align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 8px 10px;
+  border-radius: 6px;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+.nav-item:hover {
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+}
+.nav-item.active {
+  background: rgba(232,155,0,0.16);
+  color: #fbbf24;
+  border-left: 3px solid #e89b00;
+}
+.nav-badge {
+  background: #e89b00;
+  color: #000;
+  font-size: 0.65rem;
+  font-weight: 900;
+  padding: 1px 6px;
+  border-radius: 999px;
+  margin-left: auto;
+}
+
+.laptop-sidebar-footer {
+  margin-top: auto;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: 10px;
+}
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+.status-dot.green {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+}
+
+.laptop-main-panel {
+  flex: 1;
+  background: #f8fafc;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
   gap: 12px;
-  margin-top: 24px;
-  flex-wrap: wrap;
+  overflow-x: auto;
+}
+
+.laptop-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+.laptop-stat-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px 12px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+.stat-label {
+  font-size: 0.66rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.stat-value {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.45rem;
+  color: #0f172a;
+  margin: 1px 0;
+}
+.stat-sub {
+  font-size: 0.68rem;
+  font-weight: 600;
+}
+.stat-sub.positive { color: #10b981; }
+.stat-sub.warning { color: #f59e0b; }
+.stat-sub.neutral { color: #64748b; }
+
+.laptop-pipeline-notice {
+  background: rgba(232,155,0,0.08);
+  border: 1px dashed rgba(232,155,0,0.6);
+  border-radius: 8px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.76rem;
+  color: #92400e;
+}
+.notice-icon {
+  font-size: 0.95rem;
+}
+.notice-text code {
+  font-family: monospace;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.15);
+  padding: 1px 4px;
+  border-radius: 4px;
+}
+
+.laptop-table-container {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.laptop-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.76rem;
+}
+.laptop-table th {
+  background: #f1f5f9;
+  padding: 8px 12px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: left;
+}
+.laptop-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+.ext-pill {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 900;
+  color: #fff;
+  padding: 2px 5px;
+  border-radius: 4px;
+  letter-spacing: 0.03em;
+}
+.filename-cell {
+  font-weight: 700;
+  color: #0f172a;
+}
+.client-cell {
+  color: #475569;
+  font-weight: 600;
+}
+.path-cell code {
+  font-family: monospace;
+  font-size: 0.7rem;
+  color: #64748b;
+  background: #f1f5f9;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+.ver-pill {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 800;
+  background: #10b981;
+  color: #fff;
+  padding: 2px 5px;
+  border-radius: 4px;
+}
+.ver-pill.amber {
+  background: #e89b00;
+  color: #000;
+}
+.done-pill {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 800;
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.laptop-base-stand {
+  width: 104%;
+  height: 16px;
+  background: #cbd5e1;
+  border: var(--border);
+  border-radius: 0 0 16px 16px;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  justify-content: center;
+  position: relative;
+  margin-top: -2px;
+}
+.laptop-base-notch {
+  width: 130px;
+  height: 5px;
+  background: #94a3b8;
+  border-radius: 0 0 6px 6px;
 }
 
 /* ─── Trusted By Section ─────────────────────────────────────── */
 .trusted-section {
-  padding: 20px 0 60px;
+  padding: 30px 0 60px;
 }
 .trusted-inner {
   max-width: 1180px;
@@ -658,7 +770,7 @@ section {
 }
 
 /* ─── Feature Grid (3 cards) ─────────────────────────────────── */
-.feature-grid-section { padding: 90px 0; }
+.feature-grid-section { padding: 80px 0; }
 .feature-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -703,7 +815,7 @@ section {
 .feature-card p  { font-size: 0.94rem; color: #555; line-height: 1.65; }
 
 /* ─── Split Feature Sections ─────────────────────────────────── */
-.split-section { padding: 90px 0; }
+.split-section { padding: 80px 0; }
 .split-inner {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -887,7 +999,7 @@ section {
 }
 
 /* ─── Benefits Section ───────────────────────────────────────── */
-.benefits-section { padding: 90px 0; }
+.benefits-section { padding: 80px 0; }
 .benefits-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -928,7 +1040,7 @@ section {
 
 /* ─── Reviews / Testimonials Section ─────────────────────────── */
 .reviews-section {
-  padding: 96px 0;
+  padding: 80px 0;
   background: var(--cream);
 }
 .reviews-grid {
@@ -1069,7 +1181,7 @@ section {
 
 /* ─── Blog & Workflow Guides Section ─────────────────────────── */
 .blog-section {
-  padding: 90px 0;
+  padding: 80px 0;
 }
 .blog-grid {
   display: grid;
@@ -1162,7 +1274,7 @@ section {
 
 /* ─── Download & Activation Key Section ───────────────────────── */
 .cta-banner {
-  padding: 96px 0;
+  padding: 80px 0;
   background: var(--cream);
 }
 .download-grid {
@@ -1410,7 +1522,7 @@ section {
 }
 
 /* ─── FAQ Section ────────────────────────────────────────────── */
-.faq-section { padding: 90px 0; }
+.faq-section { padding: 80px 0; }
 .faq-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1488,6 +1600,9 @@ section {
 /* Tablets & Small Laptops (<= 1024px) */
 @media (max-width: 1024px) {
   .navbar-links { gap: 18px; }
+  .laptop-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
   .feature-grid, .benefits-grid, .reviews-grid, .blog-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -1503,18 +1618,17 @@ section {
   .mobile-drawer { display: block; }
   .desktop-only { display: none !important; }
 
+  .laptop-sidebar { display: none; }
   .split-inner { grid-template-columns: 1fr; gap: 40px; }
   .split-inner.reverse { direction: ltr; }
   .faq-grid { grid-template-columns: 1fr; }
   
   .trusted-inner { flex-direction: column; align-items: flex-start; gap: 20px; }
-  
-  .odometer-card { padding: 30px 24px; }
 }
 
 /* Mobile Devices (<= 640px) */
 @media (max-width: 640px) {
-  section { padding: 60px 0; }
+  section { padding: 50px 0; }
   .container { padding: 0 16px; }
 
   /* Hero headline guaranteed single-line on mobile */
@@ -1522,7 +1636,7 @@ section {
   h2 { font-size: clamp(1.5rem, 5.5vw, 2rem); }
   h3 { font-size: 1.15rem; }
 
-  .hero { padding: 40px 0 30px; }
+  .hero { padding: 40px 0 20px; }
   .hero-title-highlight {
     font-size: 0.95em;
   }
@@ -1542,39 +1656,18 @@ section {
     flex-direction: column;
     align-items: center;
     gap: 12px;
-    margin-bottom: 32px;
+    margin-bottom: 28px;
   }
   .hero-badge::after, .hero-badge::before { display: none; }
+
+  .laptop-stats-grid {
+    grid-template-columns: 1fr;
+  }
 
   /* Feature, Benefits, Reviews, Blog Grids -> 1 Column */
   .feature-grid, .benefits-grid, .reviews-grid, .blog-grid {
     grid-template-columns: 1fr;
     gap: 20px;
-  }
-
-  /* Odometer card */
-  .odometer-card {
-    padding: 24px 18px;
-  }
-  .odometer-display {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-  .odometer-digit {
-    width: 36px;
-    height: 48px;
-    font-size: 1.5rem;
-  }
-  .odometer-label {
-    font-size: 1.25rem;
-  }
-  .odometer-actions {
-    flex-direction: column;
-    width: 100%;
-  }
-  .odometer-actions .btn {
-    width: 100%;
   }
 
   /* Download & Key Generator */

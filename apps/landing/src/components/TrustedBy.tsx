@@ -2,27 +2,34 @@ import React from 'react';
 
 const LOGOS = [
   { icon: '⭐', name: 'GitHub Stars', href: 'https://github.com/logicbyroshan/foldermate' },
-  { icon: '💼', name: 'LinkedIn', href: '#' },
-  { icon: '🐦', name: 'X / Twitter', href: '#' },
-  { icon: '📰', name: 'Dev.to Blog', href: '#' },
-  { icon: '🎨', name: 'Design Studios', href: '#' },
+  { icon: '💼', name: 'LinkedIn', href: 'https://linkedin.com' },
+  { icon: '🐦', name: 'X / Twitter', href: 'https://x.com' },
+  { icon: '📰', name: 'Dev.to Guides', href: 'https://dev.to' },
+  { icon: '🎨', name: 'Design Studios', href: '#reviews' },
 ];
 
 export default function TrustedBy() {
   return (
     <section className="trusted-section">
-      <div className="trusted-inner">
-        <div className="trusted-label">
-          Trusted by studios,<br />
-          freelancers &amp; agencies
-        </div>
-        <div className="trusted-logos">
-          {LOGOS.map((l) => (
-            <a key={l.name} href={l.href} target="_blank" rel="noreferrer" className="trusted-logo">
-              <span style={{ fontSize: '1.2rem' }}>{l.icon}</span>
-              {l.name}
-            </a>
-          ))}
+      <div className="container">
+        <div className="trusted-inner">
+          <div className="trusted-label">
+            Trusted by studios, freelancers &amp; print agencies
+          </div>
+          <div className="trusted-logos">
+            {LOGOS.map((l) => (
+              <a
+                key={l.name}
+                href={l.href}
+                target={l.href.startsWith('http') ? '_blank' : '_self'}
+                rel="noreferrer"
+                className="trusted-logo"
+              >
+                <span>{l.icon}</span>
+                <span>{l.name}</span>
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </section>

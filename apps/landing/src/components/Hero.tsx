@@ -1,47 +1,47 @@
 import React from 'react';
 
-function MockCard({ dark, compact }: { dark?: boolean; compact?: boolean }) {
+export default function Hero() {
   const rows = [
-    { ext: 'CDR', name: 'ABC School ID Card 2026 v8', badge: 'v8', color: '#d97706' },
-    { ext: 'PDF', name: 'Apex Healthcare Brochure v3', badge: 'v3', color: '#dc2626' },
-    { ext: 'AI',  name: 'Zenith Corp Lanyard 2025 v1', badge: 'v1', color: '#ea580c' },
-    { ext: 'PSD', name: 'City Gala Event Poster v2', badge: 'v2', color: '#2563eb' },
+    {
+      ext: 'CDR',
+      color: '#d97706',
+      name: 'ABC School Annual Sports ID Card 2026.cdr',
+      client: 'ABC School',
+      target: 'Clients/ABC School/2026/ID Cards/',
+      ver: 'v8',
+      status: 'Organized',
+    },
+    {
+      ext: 'PDF',
+      color: '#dc2626',
+      name: 'Apex Healthcare Tri-Fold Brochure Draft.pdf',
+      client: 'Apex Healthcare',
+      target: 'Clients/Apex/Brochures/2026/',
+      ver: 'v3',
+      status: 'Organized',
+    },
+    {
+      ext: 'AI',
+      color: '#ea580c',
+      name: 'Zenith Corp Conference Lanyard Design.ai',
+      client: 'Zenith Corp',
+      target: 'Clients/Zenith/Branding/',
+      ver: 'v1',
+      status: 'Organized',
+    },
+    {
+      ext: 'PSD',
+      color: '#2563eb',
+      name: 'City Gala Charity Event Billboard 6x3m.psd',
+      client: 'City Gala',
+      target: 'Clients/City Gala/Events/2026/',
+      ver: 'v2',
+      status: 'Organized',
+    },
   ];
 
   return (
-    <div
-      className={`hero-mock ${dark ? 'hero-mock-dark hero-mock-side' : 'hero-mock-light hero-mock-center'}`}
-    >
-      <div className={`mock-titlebar ${dark ? 'mock-titlebar-dark' : 'mock-titlebar-light'}`}>
-        <div className="mock-dot mock-dot-red" />
-        <div className="mock-dot mock-dot-yellow" />
-        <div className="mock-dot mock-dot-green" />
-        <span className="mock-titlebar-text">
-          {dark ? 'Review Queue (Pending)' : 'FolderMate — Ingestion Pipeline'}
-        </span>
-      </div>
-      <div className="mock-body">
-        {(dark ? rows.slice(0, 2) : rows).map((r, i) => (
-          <div key={i} className={`mock-row ${dark ? 'mock-row-dark' : 'mock-row-light'}`}>
-            <span className="mock-ext" style={{ background: r.color }}>{r.ext}</span>
-            <span className="mock-filename">{r.name}</span>
-            <span className={`mock-badge ${i === 0 ? 'mock-badge-amber' : ''}`}>{r.badge}</span>
-          </div>
-        ))}
-        {!dark && (
-          <div className="mock-sandbox-notice">
-            <span style={{ fontSize: '1rem' }}>⚡</span>
-            <span><strong>Ingestion Active:</strong> Watching <code>Inbox/</code> folder · Auto-classified with 98% confidence</span>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-export default function Hero() {
-  return (
-    <section className="hero">
+    <section className="hero" id="hero">
       <div className="container hero-container">
         {/* Star badge */}
         <div className="animate-fade-up hero-top-badge-wrap">
@@ -50,7 +50,7 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Headline with guaranteed single-line "organized — automatically." */}
+        {/* Headline with guaranteed single-line 'organized — automatically.' */}
         <h1 className="hero-headline animate-fade-up delay-1">
           <span className="hero-title-top">Your design files,</span>
           <span className="hero-title-highlight">organized — automatically.</span>
@@ -81,14 +81,83 @@ export default function Hero() {
         <div className="hero-badges animate-fade-up delay-4">
           <div className="hero-badge">✨ Better named files</div>
           <div className="hero-badge">🔄 Auto versioned (v1, v2)</div>
-          <div className="hero-badge">⚡ 100% Offline & Private</div>
+          <div className="hero-badge">⚡ 100% Offline &amp; Private</div>
         </div>
 
-        {/* App mockup cards */}
-        <div className="hero-mockups animate-fade-up" style={{ animationDelay: '0.5s' }}>
-          <MockCard dark />
-          <MockCard />
-          <MockCard dark />
+        {/* Compact, Unified Desktop App Window Preview */}
+        <div className="hero-app-window animate-fade-up" style={{ animationDelay: '0.45s' }}>
+          {/* Titlebar */}
+          <div className="app-titlebar">
+            <div className="window-dots">
+              <div className="dot dot-red" />
+              <div className="dot dot-yellow" />
+              <div className="dot dot-green" />
+            </div>
+            <div className="window-title">
+              <span>📁</span> FolderMate Desktop — Watch &amp; Classify Engine
+            </div>
+            <div className="window-status-pill">
+              <span className="live-pulse" /> ENGINE ACTIVE
+            </div>
+          </div>
+
+          {/* Window Body: Table of organized files */}
+          <div className="app-table-wrap">
+            <table className="app-table">
+              <thead>
+                <tr>
+                  <th style={{ width: '60px' }}>Type</th>
+                  <th>Source File</th>
+                  <th>Client / Project</th>
+                  <th>Destination Folder</th>
+                  <th style={{ width: '65px', textAlign: 'center' }}>Version</th>
+                  <th style={{ width: '90px', textAlign: 'right' }}>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((row, idx) => (
+                  <tr key={idx} className="app-table-row">
+                    <td>
+                      <span className="ext-badge" style={{ background: row.color }}>
+                        {row.ext}
+                      </span>
+                    </td>
+                    <td>
+                      <span className="file-name-text">{row.name}</span>
+                    </td>
+                    <td>
+                      <span className="client-text">{row.client}</span>
+                    </td>
+                    <td>
+                      <code className="path-text">{row.target}</code>
+                    </td>
+                    <td style={{ textAlign: 'center' }}>
+                      <span className={`version-pill ${idx === 0 ? 'version-pill-amber' : ''}`}>
+                        {row.ver}
+                      </span>
+                    </td>
+                    <td style={{ textAlign: 'right' }}>
+                      <span className="status-pill">✓ Done</span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Window Footer Status */}
+          <div className="app-footer-bar">
+            <div className="footer-status-left">
+              <span>⚡ Watching <code>Inbox/</code> folder</span>
+              <span>·</span>
+              <span>4 files organized in 0.3s</span>
+              <span>·</span>
+              <span>Confidence: 98%</span>
+            </div>
+            <div className="footer-status-right">
+              <span>🔒 100% Offline (SQLite WAL)</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>

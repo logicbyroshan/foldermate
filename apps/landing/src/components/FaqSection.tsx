@@ -28,10 +28,57 @@ const FAQS = [
 ];
 
 export default function FaqSection() {
-  const [open, setOpen] = useState<number | null>(0); // First item open by default
+  const [openItems, setOpenItems] = useState<Set<number>>(new Set([0])); // First item open by default
 
   const toggle = (i: number) => {
-    setOpen(open === i ? null : i);
+    setOpenItems((prev) => {
+      const next = new Set(prev);
+      if (next.has(i)) {
+        next.delete(i);
+      } else {
+        next.add(i);
+      }
+      return next;
+    });
+  };
+
+  const col1 = FAQS.map((item, idx) => ({ ...item, originalIndex: idx })).filter(
+    (_, idx) => idx % 2 === 0
+  );
+  const col2 = FAQS.map((item, idx) => ({ ...item, originalIndex: idx })).filter(
+    (_, idx) => idx % 2 === 1
+  );
+
+  const renderCard = (f: (typeof FAQS)[0] & { originalIndex: number }) => {
+    const isOpen = openItems.has(f.originalIndex);
+    return (
+      <div
+        key={f.originalIndex}
+        className={`faq-card ${isOpen ? 'faq-card-open' : ''}`}
+        onClick={() => toggle(f.originalIndex)}
+        role="button"
+        tabIndex={0}
+        aria-expanded={isOpen}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggle(f.originalIndex);
+          }
+        }}
+      >
+        <div className="faq-question-row">
+          <h3 className="faq-question-text">{f.q}</h3>
+          <div className={`faq-toggle-icon ${isOpen ? 'open' : ''}`}>
+            {isOpen ? '−' : '+'}
+          </div>
+        </div>
+        {isOpen && (
+          <div className="faq-answer animate-fade-up">
+            <p>{f.a}</p>
+          </div>
+        )}
+      </div>
+    );
   };
 
   return (
@@ -48,39 +95,10 @@ export default function FaqSection() {
           </p>
         </div>
 
-        {/* FAQ Accordion Grid */}
+        {/* FAQ Independent Columns Grid */}
         <div className="faq-grid">
-          {FAQS.map((f, i) => {
-            const isOpen = open === i;
-            return (
-              <div
-                key={i}
-                className={`faq-card ${isOpen ? 'faq-card-open' : ''}`}
-                onClick={() => toggle(i)}
-                role="button"
-                tabIndex={0}
-                aria-expanded={isOpen}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    toggle(i);
-                  }
-                }}
-              >
-                <div className="faq-question-row">
-                  <h3 className="faq-question-text">{f.q}</h3>
-                  <div className={`faq-toggle-icon ${isOpen ? 'open' : ''}`}>
-                    {isOpen ? '−' : '+'}
-                  </div>
-                </div>
-                {isOpen && (
-                  <div className="faq-answer animate-fade-up">
-                    <p>{f.a}</p>
-                  </div>
-                )}
-              </div>
-            );
-          })}
+          <div className="faq-column">{col1.map(renderCard)}</div>
+          <div className="faq-column">{col2.map(renderCard)}</div>
         </div>
 
         {/* Rebuilt "Still Have Questions?" Neo-Brutalist Support Banner */}

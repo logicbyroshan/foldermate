@@ -26,6 +26,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Integrated license state into `Sidebar`, `TopBar`, `Settings`, and browser mock bridge.
 - Established the baseline memory and project instruction system for the repository.
 - Added a mandatory GitHub CLI branch/PR workflow rule to the operating guidance.
+- **Landing Page Responsive Laptop & Footer Overhaul**:
+  - Fixed small-screen / mobile laptop screen scaling in `Hero.tsx` to maintain widescreen aspect ratio without vertical stretching or tall gaps.
+  - Implemented 3-task scrollable container in `CtaBanner.tsx` with smooth amber scrollbar and scroll hint badge (`Showing 3 of 5 · Scroll for more ↓`), balancing card heights.
+  - Enlarged `SplitFeature.tsx` mockup cards (`OrganizeMock` and `ReviewQueueMock`) with rich metadata, status pills, suggestions, and `Assign & Move →` action buttons.
+  - Redesigned `Footer.tsx` in cohesive dark neo-brutalist styling with top CTA callout banner, 4-column directory, and bottom system status pills.
 - Added the branded FolderMate app icon, favicon set, and desktop theme refresh.
 
 ## [1.0.0] - 2026-09-12

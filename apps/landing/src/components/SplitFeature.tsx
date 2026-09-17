@@ -10,28 +10,37 @@ function OrganizeMock() {
             <div className="dot dot-yellow" />
             <div className="dot dot-green" />
           </div>
-          <span className="split-mock-title">📁 Organized / Clients / 2026 /</span>
-          <span className="split-mock-pill">5 files organized</span>
+          <span className="split-mock-title">📂 C:\Studio\Clients\2026\</span>
+          <span className="split-mock-pill">5 Files Organized</span>
         </div>
+
         <div className="split-mock-body">
           {[
-            { ext: 'CDR', name: 'ABC School Annual ID 2026 v8.cdr', color: '#d97706', size: '24.2 MB' },
-            { ext: 'PDF', name: 'Apex Healthcare Brochure v3.pdf', color: '#dc2626', size: '8.4 MB' },
-            { ext: 'AI',  name: 'Zenith Corp Lanyard Design v1.ai', color: '#ea580c', size: '14.1 MB' },
-            { ext: 'PSD', name: 'City Gala Poster Final v2.psd', color: '#2563eb', size: '62.8 MB' },
+            { ext: 'CDR', name: 'ABC_School_Annual_Sports_ID_2026.cdr', color: '#d97706', size: '24.2 MB', dest: 'Clients / ABC School / ID Cards /', ver: 'v8' },
+            { ext: 'PDF', name: 'Apex_Healthcare_TriFold_Brochure_Draft.pdf', color: '#dc2626', size: '8.4 MB', dest: 'Clients / Apex / Brochures /', ver: 'v3' },
+            { ext: 'AI',  name: 'Zenith_Corp_Staff_Lanyard_Artwork.ai', color: '#ea580c', size: '14.1 MB', dest: 'Clients / Zenith / Branding /', ver: 'v1' },
+            { ext: 'PSD', name: 'City_Gala_Charity_Billboard_6x3m.psd', color: '#2563eb', size: '62.8 MB', dest: 'Clients / City Gala / Events /', ver: 'v2' },
+            { ext: 'CDR', name: 'Nexus_Print_Packaging_Box_Dieline.cdr', color: '#d97706', size: '18.7 MB', dest: 'Clients / Nexus / Packaging /', ver: 'v4' },
           ].map((r, i) => (
             <div key={i} className="split-file-item">
               <span className="ext-badge" style={{ background: r.color }}>{r.ext}</span>
               <div className="split-file-details">
-                <span className="split-file-name">{r.name}</span>
-                <span className="split-file-size">{r.size}</span>
+                <div className="split-file-title-row">
+                  <span className="split-file-name">{r.name}</span>
+                  <span className="split-file-ver-pill">{r.ver}</span>
+                </div>
+                <div className="split-file-meta-row">
+                  <span className="split-file-dest">📁 {r.dest}</span>
+                  <span className="split-file-size">{r.size}</span>
+                </div>
               </div>
               <span className="split-file-status">✓ Moved</span>
             </div>
           ))}
         </div>
+
         <div className="split-mock-footer">
-          <span>✓ Two-phase verification complete · Zero data loss</span>
+          <span>✓ Two-phase verification complete · SHA-256 matched · SQLite WAL committed</span>
         </div>
       </div>
     </div>
@@ -48,36 +57,56 @@ function ReviewQueueMock() {
             <div className="dot dot-yellow" />
             <div className="dot dot-green" />
           </div>
-          <span className="split-mock-title">🔍 Review Queue (Needs Approval)</span>
-          <span className="split-mock-pill amber">2 pending</span>
+          <span className="split-mock-title">🔍 Review Queue (Requires Confirmation)</span>
+          <span className="split-mock-pill amber">3 Pending</span>
         </div>
+
         <div className="split-mock-body">
           {[
             {
+              ext: 'PDF',
+              color: '#dc2626',
               name: 'unknown_studio_brochure_draft_final.pdf',
-              conf: '38% Match',
-              reason: 'Unclear client name',
+              conf: '38% Confidence',
+              reason: 'Unrecognized client name',
+              suggestion: 'Suggestion: Assign to "Studio Velo"',
             },
             {
-              name: 'new_project_image_raw_export.ai',
-              conf: '52% Match',
-              reason: 'Category ambiguous',
+              ext: 'AI',
+              color: '#ea580c',
+              name: 'new_project_image_raw_export_master.ai',
+              conf: '52% Confidence',
+              reason: 'Category folder ambiguous',
+              suggestion: 'Suggestion: Move to "Branding/2026"',
+            },
+            {
+              ext: 'CDR',
+              color: '#d97706',
+              name: 'event_stage_backdrop_vector_final.cdr',
+              conf: '64% Confidence',
+              reason: 'Multiple client matches',
+              suggestion: 'Suggestion: Match "City Gala"',
             },
           ].map((r, i) => (
             <div key={i} className="split-review-item">
+              <span className="ext-badge" style={{ background: r.color }}>{r.ext}</span>
               <div className="split-review-left">
                 <span className="split-review-name">{r.name}</span>
-                <span className="split-review-reason">⚠️ {r.reason}</span>
+                <div className="split-review-details">
+                  <span className="split-review-reason">⚠️ {r.reason}</span>
+                  <span className="split-review-suggest">{r.suggestion}</span>
+                </div>
               </div>
               <div className="split-review-right">
                 <span className="conf-pill">{r.conf}</span>
-                <button type="button" className="assign-btn">Assign →</button>
+                <button type="button" className="assign-btn">Assign &amp; Move →</button>
               </div>
             </div>
           ))}
         </div>
+
         <div className="split-mock-footer">
-          <span>🔒 Low-confidence files held securely until your 1-click confirmation</span>
+          <span>🔒 Safe Isolation: Ambiguous files stay in Inbox until your 1-click confirmation</span>
         </div>
       </div>
     </div>

@@ -4,10 +4,10 @@ export default function Footer() {
   return (
     <footer className="footer">
       <div className="container">
-        {/* Top Banner Callout inside Footer */}
+        {/* Top Callout Banner inside Footer */}
         <div className="footer-top-banner">
           <div className="footer-top-left">
-            <div className="star-badge" style={{ marginBottom: 8, background: '#27272a', color: '#fff', borderColor: '#3f3f46' }}>
+            <div className="star-badge" style={{ marginBottom: 10 }}>
               <span>⭐</span> OPEN SOURCE &amp; OFFLINE FIRST
             </div>
             <h3>Ready to end manual file clutter?</h3>
@@ -22,7 +22,6 @@ export default function Footer() {
               target="_blank"
               rel="noreferrer"
               className="btn btn-outline btn-lg"
-              style={{ background: '#27272a', color: '#fff', borderColor: '#3f3f46' }}
             >
               <span>⭐</span> STAR ON GITHUB
             </a>
@@ -38,7 +37,7 @@ export default function Footer() {
               <span className="footer-brand-title">FolderMate</span>
             </div>
             <p className="footer-brand-desc">
-              The Windows desktop automation platform for graphic designers, print shops, and creative studios.
+              The offline-first desktop automation platform for graphic designers, print shops, and creative studios.
               Classifies, renames, and versions files with zero telemetry and zero cloud lock-in.
             </p>
             <div className="footer-badges-list">

@@ -1,7 +1,6 @@
 import React from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import OdometerCounter from './components/OdometerCounter';
 import TrustedBy from './components/TrustedBy';
 import FeatureGrid from './components/FeatureGrid';
 import SplitFeature from './components/SplitFeature';
@@ -18,7 +17,6 @@ export default function App() {
       <Navbar />
       <main>
         <Hero />
-        <OdometerCounter />
         <TrustedBy />
         <FeatureGrid />
         <SplitFeature />

@@ -1,40 +1,40 @@
 import React from 'react';
 
 export default function Hero() {
-  const rows = [
+  const fileRows = [
     {
       ext: 'CDR',
       color: '#d97706',
-      name: 'ABC School Annual Sports ID Card 2026.cdr',
+      name: 'ABC_School_Annual_Sports_ID_2026.cdr',
       client: 'ABC School',
-      target: 'Clients/ABC School/2026/ID Cards/',
+      folder: 'Clients / ABC School / 2026 / ID Cards /',
       ver: 'v8',
       status: 'Organized',
     },
     {
       ext: 'PDF',
       color: '#dc2626',
-      name: 'Apex Healthcare Tri-Fold Brochure Draft.pdf',
+      name: 'Apex_Healthcare_Brochure_Draft_Final.pdf',
       client: 'Apex Healthcare',
-      target: 'Clients/Apex/Brochures/2026/',
+      folder: 'Clients / Apex / Brochures / 2026 /',
       ver: 'v3',
       status: 'Organized',
     },
     {
       ext: 'AI',
       color: '#ea580c',
-      name: 'Zenith Corp Conference Lanyard Design.ai',
+      name: 'Zenith_Corp_Staff_Lanyard_2025.ai',
       client: 'Zenith Corp',
-      target: 'Clients/Zenith/Branding/',
+      folder: 'Clients / Zenith / Branding / 2025 /',
       ver: 'v1',
       status: 'Organized',
     },
     {
       ext: 'PSD',
       color: '#2563eb',
-      name: 'City Gala Charity Event Billboard 6x3m.psd',
+      name: 'City_Gala_Billboard_Charity_6x3m.psd',
       client: 'City Gala',
-      target: 'Clients/City Gala/Events/2026/',
+      folder: 'Clients / City Gala / Events / 2026 /',
       ver: 'v2',
       status: 'Organized',
     },
@@ -46,7 +46,7 @@ export default function Hero() {
         {/* Star badge */}
         <div className="animate-fade-up hero-top-badge-wrap">
           <div className="star-badge">
-            <span>⭐</span> Open-source & free forever — give it a star!
+            <span>⭐</span> Open-source &amp; free forever — give it a star!
           </div>
         </div>
 
@@ -84,78 +84,153 @@ export default function Hero() {
           <div className="hero-badge">⚡ 100% Offline &amp; Private</div>
         </div>
 
-        {/* Compact, Unified Desktop App Window Preview */}
-        <div className="hero-app-window animate-fade-up" style={{ animationDelay: '0.45s' }}>
-          {/* Titlebar */}
-          <div className="app-titlebar">
-            <div className="window-dots">
-              <div className="dot dot-red" />
-              <div className="dot dot-yellow" />
-              <div className="dot dot-green" />
-            </div>
-            <div className="window-title">
-              <span>📁</span> FolderMate Desktop — Watch &amp; Classify Engine
-            </div>
-            <div className="window-status-pill">
-              <span className="live-pulse" /> ENGINE ACTIVE
-            </div>
-          </div>
+        {/* Full-Width Laptop Screen Display Mockup */}
+        <div className="laptop-wrapper animate-fade-up" style={{ animationDelay: '0.45s' }}>
+          <div className="laptop-device">
+            {/* Top Display Lid with Camera */}
+            <div className="laptop-screen-lid">
+              <div className="laptop-camera-notch">
+                <span className="camera-lens" />
+              </div>
 
-          {/* Window Body: Table of organized files */}
-          <div className="app-table-wrap">
-            <table className="app-table">
-              <thead>
-                <tr>
-                  <th style={{ width: '60px' }}>Type</th>
-                  <th>Source File</th>
-                  <th>Client / Project</th>
-                  <th>Destination Folder</th>
-                  <th style={{ width: '65px', textAlign: 'center' }}>Version</th>
-                  <th style={{ width: '90px', textAlign: 'right' }}>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rows.map((row, idx) => (
-                  <tr key={idx} className="app-table-row">
-                    <td>
-                      <span className="ext-badge" style={{ background: row.color }}>
-                        {row.ext}
-                      </span>
-                    </td>
-                    <td>
-                      <span className="file-name-text">{row.name}</span>
-                    </td>
-                    <td>
-                      <span className="client-text">{row.client}</span>
-                    </td>
-                    <td>
-                      <code className="path-text">{row.target}</code>
-                    </td>
-                    <td style={{ textAlign: 'center' }}>
-                      <span className={`version-pill ${idx === 0 ? 'version-pill-amber' : ''}`}>
-                        {row.ver}
-                      </span>
-                    </td>
-                    <td style={{ textAlign: 'right' }}>
-                      <span className="status-pill">✓ Done</span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              {/* Inner Application Interface */}
+              <div className="laptop-display-inner">
+                {/* Simulated Desktop Window Chrome */}
+                <div className="laptop-app-chrome">
+                  <div className="window-dots">
+                    <div className="dot dot-red" />
+                    <div className="dot dot-yellow" />
+                    <div className="dot dot-green" />
+                  </div>
+                  <span className="laptop-app-title">
+                    FolderMate Desktop — Production File Classification Engine
+                  </span>
+                  <div className="laptop-app-badge">
+                    <span className="live-pulse" /> ENGINE ACTIVE (OFFLINE)
+                  </div>
+                </div>
 
-          {/* Window Footer Status */}
-          <div className="app-footer-bar">
-            <div className="footer-status-left">
-              <span>⚡ Watching <code>Inbox/</code> folder</span>
-              <span>·</span>
-              <span>4 files organized in 0.3s</span>
-              <span>·</span>
-              <span>Confidence: 98%</span>
+                {/* Main App Layout: Sidebar + Main Dashboard */}
+                <div className="laptop-app-body">
+                  {/* Left Sidebar */}
+                  <aside className="laptop-sidebar">
+                    <div className="laptop-sidebar-brand">
+                      <div className="brand-icon">📁</div>
+                      <div className="brand-text">
+                        <strong>FolderMate</strong>
+                        <span>v1.0.0</span>
+                      </div>
+                    </div>
+
+                    <nav className="laptop-sidebar-nav">
+                      <div className="nav-item active">
+                        <span>📊</span> Dashboard
+                      </div>
+                      <div className="nav-item">
+                        <span>📁</span> Rules &amp; Aliases
+                      </div>
+                      <div className="nav-item">
+                        <span>🔍</span> Review Queue <span className="nav-badge">2</span>
+                      </div>
+                      <div className="nav-item">
+                        <span>📑</span> Audit History
+                      </div>
+                      <div className="nav-item">
+                        <span>⚙️</span> Settings
+                      </div>
+                    </nav>
+
+                    <div className="laptop-sidebar-footer">
+                      <div className="status-indicator">
+                        <span className="status-dot green" />
+                        <span>SQLite WAL Ready</span>
+                      </div>
+                    </div>
+                  </aside>
+
+                  {/* Right Dashboard Area */}
+                  <main className="laptop-main-panel">
+                    {/* Top Stats Cards Row */}
+                    <div className="laptop-stats-grid">
+                      <div className="laptop-stat-card">
+                        <div className="stat-label">Total Organized</div>
+                        <div className="stat-value">1,428</div>
+                        <div className="stat-sub positive">↑ +18 today</div>
+                      </div>
+                      <div className="laptop-stat-card">
+                        <div className="stat-label">Accuracy Score</div>
+                        <div className="stat-value">98.4%</div>
+                        <div className="stat-sub neutral">High confidence</div>
+                      </div>
+                      <div className="laptop-stat-card">
+                        <div className="stat-label">Review Queue</div>
+                        <div className="stat-value">2</div>
+                        <div className="stat-sub warning">Needs confirmation</div>
+                      </div>
+                      <div className="laptop-stat-card">
+                        <div className="stat-label">Time Saved</div>
+                        <div className="stat-value">34.5 hrs</div>
+                        <div className="stat-sub positive">This month</div>
+                      </div>
+                    </div>
+
+                    {/* Live Pipeline Notice */}
+                    <div className="laptop-pipeline-notice">
+                      <span className="notice-icon">⚡</span>
+                      <div className="notice-text">
+                        <strong>Live Watcher Active:</strong> Ingestion engine is monitoring <code>C:\Studio\Inbox\</code>. 4 files processed instantly with atomic safety.
+                      </div>
+                    </div>
+
+                    {/* Processed Files Table */}
+                    <div className="laptop-table-container">
+                      <table className="laptop-table">
+                        <thead>
+                          <tr>
+                            <th style={{ width: '50px' }}>Type</th>
+                            <th>Filename</th>
+                            <th>Client / Project</th>
+                            <th>Target Directory</th>
+                            <th style={{ width: '50px', textAlign: 'center' }}>Ver</th>
+                            <th style={{ width: '70px', textAlign: 'right' }}>Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {fileRows.map((row, idx) => (
+                            <tr key={idx}>
+                              <td>
+                                <span className="ext-pill" style={{ background: row.color }}>
+                                  {row.ext}
+                                </span>
+                              </td>
+                              <td className="filename-cell">
+                                <span>{row.name}</span>
+                              </td>
+                              <td className="client-cell">{row.client}</td>
+                              <td className="path-cell">
+                                <code>{row.folder}</code>
+                              </td>
+                              <td style={{ textAlign: 'center' }}>
+                                <span className={`ver-pill ${idx === 0 ? 'amber' : ''}`}>
+                                  {row.ver}
+                                </span>
+                              </td>
+                              <td style={{ textAlign: 'right' }}>
+                                <span className="done-pill">✓ Moved</span>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </main>
+                </div>
+              </div>
             </div>
-            <div className="footer-status-right">
-              <span>🔒 100% Offline (SQLite WAL)</span>
+
+            {/* Laptop Base Stand */}
+            <div className="laptop-base-stand">
+              <div className="laptop-base-notch" />
             </div>
           </div>
         </div>

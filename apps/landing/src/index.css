@@ -1526,21 +1526,116 @@ section {
 .faq-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  margin-bottom: 50px;
+  gap: 20px;
+  margin-bottom: 40px;
 }
 .faq-card {
-  background: var(--vanilla);
+  background: #fff;
   border: var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  padding: 26px 30px;
+  padding: 22px 26px;
   cursor: pointer;
-  transition: transform 0.15s, box-shadow 0.15s;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.15s ease;
+  user-select: none;
 }
-.faq-card:hover { transform: translate(-2px,-2px); box-shadow: var(--shadow-lg); }
-.faq-card h3 { font-size: 1.05rem; font-family: 'Inter', sans-serif; font-weight: 700; margin-bottom: 10px; }
-.faq-card p  { font-size: 0.9rem; color: #555; line-height: 1.65; }
+.faq-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-lg);
+}
+.faq-card-open {
+  background: var(--vanilla);
+}
+.faq-question-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+.faq-question-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #1a1a1a;
+  margin: 0;
+}
+.faq-toggle-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #fff;
+  border: 1.5px solid #1a1a1a;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 800;
+  flex-shrink: 0;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.faq-toggle-icon.open {
+  background: var(--amber);
+}
+.faq-answer {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  font-size: 0.92rem;
+  color: #444;
+  line-height: 1.65;
+}
+
+/* Rebuilt Neo-Brutalist "Still Have Questions?" Support Callout Card */
+.faq-still-card {
+  background: var(--vanilla);
+  border: var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  padding: 34px 38px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.faq-still-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  max-width: 620px;
+}
+.faq-still-icon {
+  width: 52px;
+  height: 52px;
+  background: #fff;
+  border: 2px solid #1a1a1a;
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  flex-shrink: 0;
+}
+.faq-still-text h3 {
+  font-size: 1.35rem;
+  margin-bottom: 6px;
+  line-height: 1.25;
+}
+.faq-still-text p {
+  font-size: 0.92rem;
+  color: #555;
+  line-height: 1.55;
+}
+.faq-still-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
 
 /* ─── Footer ─────────────────────────────────────────────────── */
 .footer {
@@ -1682,6 +1777,27 @@ section {
   .key-code {
     text-align: center;
     font-size: 0.95rem;
+  }
+
+  /* FAQ Still Have Questions Card */
+  .faq-still-card {
+    padding: 24px 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  .faq-still-left {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .faq-still-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+  .faq-still-actions .btn {
+    width: 100%;
+    justify-content: center;
   }
 
   /* Footer */

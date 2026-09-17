@@ -149,5 +149,19 @@ What changed:
 Testing performed:
 - `npm run build --workspace=apps/landing` succeeded with 0 errors.
 - Automated browser subagent verification across Desktop (1440x900) and Mobile (390x844) viewports.
+## 2026-09-17 — FAQ Accordion Independent Column Layout & Stretch Prevention
+Task: Refactor FAQ accordion into two independent column containers with `align-items: start` and Set-based expansion.
+Reason: When one FAQ card in a 2-column CSS Grid row expanded, the adjacent unopened card in the same row was stretched to the full height of the row, leaving a huge empty white box.
+Files/areas affected:
+- `apps/landing/src/components/FaqSection.tsx`
+- `apps/landing/src/index.css`
+What changed:
+- Split FAQ items into two independent vertical `.faq-column` stacks (even index items on left, odd index items on right).
+- Set `.faq-grid { align-items: start; }` and `.faq-card { height: fit-content; }`.
+- Converted open state to `openItems: Set<number>` to allow independent opening/closing of cards without affecting any neighbor's height.
+Testing performed:
+- `npm run build --workspace=apps/landing` passed.
+- Browser subagent end-to-end verification (`faq_column_expansion_verify`): verified single card open (left snug, right expanded), both columns open (both snug to content), and multi-item expansion.
 Important decisions:
-- Setting `max-height: 220px` on the tasks container ensures exactly 3 tasks are visible at any time while the 4th item is partially visible to afford scrolling.
+- Independent column container flex stacks prevent CSS Grid row stretching completely, maintaining a natural layout when answers expand.
+

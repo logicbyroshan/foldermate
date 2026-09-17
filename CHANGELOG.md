@@ -31,6 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Implemented 3-task scrollable container in `CtaBanner.tsx` with smooth amber scrollbar and scroll hint badge (`Showing 3 of 5 · Scroll for more ↓`), balancing card heights.
   - Enlarged `SplitFeature.tsx` mockup cards (`OrganizeMock` and `ReviewQueueMock`) with rich metadata, status pills, suggestions, and `Assign & Move →` action buttons.
   - Redesigned `Footer.tsx` in cohesive dark neo-brutalist styling with top CTA callout banner, 4-column directory, and bottom system status pills.
+  - Refactored `FaqSection.tsx` into independent vertical column stacks with `align-items: start`, preventing unopened FAQ cards from stretching vertically when an adjacent card is opened.
 - Added the branded FolderMate app icon, favicon set, and desktop theme refresh.
 
 ## [1.0.0] - 2026-09-12

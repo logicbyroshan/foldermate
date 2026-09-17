@@ -1628,7 +1628,13 @@ section {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
+  align-items: start;
   margin-bottom: 40px;
+}
+.faq-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 .faq-card {
   background: #fff;
@@ -1639,6 +1645,7 @@ section {
   cursor: pointer;
   transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.15s ease;
   user-select: none;
+  height: fit-content;
 }
 .faq-card:hover {
   transform: translate(-2px, -2px);

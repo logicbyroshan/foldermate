@@ -9,6 +9,8 @@ import { Rules } from "./views/Rules.js";
 import { Settings } from "./views/Settings.js";
 import { ToastProvider } from "./components/ui/Toast.js";
 import { CommandPalette } from "./components/ui/CommandPalette.js";
+import { ActivationModal } from "./components/ActivationModal.js";
+import { LicenseStatus } from "@foldermate/shared";
 
 export const AppContent: React.FC = () => {
   const [currentView, setCurrentView] = useState<NavView>("dashboard");
@@ -16,6 +18,8 @@ export const AppContent: React.FC = () => {
   const [engineConnected, setEngineConnected] = useState(true);
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const [viewportIsValid, setViewportIsValid] = useState(() => window.innerWidth >= 800);
+  const [licenseStatus, setLicenseStatus] = useState<LicenseStatus | null>(null);
+  const [isActivationModalOpen, setIsActivationModalOpen] = useState(false);
 
   const fetchGlobalStats = async () => {
     try {
@@ -23,6 +27,14 @@ export const AppContent: React.FC = () => {
         const queueRes = await (window as any).foldermate.call("reviewQueue.list");
         setPendingReviewCount(queueRes?.length || 0);
         setEngineConnected(true);
+
+        const licRes = await (window as any).foldermate.call("system.getLicenseStatus");
+        if (licRes) {
+          setLicenseStatus(licRes);
+          if (!licRes.isActivated) {
+            setIsActivationModalOpen(true);
+          }
+        }
       }
     } catch {
       setEngineConnected(false);
@@ -154,6 +166,8 @@ export const AppContent: React.FC = () => {
         onSelectView={setCurrentView}
         pendingReviewCount={pendingReviewCount}
         engineConnected={engineConnected}
+        licenseStatus={licenseStatus}
+        onOpenActivation={() => setIsActivationModalOpen(true)}
       />
 
       {/* Main Workspace Area */}
@@ -164,6 +178,8 @@ export const AppContent: React.FC = () => {
           onOpenInbox={handleOpenInbox}
           onOpenStorage={handleOpenStorage}
           onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
+          licenseStatus={licenseStatus}
+          onOpenActivation={() => setIsActivationModalOpen(true)}
         />
 
         <main
@@ -179,7 +195,13 @@ export const AppContent: React.FC = () => {
           {currentView === "review" && <ReviewQueue />}
           {currentView === "clients" && <Clients />}
           {currentView === "rules" && <Rules />}
-          {currentView === "settings" && <Settings />}
+          {currentView === "settings" && (
+            <Settings
+              licenseStatus={licenseStatus}
+              onOpenActivation={() => setIsActivationModalOpen(true)}
+              onLicenseUpdated={fetchGlobalStats}
+            />
+          )}
         </main>
       </div>
 
@@ -188,6 +210,17 @@ export const AppContent: React.FC = () => {
         onClose={() => setIsCommandPaletteOpen(false)}
         onNavigate={(view) => setCurrentView(view as NavView)}
         onTriggerScan={handleScanNow}
+      />
+
+      <ActivationModal
+        isOpen={isActivationModalOpen}
+        isClosable={Boolean(licenseStatus?.isActivated)}
+        onClose={() => setIsActivationModalOpen(false)}
+        onActivated={(newStatus) => {
+          setLicenseStatus(newStatus);
+          setIsActivationModalOpen(false);
+          fetchGlobalStats();
+        }}
       />
     </div>
   );

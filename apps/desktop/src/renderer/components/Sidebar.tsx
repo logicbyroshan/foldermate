@@ -10,6 +10,8 @@ import {
   FolderTree,
 } from "lucide-react";
 import { Badge } from "./ui/Badge.js";
+import { LicenseStatus } from "@foldermate/shared";
+import { Star, Heart, Key, ShieldCheck } from "lucide-react";
 
 export type NavView = "dashboard" | "search" | "review" | "clients" | "rules" | "settings";
 
@@ -18,6 +20,8 @@ interface SidebarProps {
   onSelectView: (view: NavView) => void;
   pendingReviewCount: number;
   engineConnected: boolean;
+  licenseStatus?: LicenseStatus | null;
+  onOpenActivation?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -25,6 +29,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onSelectView,
   pendingReviewCount,
   engineConnected,
+  licenseStatus,
+  onOpenActivation,
 }) => {
   const navItems = [
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -135,32 +141,100 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </nav>
       </div>
 
-      {/* Engine Daemon Status */}
-      <div
-        className="glass-panel"
-        style={{
-          padding: "7px 9px",
-          display: "flex",
-          alignItems: "center",
-          gap: 10,
-          backgroundColor: "var(--bg-elevated)",
-        }}
-      >
+      {/* Footer Area: License & Engine Daemon Status */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+        {/* License Status Badge */}
         <div
+          onClick={onOpenActivation}
+          className="glass-panel"
           style={{
-            width: 8,
-            height: 8,
-            borderRadius: "50%",
-            backgroundColor: engineConnected ? "var(--status-success)" : "var(--status-danger)",
-            boxShadow: engineConnected ? "0 0 8px var(--status-success)" : "0 0 8px var(--status-danger)",
+            padding: "6px 8px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            cursor: "pointer",
+            backgroundColor: licenseStatus?.isActivated
+              ? licenseStatus.licenseType === "VIP" || licenseStatus.licenseType === "SPONSOR"
+                ? "rgba(247, 199, 29, 0.08)"
+                : "rgba(16, 185, 129, 0.06)"
+              : "rgba(239, 68, 68, 0.08)",
+            border: `1px solid ${
+              licenseStatus?.isActivated
+                ? licenseStatus.licenseType === "VIP" || licenseStatus.licenseType === "SPONSOR"
+                  ? "var(--border-focus)"
+                  : "rgba(16, 185, 129, 0.25)"
+                : "rgba(239, 68, 68, 0.3)"
+            }`,
+            borderRadius: "var(--radius-sm)",
+            transition: "all 0.12s ease",
           }}
-        />
-        <div>
-          <div style={{ fontSize: 11, fontWeight: 600, color: "var(--text-primary)" }}>
-            {engineConnected ? "Daemon Active" : "Daemon Offline"}
+          title={licenseStatus?.isActivated ? "Click to view license details" : "Click to activate FolderMate"}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            {licenseStatus?.isActivated ? (
+              licenseStatus.licenseType === "VIP" ? (
+                <Star size={13} color="var(--accent-amber)" fill="var(--accent-amber)" />
+              ) : licenseStatus.licenseType === "SPONSOR" ? (
+                <Heart size={13} color="#f43f5e" fill="#f43f5e" />
+              ) : (
+                <ShieldCheck size={13} color="var(--status-success)" />
+              )
+            ) : (
+              <Key size={13} color="var(--status-danger)" />
+            )}
+            <span
+              style={{
+                fontSize: 11,
+                fontWeight: 600,
+                color: licenseStatus?.isActivated
+                  ? licenseStatus.licenseType === "VIP" || licenseStatus.licenseType === "SPONSOR"
+                    ? "var(--accent-amber-text)"
+                    : "var(--status-success-text)"
+                  : "var(--status-danger-text)",
+              }}
+            >
+              {licenseStatus?.isActivated
+                ? licenseStatus.licenseType === "VIP"
+                  ? "VIP Patron"
+                  : licenseStatus.licenseType === "SPONSOR"
+                  ? "Project Sponsor"
+                  : "Community Key"
+                : "Activate License"}
+            </span>
           </div>
-          <div style={{ fontSize: 10, color: "var(--text-muted)" }}>
-            Win32 Named Pipe
+
+          <span style={{ fontSize: 9, color: "var(--text-muted)", fontWeight: 500 }}>
+            {licenseStatus?.isActivated ? "Active" : "Locked"}
+          </span>
+        </div>
+
+        {/* Engine Daemon Status */}
+        <div
+          className="glass-panel"
+          style={{
+            padding: "7px 9px",
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+            backgroundColor: "var(--bg-elevated)",
+          }}
+        >
+          <div
+            style={{
+              width: 8,
+              height: 8,
+              borderRadius: "50%",
+              backgroundColor: engineConnected ? "var(--status-success)" : "var(--status-danger)",
+              boxShadow: engineConnected ? "0 0 8px var(--status-success)" : "0 0 8px var(--status-danger)",
+            }}
+          />
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 600, color: "var(--text-primary)" }}>
+              {engineConnected ? "Daemon Active" : "Daemon Offline"}
+            </div>
+            <div style={{ fontSize: 10, color: "var(--text-muted)" }}>
+              Win32 Named Pipe
+            </div>
           </div>
         </div>
       </div>

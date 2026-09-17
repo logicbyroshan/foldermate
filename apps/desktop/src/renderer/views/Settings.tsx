@@ -10,6 +10,12 @@ import {
   AlertCircle,
   Layers,
   Cpu,
+  Heart,
+  Star,
+  Key,
+  ShieldCheck,
+  ExternalLink,
+  RotateCcw,
 } from "lucide-react";
 import {
   Button,
@@ -19,8 +25,19 @@ import {
   Badge,
   useToast,
 } from "../components/ui/index.js";
+import { LicenseStatus } from "@foldermate/shared";
 
-export const Settings: React.FC = () => {
+interface SettingsProps {
+  licenseStatus?: LicenseStatus | null;
+  onOpenActivation?: () => void;
+  onLicenseUpdated?: () => void;
+}
+
+export const Settings: React.FC<SettingsProps> = ({
+  licenseStatus,
+  onOpenActivation,
+  onLicenseUpdated,
+}) => {
   const [inboxPath, setInboxPath] = useState("C:\\FolderMate\\Inbox");
   const [organizationRoot, setOrganizationRoot] = useState("D:\\Clients");
   const [archiveRoot, setArchiveRoot] = useState("D:\\Archive");
@@ -98,6 +115,131 @@ export const Settings: React.FC = () => {
         >
           Save Configuration
         </Button>
+      </Card>
+
+      {/* License & Community Support Section */}
+      <Card
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 16,
+          background: licenseStatus?.isActivated && (licenseStatus.licenseType === "VIP" || licenseStatus.licenseType === "SPONSOR")
+            ? "linear-gradient(135deg, rgba(247, 199, 29, 0.08), rgba(16, 24, 39, 0.95))"
+            : "var(--bg-surface)",
+          border: licenseStatus?.isActivated && (licenseStatus.licenseType === "VIP" || licenseStatus.licenseType === "SPONSOR")
+            ? "1px solid var(--border-focus)"
+            : "1px solid var(--border-subtle)",
+        }}
+      >
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid var(--border-subtle)", paddingBottom: 12 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            {licenseStatus?.isActivated ? (
+              licenseStatus.licenseType === "VIP" ? (
+                <Star size={18} color="var(--accent-amber)" fill="var(--accent-amber)" />
+              ) : licenseStatus.licenseType === "SPONSOR" ? (
+                <Heart size={18} color="#f43f5e" fill="#f43f5e" />
+              ) : (
+                <ShieldCheck size={18} color="var(--status-success)" />
+              )
+            ) : (
+              <Key size={18} color="var(--status-danger)" />
+            )}
+            <div>
+              <h3 style={{ fontSize: 14, fontWeight: 700, color: "var(--text-primary)" }}>
+                License & Community Support
+              </h3>
+              <span style={{ fontSize: 11, color: "var(--text-muted)" }}>
+                Offline activation status, community credits, and project sponsorship perks.
+              </span>
+            </div>
+          </div>
+
+          <Badge
+            variant={
+              licenseStatus?.isActivated
+                ? licenseStatus.licenseType === "VIP" || licenseStatus.licenseType === "SPONSOR"
+                  ? "amber"
+                  : "success"
+                : "danger"
+            }
+            size="md"
+          >
+            {licenseStatus?.isActivated
+              ? licenseStatus.sponsorTier || licenseStatus.licenseType
+              : "Unactivated"}
+          </Badge>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+          <div style={{ padding: "12px 14px", backgroundColor: "var(--bg-canvas)", borderRadius: "var(--radius-md)", border: "1px solid var(--border-subtle)" }}>
+            <div style={{ fontSize: 11, color: "var(--text-muted)", marginBottom: 2 }}>Current Active Key</div>
+            <code className="mono-font" style={{ fontSize: 12, color: "var(--text-primary)", fontWeight: 600 }}>
+              {licenseStatus?.key ? `${licenseStatus.key.slice(0, 16)}••••••••` : "No key installed"}
+            </code>
+          </div>
+
+          <div style={{ padding: "12px 14px", backgroundColor: "var(--bg-canvas)", borderRadius: "var(--radius-md)", border: "1px solid var(--border-subtle)" }}>
+            <div style={{ fontSize: 11, color: "var(--text-muted)", marginBottom: 2 }}>Activated Date / Tier</div>
+            <div style={{ fontSize: 12, color: "var(--text-primary)", fontWeight: 600 }}>
+              {licenseStatus?.activatedAt
+                ? new Date(licenseStatus.activatedAt).toLocaleDateString()
+                : "Not activated yet"}
+              {licenseStatus?.donorName ? ` • Supporter: ${licenseStatus.donorName}` : ""}
+            </div>
+          </div>
+        </div>
+
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 10 }}>
+          <div style={{ display: "flex", gap: 8 }}>
+            <Button
+              variant="amber"
+              size="sm"
+              leftIcon={<Heart size={13} />}
+              onClick={() => window.open("https://github.com/sponsors/FolderMate", "_blank")}
+            >
+              Sponsor on GitHub 💖
+            </Button>
+
+            <Button
+              variant="secondary"
+              size="sm"
+              leftIcon={<ExternalLink size={13} />}
+              onClick={() => window.open("https://buymeacoffee.com/foldermate", "_blank")}
+            >
+              Superchat / Tip ☕
+            </Button>
+          </div>
+
+          <div style={{ display: "flex", gap: 8 }}>
+            <Button
+              variant="primary"
+              size="sm"
+              leftIcon={<Key size={13} />}
+              onClick={onOpenActivation}
+            >
+              {licenseStatus?.isActivated ? "Change / Upgrade License Key" : "Activate License Now"}
+            </Button>
+
+            {licenseStatus?.isActivated && (
+              <Button
+                variant="ghost"
+                size="sm"
+                leftIcon={<RotateCcw size={13} />}
+                onClick={async () => {
+                  if (confirm("Reset local license to test activation wizard?")) {
+                    if ((window as any).foldermate) {
+                      await (window as any).foldermate.call("system.resetLicense");
+                      onLicenseUpdated?.();
+                      showToast("License reset to unactivated state for testing", "info");
+                    }
+                  }
+                }}
+              >
+                Reset
+              </Button>
+            )}
+          </div>
+        </div>
       </Card>
 
       {/* Directory Paths Section */}

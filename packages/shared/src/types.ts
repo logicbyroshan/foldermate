@@ -165,3 +165,38 @@ export interface SearchResultItemDTO {
   sizeBytes: number;
   rank: number;
 }
+
+export type LicenseType = "COMMUNITY" | "SPONSOR" | "VIP" | "TRIAL";
+
+export interface LicenseStatus {
+  isActivated: boolean;
+  licenseType: LicenseType;
+  key?: string;
+  activatedAt?: string;
+  sponsorTier?: string;
+  donorName?: string;
+  features: {
+    unlimitedOrganize: boolean;
+    folderCustomization: boolean;
+    versionLineage: boolean;
+    corelDrawBridge: boolean;
+    priorityUpdates: boolean;
+  };
+}
+
+export interface CommunityTask {
+  id: string;
+  title: string;
+  description: string;
+  category: "github" | "blog" | "linkedin" | "x" | "community";
+  actionUrl: string;
+  actionLabel: string;
+  isCompleted: boolean;
+}
+
+export interface ActivationPayload {
+  key: string;
+  licenseType?: LicenseType;
+  donorName?: string;
+}
+

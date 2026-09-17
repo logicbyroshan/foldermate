@@ -7,13 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [Unreleased] - 2026-09-14
+## [Unreleased]
 
 ### Added
-- Established the baseline Copilot memory and project instruction system for the repository.
+- **Step-by-Step Onboarding & Activation Wizard**:
+  - Implemented multi-step modal (`ActivationModal.tsx`) with product value tour, unlock choice selection, and celebratory activation transition.
+  - Added **Free Community Key Generator**: pick any 3 tasks from GitHub Star, Blog comments, GitHub follow, LinkedIn engagement, and X/Twitter reposts with live progress tracking.
+  - Added **Sponsor & Superchat VIP Portal**: direct support links (GitHub Sponsors & BuyMeACoffee) with universal lifetime key support and VIP badge perks.
+  - Added offline cryptographic checksum license validator (`license-validator.ts`) and unit test suite (`license-validator.test.ts`).
+  - Integrated license state into `Sidebar`, `TopBar`, `Settings`, and browser mock bridge.
+- Established the baseline memory and project instruction system for the repository.
 - Added a mandatory GitHub CLI branch/PR workflow rule to the operating guidance.
-- Kept the documentation set limited to the files required for project understanding and future agent work.
-- Added the branded FolderMate app icon, favicon set, and desktop theme refresh to align the Electron shell with the project logo and yellow brand palette.
+- Added the branded FolderMate app icon, favicon set, and desktop theme refresh.
 
 ## [1.0.0] - 2026-09-12
 

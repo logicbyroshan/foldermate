@@ -242,9 +242,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
                       <div style={{ fontSize: 13, fontWeight: 600, color: "var(--text-primary)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{file.currentName}</div>
                       <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 2, display: "flex", alignItems: "center", gap: 5 }}>
                         <span style={{ color: "var(--text-secondary)", fontWeight: 500 }}>{file.clientName || "Client"}</span>
-                        <span>â€¢</span><span>{file.category || "Design"}</span>
-                        <span>â€¢</span><span>{formatBytes(file.sizeBytes || 0)}</span>
-                        {file.createdAt && <><span>â€¢</span><Clock size={10} /><span>{formatAge(file.createdAt)}</span></>}
+                        <span>•</span><span>{file.category || "Design"}</span>
+                        <span>•</span><span>{formatBytes(file.sizeBytes || 0)}</span>
+                        {file.createdAt && <><span>•</span><Clock size={10} /><span>{formatAge(file.createdAt)}</span></>}
                       </div>
                     </div>
                   </div>

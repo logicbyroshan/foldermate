@@ -3,35 +3,52 @@ import React from 'react';
 const BENEFITS = [
   {
     icon: '🔒',
+    badge: 'ZERO TELEMETRY',
     title: '100% Offline — Zero Cloud',
-    body: 'FolderMate runs entirely on your machine. No telemetry, no cloud upload, no subscription. Your files never leave your computer.',
+    body: 'FolderMate runs entirely on your local machine. No telemetry, no cloud uploads, and no monthly subscriptions. Your sensitive client files never leave your computer.',
   },
   {
     icon: '⚡',
-    title: 'Windows-Native Engine',
-    body: 'Built on Node.js with a real Windows file-watcher, named-pipe IPC, and CorelDRAW COM adapter. No web wrappers — real system-level integration.',
+    badge: 'SYSTEM INTEGRATION',
+    title: 'Windows-Native Performance',
+    body: 'Engineered specifically for Windows with native filesystem watchers, named-pipe IPC, SQLite in WAL mode, and direct CorelDRAW COM bridge integration.',
   },
   {
     icon: '🆓',
-    title: 'Free & Open Source',
-    body: 'Star the repo, leave a comment, or follow on social — that\'s all it takes to get your Community License Key. No credit card, no trial limit.',
+    badge: 'COMMUNITY DRIVEN',
+    title: 'Free & Open Source Forever',
+    body: 'Complete any 3 community tasks (Star on GitHub, read a guide, follow on social) to get your instant activation key. No credit cards, no paywalls, no trial limits.',
   },
 ];
 
 export default function BenefitsSection() {
   return (
-    <section className="benefits-section" id="how-it-works">
+    <section className="benefits-section" id="benefits">
       <div className="container">
-        <h2>Built with your experience<br />in mind</h2>
-      </div>
-      <div className="benefits-grid" style={{ maxWidth: 1160, margin: '0 auto', padding: '0 24px' }}>
-        {BENEFITS.map((b) => (
-          <div key={b.title} className="benefit-card">
-            <span className="benefit-icon">{b.icon}</span>
-            <h3>{b.title}</h3>
-            <p>{b.body}</p>
+        {/* Section Header */}
+        <div className="section-header text-center">
+          <div className="star-badge" style={{ marginBottom: 12 }}>
+            <span>⭐</span> WHY CHOOSE FOLDERMATE
           </div>
-        ))}
+          <h2>Built with privacy and productivity in mind.</h2>
+          <p className="section-sub">
+            Designed from the ground up for print shops, design agencies, and freelance artists who demand speed and security.
+          </p>
+        </div>
+
+        {/* Benefits Grid */}
+        <div className="benefits-grid">
+          {BENEFITS.map((b) => (
+            <div key={b.title} className="benefit-card">
+              <div className="benefit-card-top">
+                <span className="benefit-icon">{b.icon}</span>
+                <span className="benefit-badge">{b.badge}</span>
+              </div>
+              <h3>{b.title}</h3>
+              <p>{b.body}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

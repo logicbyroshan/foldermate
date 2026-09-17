@@ -3,9 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 const TARGET = '04823';
 
 function OdometerDigit({ digit }: { digit: string }) {
-  return (
-    <div className="odometer-digit">{digit}</div>
-  );
+  return <div className="odometer-digit">{digit}</div>;
 }
 
 export default function OdometerCounter() {
@@ -32,68 +30,53 @@ export default function OdometerCounter() {
           requestAnimationFrame(tick);
         }
       },
-      { threshold: 0.4 }
+      { threshold: 0.3 }
     );
     if (ref.current) observer.observe(ref.current);
     return () => observer.disconnect();
   }, []);
 
   return (
-    <section style={{ padding: '0 24px 80px' }}>
-      <div
-        ref={ref}
-        style={{
-          maxWidth: 1160,
-          margin: '0 auto',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: 40,
-        }}
-      >
-        {/* Left phone mock */}
-        <div className="phone-mock phone-mock-purple">
-          <div className="phone-camera" />
-          <div className="phone-speaker" />
-          <div style={{ marginTop: 20, display: 'flex', flexDirection: 'column', gap: 8, padding: '0 12px', width: '100%' }}>
-            {[1,2,3].map(i => (
-              <div key={i} style={{ height: 12, borderRadius: 4, background: 'rgba(255,255,255,0.15)' }} />
-            ))}
-          </div>
-        </div>
-
-        {/* Main counter card */}
-        <div className="odometer-card">
+    <section className="odometer-section">
+      <div className="container">
+        <div ref={ref} className="odometer-card">
+          {/* Top Counter Row */}
           <div className="odometer-display">
             <div className="odometer-digits">
               {displayed.split('').map((d, i) => (
                 <OdometerDigit key={i} digit={d} />
               ))}
             </div>
-            <span className="odometer-label">Files Organized</span>
+            <div className="odometer-label-group">
+              <span className="odometer-label">Files Organized Automatically</span>
+              <span className="odometer-sublabel">And counting across our community users</span>
+            </div>
           </div>
+
+          {/* Description Text */}
           <p className="odometer-tagline">
             <strong>Your files are our priority</strong> — open-source, community-built,
-            trusted by designers &amp; print studios worldwide.{' '}
+            and trusted by graphic designers, print shop operators, and creative agencies worldwide.
           </p>
-          <a
-            href="https://github.com/logicbyroshan/foldermate/discussions"
-            target="_blank"
-            rel="noreferrer"
-            className="odometer-contact"
-          >
-            💬 Join the community discussion
-          </a>
-        </div>
 
-        {/* Right phone mock */}
-        <div className="phone-mock phone-mock-dark">
-          <div className="phone-camera" />
-          <div className="phone-speaker" />
-          <div style={{ marginTop: 20, display: 'flex', flexDirection: 'column', gap: 8, padding: '0 12px', width: '100%' }}>
-            {[1,2,3].map(i => (
-              <div key={i} style={{ height: 12, borderRadius: 4, background: 'rgba(255,255,255,0.1)' }} />
-            ))}
+          {/* Action Links */}
+          <div className="odometer-actions">
+            <a
+              href="https://github.com/logicbyroshan/foldermate/discussions"
+              target="_blank"
+              rel="noreferrer"
+              className="btn btn-outline btn-outline-sm"
+            >
+              💬 Join Community Discussions
+            </a>
+            <a
+              href="https://github.com/logicbyroshan/foldermate"
+              target="_blank"
+              rel="noreferrer"
+              className="btn btn-primary btn-outline-sm"
+            >
+              ⭐ Star on GitHub
+            </a>
           </div>
         </div>
       </div>

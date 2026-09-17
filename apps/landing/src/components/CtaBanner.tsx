@@ -6,13 +6,13 @@ const COMMUNITY_TASKS = [
     title: '⭐ Star FolderMate on GitHub',
     desc: 'Support open-source development with a GitHub star (Required)',
     url: 'https://github.com/logicbyroshan/foldermate',
-    actionText: 'Star Repository ↗',
+    actionText: 'Star Repo ↗',
     required: true,
   },
   {
     id: 'guide',
-    title: '📖 Read & Bookmark the Workflow Guide',
-    desc: 'Check out the CorelDRAW & vector file organization manual',
+    title: '📖 Read & Bookmark Workflow Guide',
+    desc: 'Check out the CorelDRAW & vector organization manual',
     url: '#blog',
     actionText: 'Open Guide ↓',
   },
@@ -21,7 +21,7 @@ const COMMUNITY_TASKS = [
     title: '👤 Follow @logicbyroshan on GitHub',
     desc: 'Stay updated with upcoming FolderMate releases and plugins',
     url: 'https://github.com/logicbyroshan',
-    actionText: 'Follow on GitHub ↗',
+    actionText: 'Follow ↗',
   },
   {
     id: 'linkedin',
@@ -33,7 +33,7 @@ const COMMUNITY_TASKS = [
   {
     id: 'x',
     title: '🐦 Repost / Follow on X (Twitter)',
-    desc: 'Help spread the word to freelance designers',
+    desc: 'Help spread the word to freelance designers & creators',
     url: 'https://x.com',
     actionText: 'Open X ↗',
   },
@@ -74,7 +74,7 @@ export default function CtaBanner() {
     <section className="cta-banner" id="download">
       <div className="container">
         {/* Main CTA Hero Header */}
-        <div className="cta-banner-header text-center">
+        <div className="section-header text-center">
           <div className="star-badge" style={{ marginBottom: 12 }}>
             <span>⚡</span> WINDOWS 10 / 11 NATIVE DESKTOP APP
           </div>
@@ -99,7 +99,7 @@ export default function CtaBanner() {
               <li>✓ CorelDRAW (.cdr) + AI + PSD + PDF Ingestion</li>
               <li>✓ Two-phase atomic mover with zero data loss</li>
               <li>✓ SQLite WAL metadata + Review Queue</li>
-              <li>✓ 100% Free & Open-Source</li>
+              <li>✓ 100% Free &amp; Open-Source under MIT</li>
             </ul>
 
             <div className="download-btn-wrap">
@@ -113,7 +113,7 @@ export default function CtaBanner() {
                 <span>📥</span> DOWNLOAD INSTALLER (.EXE)
               </a>
               <span className="download-meta-note">
-                Requires Windows 10/11 · ~78 MB installer
+                Requires Windows 10/11 (x64) · ~78 MB installer
               </span>
             </div>
           </div>
@@ -121,45 +121,50 @@ export default function CtaBanner() {
           {/* Box 2: Instant Activation Key Generator */}
           <div className="key-generator-card">
             <div className="key-gen-header">
-              <span className="key-gen-pill">🔑 FREE ACTIVATION KEY</span>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
+                <span className="key-gen-pill">🔑 FREE ACTIVATION KEY</span>
+                <span className="tasks-scroll-hint">Showing 3 of 5 · Scroll for more ↓</span>
+              </div>
               <h3>Get Your Free License Key</h3>
               <p>Complete any 3 quick community tasks to unlock your free activation key:</p>
             </div>
 
-            {/* Task list */}
-            <div className="tasks-list">
-              {COMMUNITY_TASKS.map((task) => {
-                const isChecked = !!completed[task.id];
-                return (
-                  <div
-                    key={task.id}
-                    className={`task-row ${isChecked ? 'task-row-done' : ''}`}
-                    onClick={() => toggleTask(task.id)}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={isChecked}
-                      onChange={() => {}}
-                      className="task-checkbox"
-                    />
-                    <div className="task-content">
-                      <div className="task-title-row">
-                        <span className="task-title">{task.title}</span>
-                      </div>
-                      <span className="task-desc">{task.desc}</span>
-                    </div>
-                    <a
-                      href={task.url}
-                      target={task.url.startsWith('http') ? '_blank' : '_self'}
-                      rel="noreferrer"
-                      className="task-action-btn"
-                      onClick={(e) => e.stopPropagation()}
+            {/* Scrollable Task List showing exactly 3 at a time */}
+            <div className="tasks-scroll-container">
+              <div className="tasks-list">
+                {COMMUNITY_TASKS.map((task) => {
+                  const isChecked = !!completed[task.id];
+                  return (
+                    <div
+                      key={task.id}
+                      className={`task-row ${isChecked ? 'task-row-done' : ''}`}
+                      onClick={() => toggleTask(task.id)}
                     >
-                      {task.actionText}
-                    </a>
-                  </div>
-                );
-              })}
+                      <input
+                        type="checkbox"
+                        checked={isChecked}
+                        onChange={() => {}}
+                        className="task-checkbox"
+                      />
+                      <div className="task-content">
+                        <div className="task-title-row">
+                          <span className="task-title">{task.title}</span>
+                        </div>
+                        <span className="task-desc">{task.desc}</span>
+                      </div>
+                      <a
+                        href={task.url}
+                        target={task.url.startsWith('http') ? '_blank' : '_self'}
+                        rel="noreferrer"
+                        className="task-action-btn"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        {task.actionText}
+                      </a>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
 
             {/* Progress & Key Claim */}

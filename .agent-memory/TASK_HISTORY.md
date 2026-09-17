@@ -131,3 +131,23 @@ Testing performed:
 - End-to-end browser subagent verification on Desktop (1440x900) and Mobile (390x844).
 Important decisions:
 - The landing page is kept in `apps/landing` as an independent workspace, with zero runtime dependencies on the engine or database packages.
+
+## 2026-09-17 — Responsive Laptop Scaling, 3-Task Scroll Container, Enlarged Split Mockups & Cohesive Footer
+Task: Fix mobile/small-screen laptop elongation, limit key generator visible tasks to 3 with scrollability, enlarge split feature mockup cards, and redesign the footer.
+Reason: User feedback highlighted that on smaller screens the laptop mockup became vertically stretched, the key generator tasks made the download card disproportionately tall, the split feature mockups lacked prominence, and the footer needed visual polish.
+Files/areas affected:
+- `apps/landing/src/components/Hero.tsx`
+- `apps/landing/src/components/SplitFeature.tsx`
+- `apps/landing/src/components/CtaBanner.tsx`
+- `apps/landing/src/components/Footer.tsx`
+- `apps/landing/src/index.css`
+What changed:
+- **Responsive Laptop Mockup**: Added `.desktop-col` rules and mobile responsive CSS so stats render as a compact 2x2 grid and table columns collapse cleanly, keeping the laptop proportional and widescreen on all screen sizes.
+- **3-Task Scroll Container**: Wrapped community tasks in `.tasks-scroll-container` (`max-height: 220px`) with custom amber scrollbar and scroll hint badge (`Showing 3 of 5 · Scroll for more ↓`), balancing the Key Generator card height with the left Installer card.
+- **Enlarged Split Mockups**: Expanded `OrganizeMock` (5 file items with destination paths, versions, file sizes) and `ReviewQueueMock` (3 detailed review items with confidence badges, suggestions, and `Assign & Move →` buttons) with 2px borders, hover animations, and complete metadata.
+- **Cohesive Footer**: Redesigned footer in dark neo-brutalist palette (`#141416`) with top CTA callout banner (`#1f1f23`), 4-column structured directory with gold category headers, and bottom bar with system pills (`Windows 10/11 x64`, `SQLite WAL Mode`, `Zero Telemetry`).
+Testing performed:
+- `npm run build --workspace=apps/landing` succeeded with 0 errors.
+- Automated browser subagent verification across Desktop (1440x900) and Mobile (390x844) viewports.
+Important decisions:
+- Setting `max-height: 220px` on the tasks container ensures exactly 3 tasks are visible at any time while the 4th item is partially visible to afford scrolling.

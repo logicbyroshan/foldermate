@@ -84,7 +84,7 @@ export default function Hero() {
           <div className="hero-badge">⚡ 100% Offline &amp; Private</div>
         </div>
 
-        {/* Full-Width Laptop Screen Display Mockup */}
+        {/* Full-Width Laptop Screen Display Mockup with proportional responsive scaling */}
         <div className="laptop-wrapper animate-fade-up" style={{ animationDelay: '0.45s' }}>
           <div className="laptop-device">
             {/* Top Display Lid with Camera */}
@@ -112,7 +112,7 @@ export default function Hero() {
 
                 {/* Main App Layout: Sidebar + Main Dashboard */}
                 <div className="laptop-app-body">
-                  {/* Left Sidebar */}
+                  {/* Left Sidebar (visible on desktop/laptop) */}
                   <aside className="laptop-sidebar">
                     <div className="laptop-sidebar-brand">
                       <div className="brand-icon">📁</div>
@@ -165,7 +165,7 @@ export default function Hero() {
                       <div className="laptop-stat-card">
                         <div className="stat-label">Review Queue</div>
                         <div className="stat-value">2</div>
-                        <div className="stat-sub warning">Needs confirmation</div>
+                        <div className="stat-sub warning">Needs review</div>
                       </div>
                       <div className="laptop-stat-card">
                         <div className="stat-label">Time Saved</div>
@@ -178,7 +178,7 @@ export default function Hero() {
                     <div className="laptop-pipeline-notice">
                       <span className="notice-icon">⚡</span>
                       <div className="notice-text">
-                        <strong>Live Watcher Active:</strong> Ingestion engine is monitoring <code>C:\Studio\Inbox\</code>. 4 files processed instantly with atomic safety.
+                        <strong>Live Watcher Active:</strong> Monitoring <code>C:\Studio\Inbox\</code>. 4 files processed instantly with atomic safety.
                       </div>
                     </div>
 
@@ -189,8 +189,8 @@ export default function Hero() {
                           <tr>
                             <th style={{ width: '50px' }}>Type</th>
                             <th>Filename</th>
-                            <th>Client / Project</th>
-                            <th>Target Directory</th>
+                            <th className="desktop-col">Client / Project</th>
+                            <th className="desktop-col">Target Directory</th>
                             <th style={{ width: '50px', textAlign: 'center' }}>Ver</th>
                             <th style={{ width: '70px', textAlign: 'right' }}>Status</th>
                           </tr>
@@ -206,8 +206,8 @@ export default function Hero() {
                               <td className="filename-cell">
                                 <span>{row.name}</span>
                               </td>
-                              <td className="client-cell">{row.client}</td>
-                              <td className="path-cell">
+                              <td className="client-cell desktop-col">{row.client}</td>
+                              <td className="path-cell desktop-col">
                                 <code>{row.folder}</code>
                               </td>
                               <td style={{ textAlign: 'center' }}>

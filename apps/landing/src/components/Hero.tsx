@@ -42,52 +42,68 @@ export default function Hero() {
 
   return (
     <section className="hero" id="hero">
-      {/* Background Decorative Animated Elements */}
-      <div className="hero-bg-decorations" aria-hidden="true">
+      {/* Background Decorative Interactive Elements */}
+      <div className="hero-bg-decorations">
         {/* Floating Sticker: Inbox Watcher (Top Left) */}
-        <div className="hero-floating-badge float-top-left">
+        <a
+          href="#how-it-works"
+          className="hero-floating-badge float-top-left interactive-sticker"
+          title="Click to view Inbox Watcher workflow"
+        >
           <div className="floating-sticker sticker-amber">
             <span className="sticker-icon">📁</span>
             <div className="sticker-content">
               <span className="sticker-title">Inbox Watcher</span>
-              <span className="sticker-sub">Auto Ingestion</span>
+              <span className="sticker-sub">Auto Ingestion →</span>
             </div>
             <span className="sticker-pulse" />
           </div>
-        </div>
+        </a>
 
         {/* Floating Sticker: Two-Phase Atomic (Top Right) */}
-        <div className="hero-floating-badge float-top-right">
+        <a
+          href="#how-it-works"
+          className="hero-floating-badge float-top-right interactive-sticker"
+          title="Click to learn about Atomic Two-Phase Mover"
+        >
           <div className="floating-sticker sticker-white">
             <span className="sticker-icon">⚡</span>
             <div className="sticker-content">
               <span className="sticker-title">Atomic Move</span>
-              <span className="sticker-sub">2-Phase Safety</span>
+              <span className="sticker-sub">2-Phase Safety →</span>
             </div>
           </div>
-        </div>
+        </a>
 
         {/* Floating Pill: Verified Security (Mid Left) */}
-        <div className="hero-floating-badge float-mid-left">
+        <a
+          href="#how-it-works"
+          className="hero-floating-badge float-mid-left interactive-sticker"
+          title="Click to learn about checksum verification"
+        >
           <div className="floating-pill pill-green">
-            <span>🔒 SHA-256 Verified</span>
+            <span>🔒 SHA-256 Verified →</span>
           </div>
-        </div>
+        </a>
 
         {/* Floating Pill: Supported Formats (Mid Right) */}
-        <div className="hero-floating-badge float-mid-right">
+        <a
+          href="#features"
+          className="hero-floating-badge float-mid-right interactive-sticker"
+          title="Click to view all supported vector formats"
+        >
           <div className="floating-pill pill-amber">
-            <span>🎯 .CDR · .AI · .PSD · .PDF</span>
+            <span>🎯 .CDR · .AI · .PSD · .PDF →</span>
           </div>
-        </div>
+        </a>
 
         {/* Neo-brutalist Animated Sparkle Stars */}
-        <div className="deco-star star-tl">✦</div>
-        <div className="deco-star star-tr">★</div>
-        <div className="deco-star star-bl">✧</div>
-        <div className="deco-star star-br">✦</div>
-        <div className="deco-circle circle-1" />
-        <div className="deco-circle circle-2" />
+        <div className="deco-star star-tl" aria-hidden="true">✦</div>
+        <div className="deco-star star-tr" aria-hidden="true">★</div>
+        <div className="deco-star star-bl" aria-hidden="true">✧</div>
+        <div className="deco-star star-br" aria-hidden="true">✦</div>
+        <div className="deco-circle circle-1" aria-hidden="true" />
+        <div className="deco-circle circle-2" aria-hidden="true" />
       </div>
 
       <div className="container hero-container">

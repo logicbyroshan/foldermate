@@ -80,3 +80,22 @@ Important decisions:
 - The key validation algorithm is 100% offline-first using HMAC checksums to ensure zero cloud dependency or telemetry.
 - Community keys are single-use per device, while Sponsor keys provide reusable lifetime VIP perks.
 
+## 2026-09-17 — PR #13: Premium UI Visual Overhaul
+Task: Comprehensively overhaul the desktop renderer UI for a premium, polished, production-quality appearance.
+Reason: The initial UI was functional but visually flat. The goal was to bring a branded, premium feel with micro-animations, staggered transitions, and a rich design system.
+Files/areas affected:
+- `apps/desktop/src/renderer/index.css`
+- `apps/desktop/src/renderer/views/Dashboard.tsx`
+- `apps/desktop/src/renderer/components/Sidebar.tsx`
+- `apps/desktop/src/renderer/components/TopBar.tsx`
+What changed:
+- **CSS Design System**: Added `animate-fade-in`, `card-hover-lift`, `interactive-row`, `stagger-children` animation classes. Improved glassmorphism tokens and color variables.
+- **Dashboard**: Added `StatCard` component with per-card gradient accent bar (top edge), animated number counter using `requestAnimationFrame` easing, colored icon bubbles, and `TrendingUp` micro-indicator. Added file extension type badges (CDR=amber, PDF=red, AI=orange, PSD=blue, PNG/JPG=cyan, SVG=purple) with micro-label overlays. Refactored Ingestion Sandbox as a custom dashed-border glassmorphic panel. Staggered `animationDelay` on all list rows.
+- **Sidebar**: Active nav item now shows a vertical gradient accent bar on the left edge (brand primary → secondary). Hover transitions use `cubic-bezier` easing and include color changes.
+- **TopBar**: Replaced flat background with a glass-morphic gradient using `blur(20px) saturate(180%)`. Search bar is wider and uses `border-radius: var(--radius-md)` with its own backdrop blur.
+Testing performed:
+- `npm run build:renderer --workspace=apps/desktop` passes.
+- Browser subagent end-to-end verification: activation flow, dashboard stat cards, file list, ingestion sandbox, sidebar navigation.
+Important decisions:
+- PowerShell `Set-Content` without explicit `-Encoding UTF8` corrupts Unicode bullet characters; always use `-Encoding UTF8 -NoNewline` or avoid Set-Content for source files.
+- The `StatCard` component with `useAnimatedCount` hook (no external lib) was chosen over a library approach to keep the bundle lean.

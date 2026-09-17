@@ -35,4 +35,4 @@ Major implementation areas are present:
 - Initial bootstrap documentation and persistent project memory system were created.
 - Added the branded desktop shell assets, theme palette, and app icon/favicons for the production-ready app identity.
 - Built the interactive Onboarding Wizard with Free Community Tasks (Star repo, comment on blog, follow LinkedIn/X), offline cryptographic key validation, and Supporter/Sponsor lifetime VIP key portals.
-
+- **PR #13**: Comprehensive UI visual overhaul — animated StatCards with gradient accent bars and counter animations, file extension type badges (CDR/PDF/AI/PSD/PNG etc), refactored Ingestion Sandbox, vertical gold accent bar on active sidebar items, glassmorphic TopBar with `saturate(180%)` blur.

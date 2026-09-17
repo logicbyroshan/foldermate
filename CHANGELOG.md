@@ -10,6 +10,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Premium UI Visual Overhaul** (PR #13):
+  - New `StatCard` component on Dashboard with per-type gradient accent bars (green/amber/blue/gold), animated number counters using `requestAnimationFrame` cubic-bezier easing, and colored icon bubbles.
+  - File extension type badges in the Recently Organized list (CDR=amber, PDF=red, AI=orange, PSD=blue, PNG/JPG=cyan, SVG=purple) with `TrendingUp` micro-indicator for growth.
+  - Ingestion Sandbox redesigned as a dashed-border glassmorphic panel with Zap icon, radial glow, and quick-test pill buttons.
+  - Staggered `animationDelay` entry animations on Dashboard cards, sandbox panel, and file rows.
+  - Sidebar active item now renders a vertical gradient accent bar (brand gold → amber) on the left edge with `cubic-bezier` hover transitions and bold active font weight.
+  - TopBar redesigned with a layered glass-morphic gradient background (`blur(20px) saturate(180%)`), wider search bar (340px) with its own backdrop blur.
+  - Added global CSS animation classes: `animate-fade-in`, `card-hover-lift`, `interactive-row`, `stagger-children`.
 - **Step-by-Step Onboarding & Activation Wizard**:
   - Implemented multi-step modal (`ActivationModal.tsx`) with product value tour, unlock choice selection, and celebratory activation transition.
   - Added **Free Community Key Generator**: pick any 3 tasks from GitHub Star, Blog comments, GitHub follow, LinkedIn engagement, and X/Twitter reposts with live progress tracking.

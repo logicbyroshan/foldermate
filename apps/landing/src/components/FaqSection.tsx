@@ -3,65 +3,115 @@ import React, { useState } from 'react';
 const FAQS = [
   {
     q: 'What file types does FolderMate support?',
-    a: 'FolderMate supports all common design file types including CDR (CorelDRAW), AI (Illustrator), PSD (Photoshop), PDF, SVG, PNG, JPG, EPS, and more. Any file in your Inbox will be processed by the classification engine.',
+    a: 'FolderMate natively supports all major graphic and vector formats including CorelDRAW (.cdr), Adobe Illustrator (.ai), Photoshop (.psd), PDF (.pdf), SVG, EPS, PNG, and JPG. Any file landing in your designated Inbox is automatically evaluated by the classification engine.',
   },
   {
-    q: 'Is FolderMate completely free?',
-    a: 'Yes! FolderMate is open-source and free to use. To unlock the app you\'ll need a Community License Key, which you get by completing any 3 simple community tasks — like starring the GitHub repo, commenting on the blog, or following on social media.',
+    q: 'Is FolderMate really 100% free and open-source?',
+    a: 'Yes! FolderMate is open-source under the MIT License. To unlock the desktop app, you generate a free Community License Key by completing any 3 quick community tasks (like starring the GitHub repo, reading our workflow guide, or following on social media).',
   },
   {
-    q: 'Does FolderMate upload my files anywhere?',
-    a: 'Absolutely not. FolderMate is 100% offline-first. It runs entirely on your local machine with no cloud connectivity, no telemetry, and no external API calls. Your files never leave your computer.',
+    q: 'Does FolderMate upload my private files to any cloud?',
+    a: 'Never. FolderMate is strictly offline-first. All scanning, regex pattern matching, checksum validation, and file moving happen locally on your PC. No telemetry, no external server pings, and no cloud uploads.',
   },
   {
-    q: 'What happens to files FolderMate can\'t classify?',
-    a: 'Files that don\'t meet the minimum confidence threshold are automatically routed to the Review Queue. You can then review them, assign the correct client and project, and approve the move — nothing is ever lost or incorrectly moved.',
+    q: 'What happens if a filename is ambiguous or unrecognized?',
+    a: 'Files with a low confidence score are safely held in the Review Queue. FolderMate never guesses blindly. You can inspect the file, assign the client/project with a single click, or create an alias for future automatic matching.',
   },
   {
-    q: 'What benefits can I expect from using FolderMate?',
-    a: 'FolderMate saves you hours of manual file renaming and folder organization. You get a perfectly consistent naming convention, automatic versioning, full audit history, and a clean folder structure — all with zero manual effort.',
+    q: 'Can FolderMate prevent accidental artwork overwrites?',
+    a: 'Yes. FolderMate features smart version incrementing (e.g., v1 → v2 → v3). When a new revision arrives, FolderMate automatically detects existing versions in the target directory and assigns the next clean revision number in SQLite.',
   },
   {
-    q: 'How do I get started with FolderMate?',
-    a: 'Download the installer from our GitHub Releases page, run it, and follow the setup wizard. Configure your Inbox path and folder template, then just drop files into the Inbox — FolderMate does the rest automatically.',
+    q: 'How does the atomic two-phase mover protect my data?',
+    a: 'Before any source file is deleted from your Inbox, FolderMate stages a copy at the target path, verifies the byte length and integrity checksum, and confirms write success in SQLite. Your original artwork is 100% protected against corruption.',
   },
 ];
 
 export default function FaqSection() {
-  const [open, setOpen] = useState<number | null>(null);
+  const [open, setOpen] = useState<number | null>(0); // First item open by default
+
+  const toggle = (i: number) => {
+    setOpen(open === i ? null : i);
+  };
 
   return (
     <section className="faq-section" id="faq">
       <div className="container">
-        <h2>Frequently Asked<br />Questions</h2>
-        <div className="faq-grid" style={{ marginTop: 40 }}>
-          {FAQS.map((f, i) => (
-            <div
-              key={i}
-              className="faq-card"
-              onClick={() => setOpen(open === i ? null : i)}
-            >
-              <h3 style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
-                {f.q}
-                <span style={{ fontSize: '1.1rem', flexShrink: 0, marginTop: 2 }}>
-                  {open === i ? '−' : '+'}
-                </span>
-              </h3>
-              {open === i && <p style={{ marginTop: 12 }}>{f.a}</p>}
-            </div>
-          ))}
+        {/* Section Header */}
+        <div className="section-header text-center">
+          <div className="star-badge" style={{ marginBottom: 12 }}>
+            <span>❓</span> FREQUENTLY ASKED QUESTIONS
+          </div>
+          <h2>Got questions? We have answers.</h2>
+          <p className="section-sub">
+            Learn more about FolderMate’s offline architecture, supported formats, safety guarantees, and licensing.
+          </p>
         </div>
 
-        <div className="faq-still">
-          <h3>Still have questions?</h3>
-          <a
-            href="https://github.com/logicbyroshan/foldermate/discussions"
-            target="_blank"
-            rel="noreferrer"
-            className="btn btn-outline"
-          >
-            CONTACT US
-          </a>
+        {/* FAQ Accordion Grid */}
+        <div className="faq-grid">
+          {FAQS.map((f, i) => {
+            const isOpen = open === i;
+            return (
+              <div
+                key={i}
+                className={`faq-card ${isOpen ? 'faq-card-open' : ''}`}
+                onClick={() => toggle(i)}
+                role="button"
+                tabIndex={0}
+                aria-expanded={isOpen}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    toggle(i);
+                  }
+                }}
+              >
+                <div className="faq-question-row">
+                  <h3 className="faq-question-text">{f.q}</h3>
+                  <div className={`faq-toggle-icon ${isOpen ? 'open' : ''}`}>
+                    {isOpen ? '−' : '+'}
+                  </div>
+                </div>
+                {isOpen && (
+                  <div className="faq-answer animate-fade-up">
+                    <p>{f.a}</p>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Rebuilt "Still Have Questions?" Neo-Brutalist Support Banner */}
+        <div className="faq-still-card">
+          <div className="faq-still-left">
+            <div className="faq-still-icon">💬</div>
+            <div className="faq-still-text">
+              <h3>Still have questions or need custom rules?</h3>
+              <p>
+                Can’t find what you’re looking for? Our open-source maintainers and design community are active on GitHub Discussions.
+              </p>
+            </div>
+          </div>
+          <div className="faq-still-actions">
+            <a
+              href="https://github.com/logicbyroshan/foldermate/discussions"
+              target="_blank"
+              rel="noreferrer"
+              className="btn btn-primary"
+            >
+              💬 ASK IN DISCUSSIONS
+            </a>
+            <a
+              href="https://github.com/logicbyroshan/foldermate/issues"
+              target="_blank"
+              rel="noreferrer"
+              className="btn btn-outline"
+            >
+              ⭐ OPEN AN ISSUE
+            </a>
+          </div>
         </div>
       </div>
     </section>

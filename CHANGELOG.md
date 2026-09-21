@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Streamlined Desktop License Activation & Web Key Generator Integration**:
+  - Simplified Desktop UI `ActivationModal.tsx` by removing the embedded multi-step task completion wizard and checklist.
+  - Direct key entry input with auto-focus, paste button, instant offline cryptographic validation feedback (Community, Sponsor, VIP, Universal Lifetime Hero), and optional user/studio credit field.
+  - Added direct action cards for users needing a key: one-click button to open the Web Landing Page task generator (`http://localhost:5200/#get-key`) and Sponsor portal.
+  - Upgraded community key generator in `apps/landing/src/components/CtaBanner.tsx` to produce cryptographic segment checksums (`FM-COMMUNITY-XXXX-XXXX-XXXX`), guaranteeing instantaneous validation in the desktop app.
 - **Windows-Native File Explorer Architecture & UI Transformation**:
   - Re-architected FolderMate desktop UI from card-heavy dashboard views into a **Windows File Explorer-inspired desktop utility** with FolderMate background intelligence.
   - Implemented `ExplorerHeader.tsx` featuring back/forward/up/refresh navigation history, interactive breadcrumb address bar with `Ctrl+L` direct filesystem path mode, instant search filter (`Ctrl+F`), Details/List/Icons view mode switchers (`Ctrl+1`, `Ctrl+2`, `Ctrl+3`), inspector toggle, and live engine status dropdown with pause controls.

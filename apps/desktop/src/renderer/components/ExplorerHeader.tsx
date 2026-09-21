@@ -89,6 +89,8 @@ export const ExplorerHeader: React.FC<ExplorerHeaderProps> = ({
   const [isViewMenuOpen, setIsViewMenuOpen] = useState(false);
   const addressInputRef = useRef<HTMLInputElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const viewMenuRef = useRef<HTMLDivElement>(null);
+  const pauseMenuRef = useRef<HTMLDivElement>(null);
 
   const fullPathString = breadcrumbs.map((b) => b.label).join(" \\ ");
 
@@ -103,6 +105,33 @@ export const ExplorerHeader: React.FC<ExplorerHeaderProps> = ({
       addressInputRef.current.select();
     }
   }, [isAddressInputMode]);
+
+  // Click-outside and Escape listeners for dropdowns
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (isViewMenuOpen && viewMenuRef.current && !viewMenuRef.current.contains(e.target as Node)) {
+        setIsViewMenuOpen(false);
+      }
+      if (isPauseMenuOpen && pauseMenuRef.current && !pauseMenuRef.current.contains(e.target as Node)) {
+        setIsPauseMenuOpen(false);
+      }
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        if (isViewMenuOpen) setIsViewMenuOpen(false);
+        if (isPauseMenuOpen) setIsPauseMenuOpen(false);
+        if (isAddressInputMode) setIsAddressInputMode(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isViewMenuOpen, isPauseMenuOpen, isAddressInputMode]);
 
   return (
     <header className="explorer-header">
@@ -220,7 +249,7 @@ export const ExplorerHeader: React.FC<ExplorerHeaderProps> = ({
         </div>
 
         {/* View Mode Selectors: Details, List, Icons with Dropdown */}
-        <div className="explorer-view-modes" style={{ position: "relative" }}>
+        <div ref={viewMenuRef} className="explorer-view-modes" style={{ position: "relative" }}>
           <button
             type="button"
             className={`view-mode-btn ${viewMode === "details" ? "active" : ""}`}
@@ -253,7 +282,10 @@ export const ExplorerHeader: React.FC<ExplorerHeaderProps> = ({
           <button
             type="button"
             className={`view-mode-btn ${isViewMenuOpen ? "active" : ""}`}
-            onClick={() => setIsViewMenuOpen(!isViewMenuOpen)}
+            onClick={() => {
+              setIsViewMenuOpen((prev) => !prev);
+              setIsPauseMenuOpen(false);
+            }}
             title="All View Options & Zoom (Ctrl + Mouse Wheel)"
             style={{ width: 18 }}
           >
@@ -345,11 +377,14 @@ export const ExplorerHeader: React.FC<ExplorerHeaderProps> = ({
         </button>
 
         {/* Engine Status & Pause/Resume Dropdown */}
-        <div className="engine-status-wrapper">
+        <div ref={pauseMenuRef} className="engine-status-wrapper">
           <button
             type="button"
             className={`engine-status-pill status-${engineStatus.status}`}
-            onClick={() => setIsPauseMenuOpen(!isPauseMenuOpen)}
+            onClick={() => {
+              setIsPauseMenuOpen((prev) => !prev);
+              setIsViewMenuOpen(false);
+            }}
             title="FolderMate Background Daemon Status"
           >
             <span className="status-live-dot" />

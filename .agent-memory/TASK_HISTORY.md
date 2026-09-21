@@ -362,3 +362,36 @@ Testing performed:
 - Browser subagent visual testing verifying Explorer navigation, view modes, context menus, and light/dark theme switching with captured screenshots.
 Important decisions:
 - The desktop UI strictly behaves as a Windows File Explorer utility with background daemon integration, not a SaaS dashboard.
+
+## 2026-09-21 — Button, Dropdown & Modal Interaction Polish
+Task: Deeply audit and fix small issues across buttons, open modals, dropdowns, outside clicks, and hotkey recording.
+Reason: User reported issues with open modals, button actions, and dropdown dismissal behaviors across the desktop application and landing page.
+Files/areas affected:
+- `apps/desktop/src/renderer/components/ExplorerHeader.tsx`
+- `apps/desktop/src/renderer/components/ActivationModal.tsx`
+- `apps/desktop/src/renderer/components/InspectorPanel.tsx`
+- `apps/desktop/src/renderer/components/TopBar.tsx`
+- `apps/desktop/src/renderer/components/ui/Button.tsx`
+- `apps/desktop/src/renderer/components/ui/IconButton.tsx`
+- `apps/desktop/src/renderer/views/ExplorerView.tsx`
+- `apps/desktop/src/renderer/views/KeyboardShortcuts.tsx`
+- `apps/landing/src/components/Navbar.tsx`
+- `CHANGELOG.md`
+- `.agent-memory/CURRENT_STATE.md`
+- `.agent-memory/TASK_HISTORY.md`
+What changed:
+- Added click-outside event listeners and `Escape` key handling to `ExplorerHeader.tsx` for both the View Scaling dropdown and the Background Daemon Pause dropdown.
+- Ensured dropdown menus in the header are mutually exclusive so opening one automatically closes the other.
+- Added backdrop click and `Escape` key listeners to `ActivationModal.tsx` when closable.
+- Added explicit default `type="button"` to `Button.tsx`, `IconButton.tsx`, and `TopBar.tsx` to prevent accidental form submission behavior.
+- Added cancellation via `Escape` and confirmation via `Enter` to the hotkey recorder in `KeyboardShortcuts.tsx`.
+- Populated default shortcuts in `KeyboardShortcuts.tsx` for all 6 Explorer view modes (`Ctrl+1` through `Ctrl+6`), `Ctrl+Wheel` zoom scaling, `Ctrl+A` select all, and `Ctrl+Shift+V` new version snapshot.
+- Added toast feedback and fallback handlers for folder accent color pickers and version snapshot generation in `InspectorPanel.tsx`.
+- Added window blur and resize listeners in `ExplorerView.tsx` to auto-dismiss right-click context menus.
+- Added `Escape` key, window resize, and scroll listeners in `apps/landing/src/components/Navbar.tsx` to auto-dismiss the mobile navigation drawer.
+Testing performed:
+- `npm test` (39/39 tests passed across 13 test suites).
+- `npm run build` (All 6 monorepo workspaces built with 0 errors).
+- Browser subagent interactive testing validating dropdown click-outside closing, Escape key dismissals, Command Palette opening/closing, and shortcut recorder cancelation.
+Important decisions:
+- Interactive popups and floating menus must consistently respect standard Windows desktop dismissal mechanics: outside click, Escape key press, window blur, and mutual exclusivity.

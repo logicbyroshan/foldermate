@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **Button and Modal Interaction Fixes**:
+  - Added click-outside listeners, mutual exclusivity, and `Escape` key handlers to `ExplorerHeader.tsx` dropdowns (`isViewMenuOpen` view layout & scaling menu and `isPauseMenuOpen` daemon status menu).
+  - Added backdrop click and `Escape` key listeners to `ActivationModal.tsx` when closable.
+  - Added explicit default `type="button"` to `Button.tsx`, `IconButton.tsx`, and `TopBar.tsx` buttons to prevent accidental HTML form submit triggers.
+  - Updated `KeyboardShortcuts.tsx` hotkey recorder to properly handle `Escape` (cancel recording) and `Enter` (save shortcut), and populated default shortcut mappings for all 6 view scaling modes (`Ctrl+1` through `Ctrl+6`), `Ctrl+Wheel`, `Ctrl+A`, and `Ctrl+Shift+V`.
+  - Added responsive `Escape` key, window resize, and scroll listeners to `Navbar.tsx` on the landing page to auto-close the mobile menu drawer.
+  - Added window resize and window blur listeners to `ExplorerView.tsx` to dismiss floating right-click context menus when interacting outside.
+  - Added user feedback toasts and default handlers in `InspectorPanel.tsx` for folder accent color swatches and version snapshot creations.
+
 ### Added
 - **Complete Windows File-Manager UI Redesign**:
   - Re-architected FolderMate desktop UI to look, feel, and behave as a **modern, polished Windows-native File Explorer** utility with FolderMate background automation intelligence.

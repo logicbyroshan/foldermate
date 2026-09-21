@@ -47,6 +47,7 @@ export const IconButton: React.FC<IconButtonProps> = ({
 
   return (
     <button
+      type={props.type || "button"}
       title={tooltip}
       disabled={disabled}
       style={{

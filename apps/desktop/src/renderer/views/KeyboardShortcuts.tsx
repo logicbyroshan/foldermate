@@ -69,12 +69,66 @@ const DEFAULT_SHORTCUTS: ShortcutBinding[] = [
     isCustomizable: true,
   },
   {
-    id: "view-icons",
+    id: "view-small-icons",
     category: "Views & Display",
-    action: "Switch to Large Icons Grid",
-    description: "Displays files and folders as preview icons in a grid layout",
+    action: "Switch to Small Icons View",
+    description: "Displays files and folders as compact 24px icon rows",
     keys: ["Ctrl", "3"],
     defaultKeys: ["Ctrl", "3"],
+    isCustomizable: true,
+  },
+  {
+    id: "view-medium-icons",
+    category: "Views & Display",
+    action: "Switch to Medium Icons Grid",
+    description: "Displays files and folders as standard 44px icons in a grid layout",
+    keys: ["Ctrl", "4"],
+    defaultKeys: ["Ctrl", "4"],
+    isCustomizable: true,
+  },
+  {
+    id: "view-large-icons",
+    category: "Views & Display",
+    action: "Switch to Large Icons Grid",
+    description: "Displays files and folders as spacious 64px preview icons",
+    keys: ["Ctrl", "5"],
+    defaultKeys: ["Ctrl", "5"],
+    isCustomizable: true,
+  },
+  {
+    id: "view-extra-large-icons",
+    category: "Views & Display",
+    action: "Switch to Extra Large Icons Grid",
+    description: "Displays files and folders as 96px thumbnail cards",
+    keys: ["Ctrl", "6"],
+    defaultKeys: ["Ctrl", "6"],
+    isCustomizable: true,
+  },
+  {
+    id: "view-zoom-wheel",
+    category: "Views & Display",
+    action: "Scale View Mode (Zoom)",
+    description: "Smoothly cycles through all 6 Explorer view scaling modes",
+    keys: ["Ctrl", "Wheel"],
+    defaultKeys: ["Ctrl", "Wheel"],
+    isCustomizable: false,
+  },
+  {
+    id: "select-all",
+    category: "File Operations",
+    action: "Select All Items",
+    description: "Selects all files and folders in the current browsing directory",
+    keys: ["Ctrl", "A"],
+    defaultKeys: ["Ctrl", "A"],
+    isCustomizable: false,
+  },
+  {
+    id: "create-version",
+    category: "File Operations",
+    action: "Create New Version (v+1)",
+    description: "Forks a new version increment of the selected deliverable",
+    keys: ["Ctrl", "Shift", "V"],
+    defaultKeys: ["Ctrl", "Shift", "V"],
     isCustomizable: true,
   },
   {
@@ -181,13 +235,27 @@ export const KeyboardShortcuts: React.FC = () => {
     e.preventDefault();
     e.stopPropagation();
 
+    let key = e.key;
+
+    if (key === "Escape") {
+      setEditingId(null);
+      setConflictWarning(null);
+      return;
+    }
+
+    if (key === "Enter") {
+      if (editingId) {
+        handleSaveShortcut(editingId);
+      }
+      return;
+    }
+
     const parts: string[] = [];
     if (e.ctrlKey) parts.push("Ctrl");
     if (e.altKey) parts.push("Alt");
     if (e.shiftKey) parts.push("Shift");
     if (e.metaKey) parts.push("Win");
 
-    let key = e.key;
     if (key === "Control" || key === "Alt" || key === "Shift" || key === "Meta") {
       // Just modifier pressed so far
       setRecordedKeys(parts);

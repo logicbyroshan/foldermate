@@ -333,3 +333,32 @@ Testing performed:
 - Browser subagent visual inspection confirming crisp logo rendering in Navbar, Hero mockup, and Footer.
 Important decisions:
 - Brand assets are centralized and mirrored between desktop and landing page public directories to maintain unified visual identity across web and desktop platforms.
+
+## 2026-09-21 — Complete Windows File-Manager UI Redesign
+Task: Transform FolderMate desktop UI into a modern, polished Windows-native File Explorer.
+Reason: User required the desktop UI to eliminate all SaaS dashboard patterns, cards, and web-app layouts, turning FolderMate into a fast, keyboard-first, native Windows file manager with background intelligence.
+Files/areas affected:
+- `apps/desktop/src/renderer/index.css`
+- `apps/desktop/src/renderer/views/ExplorerView.tsx`
+- `apps/desktop/src/renderer/components/ExplorerHeader.tsx`
+- `apps/desktop/src/renderer/App.tsx`
+- `apps/desktop/src/renderer/views/Settings.tsx`
+- `CHANGELOG.md`
+- `.agent-memory/CURRENT_STATE.md`
+- `.agent-memory/TASK_HISTORY.md`
+What changed:
+- Redesigned the primary workspace around file/folder browsing surfaces with Windows Explorer conventions.
+- Implemented 6 distinct view modes: Details, List, Small Icons, Medium Icons, Large Icons, and Extra Large Icons.
+- Implemented smooth `Ctrl + Mouse Wheel` view zoom scaling to cycle through icon sizes without zooming the web app.
+- Implemented full multi-selection support with `Ctrl + Click`, `Shift + Click` range selection, and `Ctrl + A`.
+- Implemented inline file/folder renaming (`F2`) with auto-focus and extension preservation.
+- Implemented Windows 11 style context menus on right-click for folders and files (*Open*, *Open in Windows Explorer*, *New Version*, *Rename*, *Folder Appearance*, *Copy Path*, *Properties*).
+- Implemented Windows OS System Theme Following with dynamic `@media (prefers-color-scheme)` detection and live switching between Follow Windows, Light Theme (clean Windows Explorer light palette), and Dark Theme (deep neutral dark with gold accents).
+- Added bottom File Explorer status bar with item count, selected item count, formatted size, and SQLite WAL database indicator.
+- Added Appearance & Windows System Theme card in Settings for one-click theme selection.
+Testing performed:
+- `npm test` (39/39 passed across 13 test suites).
+- `npm run build` (All workspaces built with 0 errors).
+- Browser subagent visual testing verifying Explorer navigation, view modes, context menus, and light/dark theme switching with captured screenshots.
+Important decisions:
+- The desktop UI strictly behaves as a Windows File Explorer utility with background daemon integration, not a SaaS dashboard.

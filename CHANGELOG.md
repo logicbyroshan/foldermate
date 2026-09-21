@@ -10,6 +10,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Complete Windows File-Manager UI Redesign**:
+  - Re-architected FolderMate desktop UI to look, feel, and behave as a **modern, polished Windows-native File Explorer** utility with FolderMate background automation intelligence.
+  - Replaced SaaS dashboard mental models with a dedicated file/folder browsing surface centered on files, directories, breadcrumb paths, and search.
+  - Implemented 6 distinct File Explorer view modes: `Details` (sortable multi-column table), `List` (compact multi-column rows), `Small Icons` (24px icons), `Medium Icons` (44px icons), `Large Icons` (64px icons), and `Extra Large Icons` (96px previews).
+  - Implemented smooth `Ctrl + Mouse Wheel` view zoom scaling that cycles through view modes without browser-level window zoom.
+  - Added full multi-selection support with `Ctrl + Click`, `Shift + Click` range selection, and `Ctrl + A` select all.
+  - Added inline file/folder renaming (`F2`) with auto-focus and extension preservation.
+  - Implemented Windows 11 style context menus on right-click for folders (*Open*, *Open in Windows Explorer*, *Rename*, *Folder Appearance*, *Copy Path*, *Properties*) and files (*Open*, *Show in Windows Explorer*, *Create New Version*, *Rename*, *Copy Full Path*).
+  - Implemented Windows OS System Theme Following with dynamic `@media (prefers-color-scheme)` detection and instant live switching between **Follow Windows**, **Light Theme** (clean Windows Explorer light palette), and **Dark Theme** (deep neutral dark with gold accents).
+  - Added Bottom File Explorer Status Bar showing total item count, selected item count, formatted selection file size, and background SQLite WAL database status.
+  - Added Appearance & Windows System Theme configuration card to `Settings.tsx` allowing one-click theme switching.
 - **Landing Page Brand Logo & Favicon Integration**:
   - Populated `apps/landing/public/` with official FolderMate `logo.png`, `favicon.ico`, `favicon.svg`, and `favicon-dark.svg` assets.
   - Linked SVG/ICO favicons and Apple Touch Icons in `apps/landing/index.html`.

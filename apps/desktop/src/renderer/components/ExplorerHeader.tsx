@@ -16,10 +16,17 @@ import {
   HardDrive,
   Folder,
   ChevronRight,
+  ChevronDown,
 } from "lucide-react";
 import { LicenseStatus } from "@foldermate/shared";
 
-export type ViewMode = "details" | "list" | "icons";
+export type ViewMode =
+  | "details"
+  | "list"
+  | "small-icons"
+  | "medium-icons"
+  | "large-icons"
+  | "extra-large-icons";
 
 export interface BreadcrumbItem {
   id: string;
@@ -79,6 +86,7 @@ export const ExplorerHeader: React.FC<ExplorerHeaderProps> = ({
   const [isAddressInputMode, setIsAddressInputMode] = useState(false);
   const [rawAddress, setRawAddress] = useState("");
   const [isPauseMenuOpen, setIsPauseMenuOpen] = useState(false);
+  const [isViewMenuOpen, setIsViewMenuOpen] = useState(false);
   const addressInputRef = useRef<HTMLInputElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -211,8 +219,8 @@ export const ExplorerHeader: React.FC<ExplorerHeaderProps> = ({
           )}
         </div>
 
-        {/* View Mode Selectors: Details (Ctrl+1), List (Ctrl+2), Icons (Ctrl+3) */}
-        <div className="explorer-view-modes">
+        {/* View Mode Selectors: Details, List, Icons with Dropdown */}
+        <div className="explorer-view-modes" style={{ position: "relative" }}>
           <button
             type="button"
             className={`view-mode-btn ${viewMode === "details" ? "active" : ""}`}
@@ -231,12 +239,99 @@ export const ExplorerHeader: React.FC<ExplorerHeaderProps> = ({
           </button>
           <button
             type="button"
-            className={`view-mode-btn ${viewMode === "icons" ? "active" : ""}`}
-            onClick={() => onChangeViewMode("icons")}
-            title="Large Icons View (Ctrl+3)"
+            className={`view-mode-btn ${viewMode.includes("icons") ? "active" : ""}`}
+            onClick={() => {
+              if (viewMode === "small-icons") onChangeViewMode("medium-icons");
+              else if (viewMode === "medium-icons") onChangeViewMode("large-icons");
+              else if (viewMode === "large-icons") onChangeViewMode("extra-large-icons");
+              else onChangeViewMode("medium-icons");
+            }}
+            title="Icons View (Ctrl+3 / Ctrl+Wheel to zoom)"
           >
             <LayoutGrid size={15} />
           </button>
+          <button
+            type="button"
+            className={`view-mode-btn ${isViewMenuOpen ? "active" : ""}`}
+            onClick={() => setIsViewMenuOpen(!isViewMenuOpen)}
+            title="All View Options & Zoom (Ctrl + Mouse Wheel)"
+            style={{ width: 18 }}
+          >
+            <ChevronDown size={12} />
+          </button>
+
+          {isViewMenuOpen && (
+            <div
+              className="engine-pause-dropdown animate-fade-in"
+              style={{ width: 220, right: 0, top: "100%", marginTop: 4, zIndex: 1000 }}
+            >
+              <div className="dropdown-header">
+                <strong>View Layout & Scaling</strong>
+                <span>Ctrl + Mouse Wheel zooms</span>
+              </div>
+              <div className="dropdown-divider" />
+              <button
+                type="button"
+                className={`dropdown-item ${viewMode === "details" ? "primary" : ""}`}
+                onClick={() => {
+                  onChangeViewMode("details");
+                  setIsViewMenuOpen(false);
+                }}
+              >
+                <LayoutList size={14} /> Details (Ctrl+1)
+              </button>
+              <button
+                type="button"
+                className={`dropdown-item ${viewMode === "list" ? "primary" : ""}`}
+                onClick={() => {
+                  onChangeViewMode("list");
+                  setIsViewMenuOpen(false);
+                }}
+              >
+                <List size={14} /> List (Ctrl+2)
+              </button>
+              <button
+                type="button"
+                className={`dropdown-item ${viewMode === "small-icons" ? "primary" : ""}`}
+                onClick={() => {
+                  onChangeViewMode("small-icons");
+                  setIsViewMenuOpen(false);
+                }}
+              >
+                <LayoutGrid size={13} /> Small Icons (Ctrl+3)
+              </button>
+              <button
+                type="button"
+                className={`dropdown-item ${viewMode === "medium-icons" ? "primary" : ""}`}
+                onClick={() => {
+                  onChangeViewMode("medium-icons");
+                  setIsViewMenuOpen(false);
+                }}
+              >
+                <LayoutGrid size={15} /> Medium Icons (Ctrl+4)
+              </button>
+              <button
+                type="button"
+                className={`dropdown-item ${viewMode === "large-icons" ? "primary" : ""}`}
+                onClick={() => {
+                  onChangeViewMode("large-icons");
+                  setIsViewMenuOpen(false);
+                }}
+              >
+                <LayoutGrid size={18} /> Large Icons (Ctrl+5)
+              </button>
+              <button
+                type="button"
+                className={`dropdown-item ${viewMode === "extra-large-icons" ? "primary" : ""}`}
+                onClick={() => {
+                  onChangeViewMode("extra-large-icons");
+                  setIsViewMenuOpen(false);
+                }}
+              >
+                <LayoutGrid size={22} /> Extra Large Icons (Ctrl+6)
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Inspector Pane Toggle */}

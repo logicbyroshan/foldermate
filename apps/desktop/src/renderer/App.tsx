@@ -54,6 +54,46 @@ export const AppContent: React.FC = () => {
   const [licenseStatus, setLicenseStatus] = useState<LicenseStatus | null>(null);
   const [isActivationModalOpen, setIsActivationModalOpen] = useState(false);
 
+  // Theme Management: Follow Windows / Light / Dark
+  const [themePreference, setThemePreference] = useState<"follow-windows" | "light" | "dark">(() => {
+    return (localStorage.getItem("foldermate_theme_preference") as any) || "follow-windows";
+  });
+
+  useEffect(() => {
+    const applyTheme = () => {
+      let resolvedTheme = "dark";
+      if (themePreference === "light") {
+        resolvedTheme = "light";
+      } else if (themePreference === "dark") {
+        resolvedTheme = "dark";
+      } else {
+        const isSystemDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        resolvedTheme = isSystemDark ? "dark" : "light";
+      }
+      document.documentElement.setAttribute("data-theme", resolvedTheme);
+      document.body.setAttribute("data-theme", resolvedTheme);
+    };
+
+    applyTheme();
+
+    if (themePreference === "follow-windows" && window.matchMedia) {
+      const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+      const handler = () => applyTheme();
+      mediaQuery.addEventListener("change", handler);
+      return () => mediaQuery.removeEventListener("change", handler);
+    }
+  }, [themePreference]);
+
+  const handleSetThemePreference = (pref: "follow-windows" | "light" | "dark") => {
+    setThemePreference(pref);
+    localStorage.setItem("foldermate_theme_preference", pref);
+    addToast({
+      title: "Theme Updated",
+      message: `Appearance set to ${pref === "follow-windows" ? "Follow Windows" : pref === "light" ? "Light Mode" : "Dark Mode"}.`,
+      variant: "info",
+    });
+  };
+
   const getExtBadgeColors = (ext: string) => {
     const e = (ext || "").toLowerCase().replace(".", "");
     switch (e) {
@@ -432,7 +472,7 @@ export const AppContent: React.FC = () => {
         return;
       }
 
-      // Ctrl + 1 / 2 / 3: View Modes
+      // Ctrl + 1 - 6: View Modes
       if ((e.ctrlKey || e.metaKey) && e.key === "1") {
         e.preventDefault();
         setViewMode("details");
@@ -445,7 +485,22 @@ export const AppContent: React.FC = () => {
       }
       if ((e.ctrlKey || e.metaKey) && e.key === "3") {
         e.preventDefault();
-        setViewMode("icons");
+        setViewMode("small-icons");
+        return;
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key === "4") {
+        e.preventDefault();
+        setViewMode("medium-icons");
+        return;
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key === "5") {
+        e.preventDefault();
+        setViewMode("large-icons");
+        return;
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key === "6") {
+        e.preventDefault();
+        setViewMode("extra-large-icons");
         return;
       }
 
@@ -642,6 +697,7 @@ export const AppContent: React.FC = () => {
                 entries={explorerEntries}
                 currentLocationName={currentPath.split("\\").pop() || "Clients"}
                 viewMode={viewMode}
+                onChangeViewMode={setViewMode}
                 searchQuery={searchQuery}
                 selectedItem={selectedItem}
                 onSelectItem={setSelectedItem}
@@ -651,6 +707,8 @@ export const AppContent: React.FC = () => {
                 onOpenFile={(file) => {
                   if (file.targetPath) handleOpenFile(file.targetPath);
                 }}
+                onShowInFolder={handleShowInFolder}
+                onRefresh={loadData}
               />
             )}
 
@@ -666,6 +724,8 @@ export const AppContent: React.FC = () => {
                 licenseStatus={licenseStatus}
                 onOpenActivation={() => setIsActivationModalOpen(true)}
                 onLicenseUpdated={loadData}
+                themePreference={themePreference}
+                onSetThemePreference={handleSetThemePreference}
               />
             )}
           </main>

@@ -179,7 +179,9 @@ export default function Hero() {
                   {/* Left Sidebar (visible on desktop/laptop) */}
                   <aside className="laptop-sidebar">
                     <div className="laptop-sidebar-brand">
-                      <div className="brand-icon">📁</div>
+                      <div className="brand-icon">
+                        <img src="/logo.png" alt="FolderMate" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                      </div>
                       <div className="brand-text">
                         <strong>FolderMate</strong>
                         <span>v1.0.0</span>

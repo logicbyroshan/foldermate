@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Landing Page Brand Logo & Favicon Integration**:
+  - Populated `apps/landing/public/` with official FolderMate `logo.png`, `favicon.ico`, `favicon.svg`, and `favicon-dark.svg` assets.
+  - Linked SVG/ICO favicons and Apple Touch Icons in `apps/landing/index.html`.
+  - Replaced emoji placeholders in Navbar, Hero laptop simulator, and Footer with official FolderMate branded logo assets.
 - **Landing Page Section Titles & Typography Overhaul**:
   - Replaced outdated `DM Serif Display` font across the entire web landing page with a modern, high-contrast typography system powered by `Plus Jakarta Sans`, `Inter`, and `JetBrains Mono`.
   - Updated headings hierarchy (`h1, h2, h3, h4, h5, h6`) with tight letter-spacing (`-0.035em` to `-0.04em`), bold weights (700/800/900), and crisp line-heights.

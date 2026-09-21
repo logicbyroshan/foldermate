@@ -31,12 +31,16 @@ interface SettingsProps {
   licenseStatus?: LicenseStatus | null;
   onOpenActivation?: () => void;
   onLicenseUpdated?: () => void;
+  themePreference?: "follow-windows" | "light" | "dark";
+  onSetThemePreference?: (pref: "follow-windows" | "light" | "dark") => void;
 }
 
 export const Settings: React.FC<SettingsProps> = ({
   licenseStatus,
   onOpenActivation,
   onLicenseUpdated,
+  themePreference = "follow-windows",
+  onSetThemePreference,
 }) => {
   const [inboxPath, setInboxPath] = useState("C:\\FolderMate\\Inbox");
   const [organizationRoot, setOrganizationRoot] = useState("D:\\Clients");
@@ -239,6 +243,98 @@ export const Settings: React.FC<SettingsProps> = ({
               </Button>
             )}
           </div>
+        </div>
+      </Card>
+
+      {/* Appearance & Windows Theme Section */}
+      <Card style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, borderBottom: "1px solid var(--border-subtle)", paddingBottom: 12 }}>
+          <Palette size={18} color="var(--accent-amber)" />
+          <div>
+            <h3 style={{ fontSize: 14, fontWeight: 700, color: "var(--text-primary)" }}>
+              Appearance & Windows System Theme
+            </h3>
+            <span style={{ fontSize: 11, color: "var(--text-muted)" }}>
+              Configure light/dark themes and automatic Windows OS system preference synchronization.
+            </span>
+          </div>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+          <button
+            type="button"
+            onClick={() => onSetThemePreference?.("follow-windows")}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+              padding: "12px 14px",
+              borderRadius: "var(--radius-md)",
+              border: themePreference === "follow-windows" ? "1.5px solid var(--brand-primary)" : "1px solid var(--border-subtle)",
+              backgroundColor: themePreference === "follow-windows" ? "var(--bg-selected)" : "var(--bg-surface)",
+              cursor: "pointer",
+              textAlign: "left",
+              transition: "all 0.1s ease",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", marginBottom: 4 }}>
+              <strong style={{ fontSize: 13, color: "var(--text-primary)" }}>Follow Windows</strong>
+              {themePreference === "follow-windows" && <Badge variant="amber" size="sm">Active</Badge>}
+            </div>
+            <span style={{ fontSize: 11, color: "var(--text-muted)" }}>
+              Automatically tracks Windows 11 light or dark system theme.
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => onSetThemePreference?.("light")}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+              padding: "12px 14px",
+              borderRadius: "var(--radius-md)",
+              border: themePreference === "light" ? "1.5px solid var(--brand-primary)" : "1px solid var(--border-subtle)",
+              backgroundColor: themePreference === "light" ? "var(--bg-selected)" : "var(--bg-surface)",
+              cursor: "pointer",
+              textAlign: "left",
+              transition: "all 0.1s ease",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", marginBottom: 4 }}>
+              <strong style={{ fontSize: 13, color: "var(--text-primary)" }}>Light Theme</strong>
+              {themePreference === "light" && <Badge variant="amber" size="sm">Active</Badge>}
+            </div>
+            <span style={{ fontSize: 11, color: "var(--text-muted)" }}>
+              Crisp Windows Explorer clean light palette with dark text.
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => onSetThemePreference?.("dark")}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+              padding: "12px 14px",
+              borderRadius: "var(--radius-md)",
+              border: themePreference === "dark" ? "1.5px solid var(--brand-primary)" : "1px solid var(--border-subtle)",
+              backgroundColor: themePreference === "dark" ? "var(--bg-selected)" : "var(--bg-surface)",
+              cursor: "pointer",
+              textAlign: "left",
+              transition: "all 0.1s ease",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", marginBottom: 4 }}>
+              <strong style={{ fontSize: 13, color: "var(--text-primary)" }}>Dark Theme</strong>
+              {themePreference === "dark" && <Badge variant="amber" size="sm">Active</Badge>}
+            </div>
+            <span style={{ fontSize: 11, color: "var(--text-muted)" }}>
+              Deep neutral dark mode with FolderMate signature gold accents.
+            </span>
+          </button>
         </div>
       </Card>
 

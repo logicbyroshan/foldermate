@@ -225,8 +225,14 @@ section {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.15rem;
+  overflow: hidden;
+  padding: 4px;
   transition: transform 0.15s ease;
+}
+.navbar-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 .navbar-logo:hover .navbar-logo-icon {
   transform: rotate(-6deg) scale(1.05);
@@ -839,8 +845,9 @@ section {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.9rem;
-  color: #000;
+  overflow: hidden;
+  padding: 3px;
+  flex-shrink: 0;
 }
 .brand-text {
   display: flex;
@@ -2168,8 +2175,13 @@ section {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.2rem;
-  color: #000;
+  overflow: hidden;
+  padding: 4px;
+}
+.footer-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 .footer-brand-title {
   font-family: var(--font-heading);

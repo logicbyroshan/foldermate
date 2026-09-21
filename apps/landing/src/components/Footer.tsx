@@ -33,7 +33,9 @@ export default function Footer() {
           {/* Column 1: Brand & Mission */}
           <div className="footer-col footer-col-brand">
             <div className="footer-brand-header">
-              <div className="footer-logo-icon">📁</div>
+              <div className="footer-logo-icon">
+                <img src="/logo.png" alt="FolderMate" className="footer-logo-img" />
+              </div>
               <span className="footer-brand-title">FolderMate</span>
             </div>
             <p className="footer-brand-desc">

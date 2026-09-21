@@ -17,7 +17,9 @@ export default function Navbar() {
       <div className="navbar-inner">
         {/* Logo with Brand Status Badge */}
         <a href="#" className="navbar-logo" onClick={closeMenu}>
-          <div className="navbar-logo-icon">📁</div>
+          <div className="navbar-logo-icon">
+            <img src="/logo.png" alt="FolderMate" className="navbar-logo-img" />
+          </div>
           <span className="navbar-brand-name">FolderMate</span>
           <span className="navbar-version-badge">v1.0 · Free</span>
         </a>

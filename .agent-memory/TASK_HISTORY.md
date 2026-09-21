@@ -306,3 +306,30 @@ Testing performed:
 - Browser subagent visual inspection capturing screenshots of all section titles and card layouts at `http://localhost:5200`.
 Important decisions:
 - Landing page typography strictly follows bold, modern neo-brutalism using Plus Jakarta Sans for headings and Inter for body text, eliminating awkward serif styles.
+
+## 2026-09-21 — Landing Page Brand Logo & Favicon Integration
+Task: Add official FolderMate brand logo and favicons to the landing page.
+Reason: User reported that the landing page was missing the brand logo and favicons (using placeholder emoji icons and missing public directory assets).
+Files/areas affected:
+- `apps/landing/public/` (`logo.png`, `favicon.ico`, `favicon.svg`, `favicon-dark.svg`)
+- `apps/landing/index.html`
+- `apps/landing/src/components/Navbar.tsx`
+- `apps/landing/src/components/Hero.tsx`
+- `apps/landing/src/components/Footer.tsx`
+- `apps/landing/src/index.css`
+- `CHANGELOG.md`
+- `.agent-memory/CURRENT_STATE.md`
+- `.agent-memory/TASK_HISTORY.md`
+What changed:
+- Created `apps/landing/public` directory and copied branded `logo.png`, `favicon.ico`, `favicon.svg`, and `favicon-dark.svg` assets from `apps/desktop/public`.
+- Configured SVG, ICO, and Apple Touch Icon favicon links in `apps/landing/index.html`.
+- Replaced placeholder emoji `📁` with official `logo.png` image in `Navbar.tsx` (with amber container, border, and hover micro-interaction).
+- Replaced sidebar header placeholder emoji in `Hero.tsx` laptop UI simulation with official FolderMate logo image.
+- Replaced emoji in `Footer.tsx` with official FolderMate logo image.
+- Added responsive logo styling rules in `index.css` (`.navbar-logo-img`, `.footer-logo-img`, `.brand-icon`).
+Testing performed:
+- `npm run build:landing` (Built in 1.23s with 0 errors).
+- `npm test` (All 39 tests passed across 13 test suites).
+- Browser subagent visual inspection confirming crisp logo rendering in Navbar, Hero mockup, and Footer.
+Important decisions:
+- Brand assets are centralized and mirrored between desktop and landing page public directories to maintain unified visual identity across web and desktop platforms.

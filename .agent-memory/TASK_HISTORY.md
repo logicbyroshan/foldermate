@@ -262,7 +262,24 @@ Testing performed:
 - Vitest automated test suite: `npm test` (39 tests passed).
 - Build verification: `npm run build:renderer --workspace=apps/desktop` (0 warnings).
 - Browser subagent visual verification across Home, Explorer, Clients, Review Queue, Background Daemon, Keyboard Shortcuts, Settings, and Activation Modal.
+## 2026-09-21 — Streamline Desktop UI License Activation & Web Key Generator Integration
+Task: Remove multi-step task completion wizard from desktop UI and directly prompt for license key with links to the web landing page.
+Reason: User request to separate task completion steps from desktop application and have the desktop app directly prompt for the license key, with links to landing page tasks or sponsorship for users who need a key.
+Files/areas affected:
+- `apps/desktop/src/renderer/components/ActivationModal.tsx`
+- `apps/landing/src/components/CtaBanner.tsx`
+- `CHANGELOG.md`
+- `.agent-memory/CURRENT_STATE.md`
+- `.agent-memory/TASK_HISTORY.md`
+What changed:
+- Streamlined `ActivationModal.tsx` in `apps/desktop` by removing internal task completion checklist, progress bar, and multi-step wizard screens.
+- Converted modal to a direct License Key entry dialog with auto-focus, paste button, real-time cryptographic validation feedback (Community, Sponsor, VIP, Lifetime), and optional studio/name field.
+- Added direct action cards for users without a key: "Get Free Key ↗" linking to landing page task generator (`http://localhost:5200/#get-key`) and "Sponsor Portal 💖" linking to GitHub Sponsors / BuyMeACoffee.
+- Upgraded community key generator in `apps/landing/src/components/CtaBanner.tsx` with cryptographic segment checksum matching the desktop validator.
+- Verified with full test suite (39/39 tests passed), production builds, and interactive browser subagent verification.
+Testing performed:
+- `npm test` (39/39 passed across 13 test suites).
+- `npm run build:landing` and `npm run build --workspace=apps/desktop` (0 errors).
+- Browser subagent verification: verified invalid key rejection (`Unrecognized license type`), valid key activation (`FM-SPONSOR-GOLD-LIFETIME-VIP`), and UI link navigation.
 Important decisions:
-- Component styles adhere strictly to global design tokens and Windows Explorer design patterns rather than ad-hoc inline styles.
-
-
+- The desktop app remains completely focused on local offline validation and desktop execution, while task completion and key generation for community users is hosted on the web landing page.

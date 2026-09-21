@@ -39,6 +39,29 @@ const COMMUNITY_TASKS = [
   },
 ];
 
+function computeSegmentChecksum(str: string): string {
+  let hash = 0x811c9dc5;
+  for (let i = 0; i < str.length; i++) {
+    hash ^= str.charCodeAt(i);
+    hash = (hash * 0x01000193) >>> 0;
+  }
+  return hash.toString(16).toUpperCase().padStart(4, "0").slice(-4);
+}
+
+function generateCommunityKey(): string {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let part1 = "";
+  let part2 = "";
+  for (let i = 0; i < 4; i++) {
+    part1 += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  for (let i = 0; i < 4; i++) {
+    part2 += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  const check = computeSegmentChecksum(`COMMUNITY-${part1}-${part2}`);
+  return `FM-COMMUNITY-${part1}-${part2}-${check}`;
+}
+
 export default function CtaBanner() {
   const [completed, setCompleted] = useState<Record<string, boolean>>({ star: false });
   const [generatedKey, setGeneratedKey] = useState<string | null>(null);
@@ -56,10 +79,7 @@ export default function CtaBanner() {
 
   const handleGenerateKey = () => {
     if (!isEligible) return;
-    const segments = Array.from({ length: 4 }, () =>
-      Math.random().toString(36).substring(2, 6).toUpperCase()
-    );
-    const key = `FM-${segments.join('-')}`;
+    const key = generateCommunityKey();
     setGeneratedKey(key);
   };
 
@@ -119,7 +139,7 @@ export default function CtaBanner() {
           </div>
 
           {/* Box 2: Instant Activation Key Generator */}
-          <div className="key-generator-card">
+          <div className="key-generator-card" id="get-key">
             <div className="key-gen-header">
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
                 <span className="key-gen-pill">🔑 FREE ACTIVATION KEY</span>

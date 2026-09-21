@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ShieldCheck,
   Sparkles,
@@ -36,6 +36,16 @@ export const ActivationModal: React.FC<ActivationModalProps> = ({
   const [inputKey, setInputKey] = useState("");
   const [donorName, setDonorName] = useState("");
   const [isActivating, setIsActivating] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isOpen && (isClosable || onClose)) {
+        onClose?.();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, isClosable, onClose]);
 
   if (!isOpen) return null;
 
@@ -114,6 +124,11 @@ export const ActivationModal: React.FC<ActivationModalProps> = ({
 
   return (
     <div
+      onClick={(e) => {
+        if (e.target === e.currentTarget && (isClosable || onClose)) {
+          onClose?.();
+        }
+      }}
       style={{
         position: "fixed",
         inset: 0,

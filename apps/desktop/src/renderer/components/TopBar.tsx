@@ -90,6 +90,7 @@ export const TopBar: React.FC<TopBarProps> = ({
         {/* Supporter / License Badge */}
         {licenseStatus && (
           <button
+            type="button"
             onClick={onOpenActivation}
             style={{
               display: "flex",

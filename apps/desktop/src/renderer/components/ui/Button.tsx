@@ -63,6 +63,7 @@ export const Button: React.FC<ButtonProps> = ({
 
   return (
     <button
+      type={props.type || "button"}
       disabled={disabled || isLoading}
       style={{
         display: "inline-flex",

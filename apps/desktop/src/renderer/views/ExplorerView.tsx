@@ -311,9 +311,11 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
         return;
       }
 
-      // Escape: Clear selection or cancel rename
+      // Escape: Close context menu, cancel rename, or clear selection
       if (e.key === "Escape") {
-        if (renamingId) {
+        if (contextMenu.isOpen) {
+          closeContextMenu();
+        } else if (renamingId) {
           setRenamingId(null);
         } else {
           setSelectedIds(new Set());
@@ -322,8 +324,14 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
     };
 
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [filteredAndSortedEntries, selectedItem, renamingId, onOpenFolder, onOpenFile]);
+    window.addEventListener("resize", closeContextMenu);
+    window.addEventListener("blur", closeContextMenu);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("resize", closeContextMenu);
+      window.removeEventListener("blur", closeContextMenu);
+    };
+  }, [filteredAndSortedEntries, selectedItem, renamingId, contextMenu.isOpen, onOpenFolder, onOpenFile]);
 
   // Focus rename input on activation
   useEffect(() => {

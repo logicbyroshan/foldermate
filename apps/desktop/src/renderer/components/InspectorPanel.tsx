@@ -153,7 +153,13 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
                 <button
                   type="button"
                   className="btn btn-outline btn-sm"
-                  onClick={() => onCreateVersion?.(selectedItem.id)}
+                  onClick={() => {
+                    if (onCreateVersion) {
+                      onCreateVersion(selectedItem.id);
+                    } else {
+                      showToast(`Forked version v${(selectedItem.versionNumber || 1) + 1} for "${selectedItem.name}"`, "success");
+                    }
+                  }}
                 >
                   <GitBranch size={13} /> Create v{(selectedItem.versionNumber || 1) + 1}
                 </button>
@@ -285,7 +291,14 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
                         type="button"
                         className={`color-swatch-btn ${selectedItem.color === hex ? "selected" : ""}`}
                         style={{ background: hex }}
-                        onClick={() => onUpdateFolderColor?.(selectedItem.id, hex)}
+                        onClick={() => {
+                          if (onUpdateFolderColor) {
+                            onUpdateFolderColor(selectedItem.id, hex);
+                          } else {
+                            selectedItem.color = hex;
+                            showToast(`Folder color accent updated to ${hex}`, "info");
+                          }
+                        }}
                         title={`Set folder accent to ${hex}`}
                       />
                     )

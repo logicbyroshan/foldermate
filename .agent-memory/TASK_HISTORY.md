@@ -283,3 +283,26 @@ Testing performed:
 - Browser subagent verification: verified invalid key rejection (`Unrecognized license type`), valid key activation (`FM-SPONSOR-GOLD-LIFETIME-VIP`), and UI link navigation.
 Important decisions:
 - The desktop app remains completely focused on local offline validation and desktop execution, while task completion and key generation for community users is hosted on the web landing page.
+
+## 2026-09-21 — Landing Page Section Titles & Typography Overhaul
+Task: Modernize and fix landing page section titles and heading typography across all components.
+Reason: User reported that landing page section titles had visual issues and were not looking good due to outdated serif font rendering.
+Files/areas affected:
+- `apps/landing/index.html`
+- `apps/landing/src/index.css`
+- `CHANGELOG.md`
+- `.agent-memory/CURRENT_STATE.md`
+- `.agent-memory/TASK_HISTORY.md`
+What changed:
+- Replaced outdated `DM Serif Display` font across the entire landing page with a modern, high-contrast, bold typography system based on `Plus Jakarta Sans`, `Inter`, and `JetBrains Mono`.
+- Updated base heading rules (`h1, h2, h3, h4, h5, h6`), setting crisp line heights (1.1 to 1.18), tight letter-spacing (`-0.035em` to `-0.04em`), bold weights (700/800/900), and proper dark color tokens (`#111827`).
+- Redesigned `.section-header` and `.section-sub` with centered flex layouts, clean subtitle text weights, and neo-brutalist pill badges.
+- Enhanced the hero headline with tight tracking and a subtle yellow highlight marker accent behind "organized — automatically.".
+- Updated `.navbar-logo`, `.trusted-label`, `.summary-score`, `.stat-value`, `.footer-brand-title`, and `.blog-title` to use the unified modern heading token `--font-heading`.
+- Audited all section headers via browser subagent across Hero, Features, Split Features, Benefits, Reviews, Blog & Workflow Guides, FAQ, CTA Banner, and Footer.
+Testing performed:
+- `npm run build:landing` (Built in 1.47s with 0 errors).
+- `npm test` (All 39 tests passed across 13 test suites).
+- Browser subagent visual inspection capturing screenshots of all section titles and card layouts at `http://localhost:5200`.
+Important decisions:
+- Landing page typography strictly follows bold, modern neo-brutalism using Plus Jakarta Sans for headings and Inter for body text, eliminating awkward serif styles.

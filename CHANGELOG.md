@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Landing Page Section Titles & Typography Overhaul**:
+  - Replaced outdated `DM Serif Display` font across the entire web landing page with a modern, high-contrast typography system powered by `Plus Jakarta Sans`, `Inter`, and `JetBrains Mono`.
+  - Updated headings hierarchy (`h1, h2, h3, h4, h5, h6`) with tight letter-spacing (`-0.035em` to `-0.04em`), bold weights (700/800/900), and crisp line-heights.
+  - Modernized `.section-header` with centered layouts, clean subtext weights, and high-contrast pill badges.
+  - Enhanced Hero headline, feature cards, review summaries, and blog & workflow guides with unified modern heading design tokens.
 - **Streamlined Desktop License Activation & Web Key Generator Integration**:
   - Simplified Desktop UI `ActivationModal.tsx` by removing the embedded multi-step task completion wizard and checklist.
   - Direct key entry input with auto-focus, paste button, instant offline cryptographic validation feedback (Community, Sponsor, VIP, Universal Lifetime Hero), and optional user/studio credit field.

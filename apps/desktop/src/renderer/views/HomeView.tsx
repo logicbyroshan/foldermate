@@ -1,19 +1,22 @@
 import React from "react";
 import {
+  Folder,
+  FolderOpen,
   Inbox,
   FolderTree,
-  FolderOpen,
   Archive,
   AlertCircle,
-  FileCheck2,
-  Clock,
+  Pin,
+  HardDrive,
   ArrowRight,
-  Sparkles,
-  GitBranch,
-  ShieldCheck,
-  ExternalLink,
+  Monitor,
+  Download,
+  FileText,
+  FileCode,
+  FileImage,
+  FileSpreadsheet,
 } from "lucide-react";
-import { SelectedItem, SelectedFileItem } from "../components/InspectorPanel.js";
+import { SelectedItem } from "../components/InspectorPanel.js";
 import { ExplorerFileEntry } from "./ExplorerView.js";
 
 interface HomeViewProps {
@@ -23,7 +26,7 @@ interface HomeViewProps {
   onSelectItem: (item: SelectedItem) => void;
   onOpenFile: (file: ExplorerFileEntry) => void;
   onScanNow: () => void;
-  recentEvents: { id: string; type: string; title: string; subtitle: string; time: string }[];
+  recentEvents?: { id: string; type: string; title: string; subtitle: string; time: string }[];
 }
 
 export const HomeView: React.FC<HomeViewProps> = ({
@@ -32,63 +35,96 @@ export const HomeView: React.FC<HomeViewProps> = ({
   onNavigateToView,
   onSelectItem,
   onOpenFile,
-  onScanNow,
-  recentEvents,
 }) => {
   const quickAccessFolders = [
     {
       id: "inbox",
-      name: "Inbox (Watcher)",
+      name: "Inbox",
       path: "C:\\FolderMate\\Inbox",
       icon: Inbox,
       color: "#f59e0b",
-      badge: "Active Watch",
-      onClick: () => onNavigateToView("explorer", "inbox"),
+      badge: "Watch Folder",
+      onClick: () => onNavigateToView("explorer", "C:\\FolderMate\\Inbox"),
     },
     {
       id: "clients",
-      name: "Organized Clients",
+      name: "Clients",
       path: "D:\\Clients",
       icon: FolderTree,
       color: "#3b82f6",
       badge: "Root Storage",
-      onClick: () => onNavigateToView("clients"),
+      onClick: () => onNavigateToView("clients", "D:\\Clients"),
     },
     {
-      id: "review",
-      name: "Review Queue",
-      path: "Needs Confirmation",
-      icon: AlertCircle,
-      color: "#ef4444",
-      badge: `${pendingReviewCount} Pending`,
-      onClick: () => onNavigateToView("review"),
+      id: "desktop",
+      name: "Desktop",
+      path: "C:\\Users\\Public\\Desktop",
+      icon: Monitor,
+      color: "#06b6d4",
+      badge: "User Folder",
+      onClick: () => onNavigateToView("explorer", "D:\\Clients"),
+    },
+    {
+      id: "downloads",
+      name: "Downloads",
+      path: "C:\\Users\\Downloads",
+      icon: Download,
+      color: "#10b981",
+      badge: "System",
+      onClick: () => onNavigateToView("explorer", "C:\\FolderMate\\Inbox"),
+    },
+    {
+      id: "documents",
+      name: "Documents",
+      path: "D:\\Clients\\Projects",
+      icon: FileText,
+      color: "#8b5cf6",
+      badge: "Storage",
+      onClick: () => onNavigateToView("clients", "D:\\Clients"),
     },
     {
       id: "archive",
-      name: "Cold Archive",
+      name: "Archive",
       path: "D:\\Archive",
       icon: Archive,
-      color: "#8b5cf6",
-      badge: "Safe Store",
-      onClick: () => onNavigateToView("explorer", "archive"),
+      color: "#64748b",
+      badge: "Cold Store",
+      onClick: () => onNavigateToView("explorer", "D:\\Archive"),
     },
   ];
 
+  const getFormatIcon = (ext: string) => {
+    const e = (ext || "").toLowerCase().replace(".", "");
+    switch (e) {
+      case "cdr":
+      case "ai":
+      case "psd":
+      case "png":
+      case "jpg":
+        return <FileImage size={15} color="var(--brand-primary)" />;
+      case "xlsx":
+      case "xls":
+      case "csv":
+        return <FileSpreadsheet size={15} color="#10b981" />;
+      default:
+        return <FileText size={15} color="#3b82f6" />;
+    }
+  };
+
   return (
-    <div className="home-view-root animate-fade-in">
-      {/* Needs Review Callout Banner (if pending items exist) */}
+    <div className="win11-home-view animate-fade-in">
+      {/* Windows 11 Info Notice (only if Review Queue items need confirmation) */}
       {pendingReviewCount > 0 && (
-        <div className="home-alert-banner">
-          <div className="alert-left">
-            <AlertCircle size={20} color="var(--brand-primary)" />
-            <div className="alert-text">
-              <strong>{pendingReviewCount} Ambiguous files need confirmation</strong>
-              <p>FolderMate held these files safely in the Review Queue rather than guessing.</p>
-            </div>
+        <div className="win11-info-bar">
+          <div className="info-bar-left">
+            <AlertCircle size={16} className="info-bar-icon" />
+            <span className="info-bar-message">
+              <strong>Review Queue:</strong> {pendingReviewCount} incoming files require classification approval before routing.
+            </span>
           </div>
           <button
             type="button"
-            className="btn btn-primary btn-sm"
+            className="win11-info-bar-btn"
             onClick={() => onNavigateToView("review")}
           >
             Review Files <ArrowRight size={13} />
@@ -96,75 +132,70 @@ export const HomeView: React.FC<HomeViewProps> = ({
         </div>
       )}
 
-      {/* Quick Access Section */}
-      <section className="home-section">
-        <div className="section-title-row">
-          <span className="section-title">Quick Access</span>
-          <button
-            type="button"
-            className="btn btn-outline btn-xs"
-            onClick={onScanNow}
-            title="Scan Inbox folder now"
-          >
-            <Sparkles size={12} /> Trigger Scan Now
-          </button>
+      {/* SECTION 1: QUICK ACCESS PINNED FOLDERS */}
+      <section className="win11-section">
+        <div className="win11-section-header">
+          <span className="win11-section-title">Quick access</span>
+          <span className="win11-section-sub">Pinned folders</span>
         </div>
 
-        <div className="quick-access-grid">
-          {quickAccessFolders.map((q) => {
-            const Icon = q.icon;
+        <div className="win11-quick-access-grid">
+          {quickAccessFolders.map((item) => {
+            const IconComponent = item.icon;
             return (
               <div
-                key={q.id}
-                className="quick-access-card"
-                onClick={q.onClick}
+                key={item.id}
+                className="win11-quick-tile"
+                onClick={item.onClick}
                 role="button"
                 tabIndex={0}
+                title={`Open ${item.path}`}
               >
-                <div className="quick-access-icon" style={{ background: `${q.color}22` }}>
-                  <Icon size={20} color={q.color} />
+                <div className="quick-tile-icon-wrap" style={{ background: `${item.color}18` }}>
+                  <IconComponent size={20} color={item.color} />
                 </div>
-                <div className="quick-access-details">
-                  <span className="quick-access-name">{q.name}</span>
-                  <span className="quick-access-path">{q.path}</span>
+                <div className="quick-tile-info">
+                  <div className="quick-tile-name-row">
+                    <span className="quick-tile-name">{item.name}</span>
+                    <Pin size={11} className="pin-icon" />
+                  </div>
+                  <span className="quick-tile-path">{item.path}</span>
                 </div>
-                <span className="quick-access-pill">{q.badge}</span>
               </div>
             );
           })}
         </div>
       </section>
 
-      {/* Recent Files Section */}
-      <section className="home-section">
-        <div className="section-title-row">
-          <span className="section-title">Recent Files</span>
+      {/* SECTION 2: FAVORITES & RECENT FILES */}
+      <section className="win11-section">
+        <div className="win11-section-header">
+          <span className="win11-section-title">Recent files</span>
           <button
             type="button"
-            className="section-link-btn"
+            className="win11-link-btn"
             onClick={() => onNavigateToView("search")}
           >
-            Search all files →
+            Search all indexed files →
           </button>
         </div>
 
-        <div className="explorer-details-table-wrapper home-table-wrapper">
-          <table className="explorer-table">
+        <div className="win11-details-table-wrapper">
+          <table className="win11-table">
             <thead>
               <tr>
-                <th className="col-name">Name</th>
-                <th className="col-type">Format</th>
-                <th className="col-client">Client / Project</th>
-                <th className="col-date">Date Modified</th>
-                <th className="col-size" style={{ textAlign: "right" }}>Size</th>
-                <th className="col-status" style={{ textAlign: "center" }}>Version</th>
+                <th className="th-name">Name</th>
+                <th className="th-date">Date modified</th>
+                <th className="th-type">Type</th>
+                <th className="th-size" style={{ textAlign: "right" }}>Size</th>
+                <th className="th-path">Folder location</th>
               </tr>
             </thead>
             <tbody>
               {recentFiles.map((file) => (
                 <tr
                   key={file.id}
-                  className="explorer-row file-row"
+                  className="win11-table-row"
                   onClick={() =>
                     onSelectItem({
                       type: "file",
@@ -187,68 +218,37 @@ export const HomeView: React.FC<HomeViewProps> = ({
                   }
                   onDoubleClick={() => onOpenFile(file)}
                 >
-                  <td className="col-name">
-                    <div className="row-name-content">
+                  <td className="td-name">
+                    <div className="file-entry-cell">
                       <span
-                        className="file-format-badge"
+                        className="file-type-badge-mini"
                         style={{ background: file.extBg, color: file.extColor }}
                       >
                         {file.ext.toUpperCase()}
                       </span>
-                      <span className="entry-name-label">{file.name}</span>
+                      <span className="file-entry-label" title={file.name}>
+                        {file.name}
+                      </span>
                     </div>
                   </td>
-                  <td className="col-type">
-                    <span className="type-badge file-badge">{file.ext.toUpperCase()}</span>
-                  </td>
-                  <td className="col-client">
-                    <span className="client-subtext">
-                      {file.clientName ? `${file.clientName} / ${file.projectName || "General"}` : "Unassigned"}
+                  <td className="td-date">{file.modifiedAt || "Today"}</td>
+                  <td className="td-type">
+                    <span className="file-format-desc">
+                      {file.ext.toUpperCase()} Document
                     </span>
                   </td>
-                  <td className="col-date">{file.modifiedAt || "Today"}</td>
-                  <td className="col-size" style={{ textAlign: "right" }}>
+                  <td className="td-size" style={{ textAlign: "right" }}>
                     {file.formattedSize || "—"}
                   </td>
-                  <td className="col-status" style={{ textAlign: "center" }}>
-                    <span className="version-tag-pill">v{file.versionNumber || 1}</span>
+                  <td className="td-path">
+                    <span className="file-location-path">
+                      {file.clientName ? `D:\\Clients\\${file.clientName}` : "C:\\FolderMate\\Inbox"}
+                    </span>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-        </div>
-      </section>
-
-      {/* Live Background Activity Log */}
-      <section className="home-section">
-        <div className="section-title-row">
-          <span className="section-title">Background Activity</span>
-          <span className="activity-live-badge">● Live Daemon Events</span>
-        </div>
-
-        <div className="home-activity-list">
-          {recentEvents.map((evt) => {
-            const t = (evt.type || "").toLowerCase();
-            return (
-              <div key={evt.id} className="activity-item">
-                <div className="activity-icon-badge">
-                  {t === "organized" ? (
-                    <FileCheck2 size={14} color="var(--status-success)" />
-                  ) : t === "review" ? (
-                    <AlertCircle size={14} color="var(--brand-primary)" />
-                  ) : (
-                    <ShieldCheck size={14} color="var(--status-info)" />
-                  )}
-                </div>
-                <div className="activity-info">
-                  <span className="activity-title">{evt.title}</span>
-                  <span className="activity-subtitle">{evt.subtitle}</span>
-                </div>
-                <span className="activity-time">{evt.time}</span>
-              </div>
-            );
-          })}
         </div>
       </section>
     </div>

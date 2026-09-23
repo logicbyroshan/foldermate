@@ -1,21 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Home,
+  Folder,
+  FolderOpen,
   FolderTree,
   Search,
   Inbox,
-  Users,
-  Sliders,
   Settings,
-  Activity,
-  Keyboard,
   HardDrive,
   Star,
   Heart,
   Key,
   ShieldCheck,
+  ChevronRight,
+  ChevronDown,
+  Archive,
+  AlertCircle,
+  Sliders,
+  Keyboard,
+  Activity,
 } from "lucide-react";
-import { Badge } from "./ui/Badge.js";
 import { LicenseStatus } from "@foldermate/shared";
 
 export type NavView =
@@ -32,157 +36,310 @@ export type NavView =
 
 interface SidebarProps {
   currentView: NavView;
+  currentPath: string;
   onSelectView: (view: NavView) => void;
+  onNavigatePath: (path: string) => void;
   pendingReviewCount: number;
   engineConnected: boolean;
   licenseStatus?: LicenseStatus | null;
   onOpenActivation?: () => void;
+  clients?: { id: string; name: string; color?: string }[];
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
   currentView,
+  currentPath,
   onSelectView,
+  onNavigatePath,
   pendingReviewCount,
   engineConnected,
   licenseStatus,
   onOpenActivation,
+  clients = [],
 }) => {
-  const sections = [
-    {
-      title: "EXPLORER",
-      items: [
-        { id: "home", label: "Home", icon: Home },
-        { id: "explorer", label: "Files & Folders", icon: HardDrive },
-        { id: "clients", label: "Client Directories", icon: FolderTree },
-        { id: "search", label: "Search Files", icon: Search },
-      ],
-    },
-    {
-      title: "AUTOMATION & SAFETY",
-      items: [
-        { id: "review", label: "Review Queue", icon: Inbox, badge: pendingReviewCount },
-        { id: "automation", label: "Background Daemon", icon: Activity },
-        { id: "rules", label: "Folder Customizer", icon: Sliders },
-      ],
-    },
-    {
-      title: "SYSTEM",
-      items: [
-        { id: "shortcuts", label: "Keyboard Shortcuts", icon: Keyboard },
-        { id: "settings", label: "Settings", icon: Settings },
-      ],
-    },
-  ];
+  const [isDriveDExpanded, setIsDriveDExpanded] = useState(true);
+  const [isClientsExpanded, setIsClientsExpanded] = useState(true);
+  const [isDriveCExpanded, setIsDriveCExpanded] = useState(false);
+  const [isQuickAccessExpanded, setIsQuickAccessExpanded] = useState(true);
+  const [isThisPcExpanded, setIsThisPcExpanded] = useState(true);
+
+  const isHomeActive = currentView === "home" || currentView === "dashboard";
+  const isInboxActive =
+    (currentView === "explorer" || currentView === "clients") &&
+    currentPath.toLowerCase().includes("inbox");
+  const isClientsRootActive =
+    (currentView === "explorer" || currentView === "clients") &&
+    (currentPath === "D:\\Clients" || currentPath === "Clients" || currentPath === "D:\\Clients\\");
+  const isArchiveActive =
+    (currentView === "explorer" || currentView === "clients") &&
+    currentPath.toLowerCase().includes("archive");
+  const isReviewActive = currentView === "review";
 
   return (
-    <aside className="explorer-sidebar">
-      <div>
-        {/* Brand Header */}
-        <div className="sidebar-brand-header">
-          <div className="brand-logo-wrap">
-            <img
-              src="/logo.png?v=2"
-              alt="FolderMate logo"
-              style={{
-                width: 32,
-                height: 32,
-                display: "block",
-                objectFit: "contain",
-              }}
-            />
+    <aside className="win11-sidebar">
+      {/* Windows 11 Tree Navigation Pane */}
+      <div className="win11-nav-tree-scroll">
+        <div className="win11-tree-root">
+          {/* 1. HOME NODE */}
+          <div
+            className={`win11-tree-row ${isHomeActive ? "selected" : ""}`}
+            onClick={() => onSelectView("home")}
+            role="button"
+            tabIndex={0}
+            title="Home"
+          >
+            <span className="tree-indent-spacer" />
+            <Home size={16} className="win11-tree-icon" color="var(--brand-primary)" />
+            <span className="win11-tree-label">Home</span>
           </div>
-          <div>
-            <h1 className="brand-name">FolderMate</h1>
-            <p className="brand-sub">Windows Background Utility</p>
+
+          {/* 2. QUICK ACCESS SECTION */}
+          <div className="win11-tree-group">
+            <div
+              className="win11-tree-row header-row"
+              onClick={() => setIsQuickAccessExpanded((prev) => !prev)}
+            >
+              <button
+                type="button"
+                className="win11-expand-toggle"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsQuickAccessExpanded((prev) => !prev);
+                }}
+              >
+                {isQuickAccessExpanded ? <ChevronDown size={13} /> : <ChevronRight size={13} />}
+              </button>
+              <Star size={15} className="win11-tree-icon" color="#eab308" />
+              <span className="win11-tree-label group-label">Quick access</span>
+            </div>
+
+            {isQuickAccessExpanded && (
+              <div className="win11-tree-subgroup">
+                <div
+                  className={`win11-tree-row ${isInboxActive ? "selected" : ""}`}
+                  onClick={() => onNavigatePath("C:\\FolderMate\\Inbox")}
+                  role="button"
+                  tabIndex={0}
+                  title="Inbox Watcher (C:\FolderMate\Inbox)"
+                >
+                  <span className="tree-indent-spacer" />
+                  <Inbox size={15} className="win11-tree-icon" color="#f59e0b" />
+                  <span className="win11-tree-label">Inbox (Watcher)</span>
+                </div>
+
+                <div
+                  className={`win11-tree-row ${isClientsRootActive ? "selected" : ""}`}
+                  onClick={() => onNavigatePath("D:\\Clients")}
+                  role="button"
+                  tabIndex={0}
+                  title="Clients Storage (D:\Clients)"
+                >
+                  <span className="tree-indent-spacer" />
+                  <FolderTree size={15} className="win11-tree-icon" color="#3b82f6" />
+                  <span className="win11-tree-label">Clients Library</span>
+                </div>
+
+                <div
+                  className={`win11-tree-row ${isArchiveActive ? "selected" : ""}`}
+                  onClick={() => onNavigatePath("D:\\Archive")}
+                  role="button"
+                  tabIndex={0}
+                  title="Archive (D:\Archive)"
+                >
+                  <span className="tree-indent-spacer" />
+                  <Archive size={15} className="win11-tree-icon" color="#8b5cf6" />
+                  <span className="win11-tree-label">Archive</span>
+                </div>
+
+                <div
+                  className={`win11-tree-row ${isReviewActive ? "selected" : ""}`}
+                  onClick={() => onSelectView("review")}
+                  role="button"
+                  tabIndex={0}
+                  title="Review Queue (Ambiguous Files)"
+                >
+                  <span className="tree-indent-spacer" />
+                  <AlertCircle size={15} className="win11-tree-icon" color="#ef4444" />
+                  <span className="win11-tree-label">Review Queue</span>
+                  {pendingReviewCount > 0 && (
+                    <span className="win11-badge-counter">{pendingReviewCount}</span>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* 3. THIS PC SECTION */}
+          <div className="win11-tree-group">
+            <div
+              className="win11-tree-row header-row"
+              onClick={() => setIsThisPcExpanded((prev) => !prev)}
+            >
+              <button
+                type="button"
+                className="win11-expand-toggle"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsThisPcExpanded((prev) => !prev);
+                }}
+              >
+                {isThisPcExpanded ? <ChevronDown size={13} /> : <ChevronRight size={13} />}
+              </button>
+              <HardDrive size={15} className="win11-tree-icon" color="var(--text-secondary)" />
+              <span className="win11-tree-label group-label">This PC</span>
+            </div>
+
+            {isThisPcExpanded && (
+              <div className="win11-tree-subgroup">
+                {/* Local Disk (C:) */}
+                <div
+                  className="win11-tree-row"
+                  onClick={() => {
+                    setIsDriveCExpanded((prev) => !prev);
+                    onNavigatePath("C:\\FolderMate\\Inbox");
+                  }}
+                >
+                  <button
+                    type="button"
+                    className="win11-expand-toggle"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsDriveCExpanded((prev) => !prev);
+                    }}
+                  >
+                    {isDriveCExpanded ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
+                  </button>
+                  <HardDrive size={15} className="win11-tree-icon" color="var(--text-muted)" />
+                  <span className="win11-tree-label">Local Disk (C:)</span>
+                </div>
+
+                {isDriveCExpanded && (
+                  <div className="win11-tree-subgroup level-2">
+                    <div
+                      className={`win11-tree-row ${isInboxActive ? "selected" : ""}`}
+                      onClick={() => onNavigatePath("C:\\FolderMate\\Inbox")}
+                    >
+                      <span className="tree-indent-spacer" />
+                      <Folder size={14} className="win11-tree-icon" color="#f59e0b" />
+                      <span className="win11-tree-label">FolderMate / Inbox</span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Storage Disk (D:) */}
+                <div
+                  className={`win11-tree-row ${
+                    currentView === "explorer" && currentPath.startsWith("D:") && !isClientsRootActive
+                      ? "selected-parent"
+                      : ""
+                  }`}
+                  onClick={() => {
+                    setIsDriveDExpanded((prev) => !prev);
+                    onNavigatePath("D:\\Clients");
+                  }}
+                >
+                  <button
+                    type="button"
+                    className="win11-expand-toggle"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsDriveDExpanded((prev) => !prev);
+                    }}
+                  >
+                    {isDriveDExpanded ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
+                  </button>
+                  <HardDrive size={15} className="win11-tree-icon" color="var(--brand-primary)" />
+                  <span className="win11-tree-label">Data Storage (D:)</span>
+                </div>
+
+                {isDriveDExpanded && (
+                  <div className="win11-tree-subgroup level-2">
+                    {/* Clients Directory */}
+                    <div
+                      className={`win11-tree-row ${isClientsRootActive ? "selected" : ""}`}
+                      onClick={() => onNavigatePath("D:\\Clients")}
+                    >
+                      <button
+                        type="button"
+                        className="win11-expand-toggle"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setIsClientsExpanded((prev) => !prev);
+                        }}
+                      >
+                        {isClientsExpanded ? <ChevronDown size={11} /> : <ChevronRight size={11} />}
+                      </button>
+                      <FolderOpen size={14} className="win11-tree-icon" color="#f59e0b" />
+                      <span className="win11-tree-label">Clients</span>
+                    </div>
+
+                    {/* Expandable Client Subfolders */}
+                    {isClientsExpanded && (
+                      <div className="win11-tree-subgroup level-3">
+                        {clients.map((c) => {
+                          const isClientActive =
+                            (currentView === "explorer" || currentView === "clients") &&
+                            currentPath.toLowerCase().includes(c.name.toLowerCase());
+                          return (
+                            <div
+                              key={c.id}
+                              className={`win11-tree-row ${isClientActive ? "selected" : ""}`}
+                              onClick={() => onNavigatePath(`D:\\Clients\\${c.name}`)}
+                              title={`Open ${c.name}`}
+                            >
+                              <span className="tree-indent-spacer" />
+                              <Folder size={13} className="win11-tree-icon" color={c.color || "#f59e0b"} />
+                              <span className="win11-tree-label truncate">{c.name}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+
+                    {/* Archive Folder */}
+                    <div
+                      className={`win11-tree-row ${isArchiveActive ? "selected" : ""}`}
+                      onClick={() => onNavigatePath("D:\\Archive")}
+                    >
+                      <span className="tree-indent-spacer" />
+                      <Folder size={14} className="win11-tree-icon" color="#8b5cf6" />
+                      <span className="win11-tree-label">Archive</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
-
-        {/* Navigation Sections */}
-        <nav className="sidebar-nav-container">
-          {sections.map((section, sIdx) => (
-            <div key={section.title} className="sidebar-section">
-              <div className="sidebar-section-title">{section.title}</div>
-              <div className="sidebar-section-items">
-                {section.items.map((item) => {
-                  const Icon = item.icon;
-                  const isActive =
-                    currentView === item.id ||
-                    (item.id === "home" && currentView === "dashboard");
-
-                  return (
-                    <button
-                      key={item.id}
-                      type="button"
-                      onClick={() => onSelectView(item.id as NavView)}
-                      className={`sidebar-nav-item ${isActive ? "active" : ""}`}
-                    >
-                      {isActive && <div className="active-accent-bar" />}
-                      <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
-                        <Icon size={16} className="nav-icon" />
-                        <span>{item.label}</span>
-                      </div>
-
-                      {item.badge !== undefined && item.badge > 0 && (
-                        <Badge variant="amber" size="sm">
-                          {item.badge}
-                        </Badge>
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          ))}
-        </nav>
       </div>
 
-      {/* Footer Area: License & Engine Daemon Status */}
-      <div className="sidebar-footer-area">
-        {/* License Status Badge */}
-        <div
-          onClick={onOpenActivation}
-          className="sidebar-license-badge"
-          title={licenseStatus?.isActivated ? "Click to view license details" : "Click to activate FolderMate"}
+      {/* Windows 11 Bottom Minimal Anchor: Settings & License Info */}
+      <div className="win11-sidebar-bottom">
+        <button
+          type="button"
+          className="win11-sidebar-bottom-btn"
+          onClick={() => onSelectView("settings")}
+          title="FolderMate Settings & Appearance"
         >
-          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            {licenseStatus?.isActivated ? (
-              licenseStatus.licenseType === "VIP" ? (
-                <Star size={13} color="var(--accent-amber)" fill="var(--accent-amber)" />
-              ) : licenseStatus.licenseType === "SPONSOR" ? (
-                <Heart size={13} color="#f43f5e" fill="#f43f5e" />
-              ) : (
-                <ShieldCheck size={13} color="var(--status-success)" />
-              )
-            ) : (
-              <Key size={13} color="var(--status-danger)" />
-            )}
-            <span className="license-type-text">
-              {licenseStatus?.isActivated
-                ? licenseStatus.licenseType === "VIP"
-                  ? "VIP Patron"
-                  : licenseStatus.licenseType === "SPONSOR"
-                  ? "Project Sponsor"
-                  : "Community Key"
-                : "Activate License"}
-            </span>
-          </div>
+          <Settings size={15} />
+          <span>Settings</span>
+        </button>
 
-          <span className="license-status-tag">
-            {licenseStatus?.isActivated ? "Active" : "Locked"}
+        <div
+          className="win11-license-pill"
+          onClick={onOpenActivation}
+          role="button"
+          tabIndex={0}
+          title={
+            licenseStatus?.isActivated
+              ? `License: ${licenseStatus.licenseType || "Active"}`
+              : "Click to activate license"
+          }
+        >
+          <span className={`license-dot ${licenseStatus?.isActivated ? "active" : "locked"}`} />
+          <span className="license-text">
+            {licenseStatus?.isActivated ? (licenseStatus.licenseType === "VIP" ? "VIP" : "Licensed") : "Community"}
           </span>
-        </div>
-
-        {/* Engine Daemon Status */}
-        <div className="sidebar-daemon-status">
-          <div
-            className={`daemon-indicator-dot ${engineConnected ? "online" : "offline"}`}
-          />
-          <div>
-            <div className="daemon-title">
-              {engineConnected ? "Daemon Active" : "Daemon Offline"}
-            </div>
-            <div className="daemon-subtitle">Win32 Named Pipe</div>
-          </div>
         </div>
       </div>
     </aside>

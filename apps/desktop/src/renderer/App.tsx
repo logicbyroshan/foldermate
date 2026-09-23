@@ -6,7 +6,6 @@ import { HomeView } from "./views/HomeView.js";
 import { ExplorerView, ExplorerEntry, ExplorerFileEntry, ExplorerFolderEntry } from "./views/ExplorerView.js";
 import { Search } from "./views/Search.js";
 import { ReviewQueue } from "./views/ReviewQueue.js";
-import { Clients } from "./views/Clients.js";
 import { Rules } from "./views/Rules.js";
 import { Settings } from "./views/Settings.js";
 import { BackgroundAutomation } from "./views/BackgroundAutomation.js";
@@ -14,19 +13,35 @@ import { KeyboardShortcuts } from "./views/KeyboardShortcuts.js";
 import { ToastProvider, useToast } from "./components/ui/Toast.js";
 import { CommandPalette } from "./components/ui/CommandPalette.js";
 import { ActivationModal } from "./components/ActivationModal.js";
+import { Modal } from "./components/ui/Modal.js";
 import { LicenseStatus } from "@foldermate/shared";
+import { Folder, Plus, Inbox, FolderTree, Archive, HardDrive } from "lucide-react";
+
+interface ExplorerTab {
+  id: string;
+  title: string;
+  path: string;
+  view: NavView;
+}
 
 export const AppContent: React.FC = () => {
   const { addToast } = useToast();
-  const [currentView, setCurrentView] = useState<NavView>("home");
+
+  // Navigation History & Path State - Default to Explorer at D:\Clients
+  const [currentView, setCurrentView] = useState<NavView>("explorer");
+  const [currentPath, setCurrentPath] = useState("D:\\Clients");
   const [viewMode, setViewMode] = useState<ViewMode>("details");
   const [isInspectorOpen, setIsInspectorOpen] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Navigation History & Path State
-  const [currentPath, setCurrentPath] = useState("D:\\Clients");
   const [history, setHistory] = useState<string[]>(["D:\\Clients"]);
   const [historyIndex, setHistoryIndex] = useState(0);
+
+  // Windows 11 Tabs State
+  const [tabs, setTabs] = useState<ExplorerTab[]>([
+    { id: "tab-1", title: "Clients", path: "D:\\Clients", view: "explorer" },
+  ]);
+  const [activeTabId, setActiveTabId] = useState<string>("tab-1");
 
   // Inspector Selection State
   const [selectedItem, setSelectedItem] = useState<SelectedItem>(null);
@@ -53,6 +68,9 @@ export const AppContent: React.FC = () => {
   const [viewportIsValid, setViewportIsValid] = useState(() => window.innerWidth >= 800);
   const [licenseStatus, setLicenseStatus] = useState<LicenseStatus | null>(null);
   const [isActivationModalOpen, setIsActivationModalOpen] = useState(false);
+  const [showNewFolderModal, setShowNewFolderModal] = useState(false);
+  const [newFolderName, setNewFolderName] = useState("");
+  const [newFolderColor, setNewFolderColor] = useState("amber");
 
   // Theme Management: Follow Windows / Light / Dark
   const [themePreference, setThemePreference] = useState<"follow-windows" | "light" | "dark">(() => {
@@ -177,7 +195,7 @@ export const AppContent: React.FC = () => {
         folderPath: `D:\\Clients\\${c.name}`,
       }));
 
-      const rootFileEntries: ExplorerFileEntry[] = rawFiles.slice(0, 3).map((f) => {
+      const rootFileEntries: ExplorerFileEntry[] = rawFiles.slice(0, 4).map((f) => {
         const { extColor, extBg } = getExtBadgeColors(f.extension);
         return {
           id: f.id,
@@ -205,6 +223,59 @@ export const AppContent: React.FC = () => {
       });
 
       return [...folderEntries, ...rootFileEntries];
+    }
+
+    if (currentPath.toLowerCase().includes("inbox")) {
+      const inboxFiles: ExplorerFileEntry[] = rawFiles
+        .filter((f) => !f.clientId || f.path?.toLowerCase().includes("inbox"))
+        .slice(0, 10)
+        .map((f) => {
+          const { extColor, extBg } = getExtBadgeColors(f.extension);
+          return {
+            id: f.id,
+            name: f.filename,
+            type: "file",
+            ext: f.extension,
+            extColor,
+            extBg,
+            clientName: "Pending Sorting",
+            projectName: "Inbox Watcher",
+            year: 2026,
+            versionNumber: 1,
+            sizeBytes: f.fileSizeBytes,
+            formattedSize: formatFileSize(f.fileSizeBytes),
+            modifiedAt: "Just now",
+            targetPath: f.path,
+            sha256: f.sha256Hash,
+          };
+        });
+      return inboxFiles;
+    }
+
+    if (currentPath.toLowerCase().includes("archive")) {
+      const archiveFolders: ExplorerFolderEntry[] = [
+        {
+          id: "arch-2025",
+          name: "2025 Archived Deliverables",
+          type: "folder",
+          color: "purple",
+          projectCount: 8,
+          fileCount: 34,
+          modifiedAt: "Jan 15, 2026",
+          folderPath: "D:\\Archive\\2025",
+        },
+        {
+          id: "arch-2024",
+          name: "2024 Archived Deliverables",
+          type: "folder",
+          color: "purple",
+          projectCount: 14,
+          fileCount: 82,
+          modifiedAt: "Dec 30, 2024",
+          folderPath: "D:\\Archive\\2024",
+        },
+      ];
+      return archiveFolders;
     }
 
     // Inside specific client folder
@@ -258,7 +329,7 @@ export const AppContent: React.FC = () => {
   }, [currentPath, rawClients, rawProjects, rawFiles]);
 
   const recentExplorerFiles = useMemo((): ExplorerFileEntry[] => {
-    return rawFiles.slice(0, 6).map((f) => {
+    return rawFiles.slice(0, 10).map((f) => {
       const { extColor, extBg } = getExtBadgeColors(f.extension);
       return {
         id: f.id,
@@ -306,7 +377,7 @@ export const AppContent: React.FC = () => {
     if (currentView === "automation") {
       return [
         { id: "root", label: "Daemon", type: "root" },
-        { id: "bg", label: "Background & Automation", type: "folder" },
+        { id: "bg", label: "Background Automation", type: "folder" },
       ];
     }
     if (currentView === "shortcuts") {
@@ -318,7 +389,7 @@ export const AppContent: React.FC = () => {
     if (currentView === "rules") {
       return [
         { id: "root", label: "Customizer", type: "root" },
-        { id: "rules", label: "Rules & Folders", type: "folder" },
+        { id: "rules", label: "Appearance Rules", type: "folder" },
       ];
     }
     if (currentView === "settings") {
@@ -328,9 +399,9 @@ export const AppContent: React.FC = () => {
       ];
     }
 
-    // Explorer / Clients view: Split path
+    // Windows 11 Explorer Breadcrumb Path: This PC > Drive > Folder
+    const crumbs: BreadcrumbItem[] = [{ id: "this-pc", label: "This PC", type: "root" }];
     const parts = currentPath.split("\\").filter(Boolean);
-    const crumbs: BreadcrumbItem[] = [];
     let acc = "";
     parts.forEach((p, idx) => {
       acc = idx === 0 ? p : `${acc}\\${p}`;
@@ -340,34 +411,69 @@ export const AppContent: React.FC = () => {
         type: idx === 0 ? "root" : idx === 1 ? "client" : "folder",
       });
     });
-    return crumbs.length > 0 ? crumbs : [{ id: "clients", label: "Clients", type: "root" }];
-  }, [currentView, currentPath]);
+    return crumbs;
+  }, [currentPath, currentView]);
 
+  // Navigation Handlers
   const navigateToPath = (newPath: string) => {
-    if (newPath === currentPath) return;
-    const newHist = history.slice(0, historyIndex + 1);
-    newHist.push(newPath);
-    setHistory(newHist);
-    setHistoryIndex(newHist.length - 1);
-    setCurrentPath(newPath);
-    if (currentView !== "explorer") {
-      setCurrentView("explorer");
-    }
+    let normalized = newPath;
+    if (newPath === "clients" || newPath === "root") normalized = "D:\\Clients";
+    else if (newPath === "inbox") normalized = "C:\\FolderMate\\Inbox";
+    else if (newPath === "archive") normalized = "D:\\Archive";
+
+    setCurrentPath(normalized);
+    setCurrentView("explorer");
     setSelectedItem(null);
+
+    // Update active tab
+    setTabs((prev) =>
+      prev.map((tab) =>
+        tab.id === activeTabId
+          ? {
+              ...tab,
+              title: normalized.split("\\").pop() || "Clients",
+              path: normalized,
+              view: "explorer",
+            }
+          : tab
+      )
+    );
+
+    const nextHistory = history.slice(0, historyIndex + 1);
+    nextHistory.push(normalized);
+    setHistory(nextHistory);
+    setHistoryIndex(nextHistory.length - 1);
+  };
+
+  const handleBreadcrumbClick = (crumbIndex: number) => {
+    const crumbs = getBreadcrumbs();
+    const target = crumbs[crumbIndex];
+    if (!target) return;
+    if (target.id === "this-pc" || target.id === "home") {
+      setCurrentView("home");
+      return;
+    }
+    navigateToPath(target.id);
   };
 
   const handleGoBack = () => {
     if (historyIndex > 0) {
-      setHistoryIndex(historyIndex - 1);
-      setCurrentPath(history[historyIndex - 1]);
+      const newIdx = historyIndex - 1;
+      setHistoryIndex(newIdx);
+      const target = history[newIdx];
+      setCurrentPath(target);
+      setCurrentView("explorer");
       setSelectedItem(null);
     }
   };
 
   const handleGoForward = () => {
     if (historyIndex < history.length - 1) {
-      setHistoryIndex(historyIndex + 1);
-      setCurrentPath(history[historyIndex + 1]);
+      const newIdx = historyIndex + 1;
+      setHistoryIndex(newIdx);
+      const target = history[newIdx];
+      setCurrentPath(target);
+      setCurrentView("explorer");
       setSelectedItem(null);
     }
   };
@@ -376,21 +482,48 @@ export const AppContent: React.FC = () => {
     const parts = currentPath.split("\\").filter(Boolean);
     if (parts.length > 1) {
       parts.pop();
-      const parentPath = parts.join("\\");
-      navigateToPath(parentPath);
+      const parent = parts.join("\\");
+      navigateToPath(parent);
     } else {
       setCurrentView("home");
     }
   };
 
-  const handleBreadcrumbClick = (idx: number) => {
-    const crumbs = getBreadcrumbs();
-    if (crumbs[idx] && crumbs[idx].id) {
-      if (crumbs[idx].id === "home") {
-        setCurrentView("home");
-      } else {
-        navigateToPath(crumbs[idx].id);
-      }
+  // Tab Management
+  const handleSelectTab = (tabId: string) => {
+    const targetTab = tabs.find((t) => t.id === tabId);
+    if (!targetTab) return;
+    setActiveTabId(tabId);
+    setCurrentPath(targetTab.path);
+    setCurrentView(targetTab.view);
+    setSelectedItem(null);
+  };
+
+  const handleNewTab = () => {
+    const newId = `tab-${Date.now()}`;
+    const newTab: ExplorerTab = {
+      id: newId,
+      title: "Clients",
+      path: "D:\\Clients",
+      view: "explorer",
+    };
+    setTabs((prev) => [...prev, newTab]);
+    setActiveTabId(newId);
+    setCurrentPath("D:\\Clients");
+    setCurrentView("explorer");
+    setSelectedItem(null);
+  };
+
+  const handleCloseTab = (tabId: string) => {
+    if (tabs.length <= 1) return;
+    const remaining = tabs.filter((t) => t.id !== tabId);
+    setTabs(remaining);
+    if (activeTabId === tabId) {
+      const nextTab = remaining[remaining.length - 1];
+      setActiveTabId(nextTab.id);
+      setCurrentPath(nextTab.path);
+      setCurrentView(nextTab.view);
+      setSelectedItem(null);
     }
   };
 
@@ -398,51 +531,81 @@ export const AppContent: React.FC = () => {
     try {
       if ((window as any).foldermate) {
         await (window as any).foldermate.call("system.pauseAutomation", { duration });
-        setEngineStatus((prev) => ({ ...prev, status: "paused" }));
-        addToast({
-          title: "Automation Paused",
-          message: `Folder watching and autonomous moves paused for ${duration}.`,
-          variant: "warning",
-        });
       }
-    } catch {}
+      setEngineStatus((prev) => ({ ...prev, status: "paused" }));
+      addToast({
+        title: "Automation Paused",
+        message: `Inbox monitoring paused (${duration}).`,
+        variant: "warning",
+      });
+    } catch {
+      setEngineStatus((prev) => ({ ...prev, status: "paused" }));
+    }
   };
 
   const handleResumeAutomation = async () => {
     try {
       if ((window as any).foldermate) {
         await (window as any).foldermate.call("system.resumeAutomation");
-        setEngineStatus((prev) => ({ ...prev, status: "running" }));
-        addToast({
-          title: "Automation Resumed",
-          message: "FolderMate daemon is actively organizing incoming files.",
-          variant: "success",
-        });
       }
-    } catch {}
+      setEngineStatus((prev) => ({ ...prev, status: "running" }));
+      addToast({
+        title: "Automation Resumed",
+        message: "Inbox monitoring is now active.",
+        variant: "success",
+      });
+    } catch {
+      setEngineStatus((prev) => ({ ...prev, status: "running" }));
+    }
   };
 
   const handleScanNow = async () => {
     try {
       if ((window as any).foldermate) {
-        await (window as any).foldermate.call("system.triggerScan");
-        loadData();
-        addToast({ title: "Scan Complete", message: "Inbox scan checked for new items.", variant: "info" });
+        await (window as any).foldermate.call("system.scanNow");
       }
-    } catch {}
+      addToast({
+        title: "Scan Triggered",
+        message: "Scanned monitored Inbox for new files.",
+        variant: "info",
+      });
+      loadData();
+    } catch {
+      loadData();
+      addToast({
+        title: "Scan Triggered",
+        message: "Checking monitored Inbox directory.",
+        variant: "info",
+      });
+    }
   };
 
   useEffect(() => {
-    const updateViewport = () => setViewportIsValid(window.innerWidth >= 800);
-    updateViewport();
-
     loadData();
-    const interval = setInterval(loadData, 4000);
+    const interval = setInterval(loadData, 5000);
 
-    // Global keyboard shortcuts
+    const updateViewport = () => setViewportIsValid(window.innerWidth >= 800);
+
     const handleKeyDown = (e: KeyboardEvent) => {
-      const activeEl = document.activeElement;
-      const isTyping = activeEl && (activeEl.tagName === "INPUT" || activeEl.tagName === "TEXTAREA");
+      const target = e.target as HTMLElement;
+      const isTyping =
+        target.tagName === "INPUT" ||
+        target.tagName === "TEXTAREA" ||
+        target.isContentEditable;
+
+      // Ctrl + T: New Tab
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "t" && !isTyping) {
+        e.preventDefault();
+        handleNewTab();
+        return;
+      }
+
+      // Ctrl + W: Close Tab
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "w" && !isTyping) {
+        e.preventDefault();
+        handleCloseTab(activeTabId);
+        return;
+      }
 
       // Ctrl + K: Command Palette
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
@@ -451,28 +614,15 @@ export const AppContent: React.FC = () => {
         return;
       }
 
-      // Ctrl + F: Search
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "f") {
+      // Ctrl + Shift + N: New Directory
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === "n") {
         e.preventDefault();
-        const searchInput = document.querySelector(".search-box-input") as HTMLInputElement;
-        if (searchInput) {
-          searchInput.focus();
-          searchInput.select();
-        } else {
-          setCurrentView("search");
-        }
+        setNewFolderName("");
+        setShowNewFolderModal(true);
         return;
       }
 
-      // Ctrl + L: Focus Address Bar
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "l") {
-        e.preventDefault();
-        const addrBar = document.querySelector(".explorer-address-bar") as HTMLElement;
-        if (addrBar) addrBar.click();
-        return;
-      }
-
-      // Ctrl + 1 - 6: View Modes
+      // View Mode Shortcuts: Ctrl + 1..6
       if ((e.ctrlKey || e.metaKey) && e.key === "1") {
         e.preventDefault();
         setViewMode("details");
@@ -511,20 +661,6 @@ export const AppContent: React.FC = () => {
         return;
       }
 
-      // Ctrl + Shift + R: Review Queue
-      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === "r") {
-        e.preventDefault();
-        setCurrentView("review");
-        return;
-      }
-
-      // Ctrl + ,: Settings
-      if ((e.ctrlKey || e.metaKey) && e.key === ",") {
-        e.preventDefault();
-        setCurrentView("settings");
-        return;
-      }
-
       // Alt + Left: Back
       if (e.altKey && e.key === "ArrowLeft") {
         e.preventDefault();
@@ -539,8 +675,8 @@ export const AppContent: React.FC = () => {
         return;
       }
 
-      // Backspace: Up (only if not typing in input)
-      if (!isTyping && e.key === "Backspace") {
+      // Backspace / Alt+Up: Up (only if not typing in input)
+      if (!isTyping && (e.key === "Backspace" || (e.altKey && e.key === "ArrowUp"))) {
         e.preventDefault();
         handleGoUp();
         return;
@@ -550,7 +686,7 @@ export const AppContent: React.FC = () => {
       if (e.key === "F5" || ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "r" && !e.shiftKey)) {
         e.preventDefault();
         loadData();
-        addToast({ title: "Refreshed", message: "Folder and state updated.", variant: "info" });
+        addToast({ title: "Refreshed", message: "Folder contents updated.", variant: "info" });
         return;
       }
     };
@@ -578,7 +714,7 @@ export const AppContent: React.FC = () => {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("resize", updateViewport);
     };
-  }, [historyIndex, history, currentPath]);
+  }, [historyIndex, history, currentPath, activeTabId, tabs]);
 
   const handleOpenFile = async (filePath: string) => {
     try {
@@ -609,133 +745,213 @@ export const AppContent: React.FC = () => {
     );
   }
 
-  const recentEvents = [
-    {
-      id: "ev-1",
-      type: "ORGANIZED",
-      title: "Organized Deliverable",
-      subtitle: "ABC School ID Card 2026 v8.cdr → ID Card",
-      time: "2m ago",
-    },
-    {
-      id: "ev-2",
-      type: "VERSION",
-      title: "Created Version 2",
-      subtitle: "ABC School Annual Magazine 2026 v2.pdf",
-      time: "15m ago",
-    },
-    {
-      id: "ev-3",
-      type: "REVIEW",
-      title: "Queued for Review",
-      subtitle: "draft id final ok.cdr (65% match)",
-      time: "40m ago",
-    },
-  ];
+  const handleCreateFolder = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!newFolderName.trim()) return;
+    try {
+      if ((window as any).foldermate) {
+        await (window as any).foldermate.call("clients.create", {
+          name: newFolderName.trim(),
+          color: newFolderColor,
+        });
+      }
+      addToast({
+        title: "Directory Created",
+        message: `Created "${newFolderName.trim()}" in ${currentPath}.`,
+        variant: "success",
+      });
+      setShowNewFolderModal(false);
+      setNewFolderName("");
+      loadData();
+    } catch (err: any) {
+      addToast({ title: "Creation Failed", message: err.message, variant: "error" });
+    }
+  };
 
   return (
     <div className="app-shell">
-      {/* Windows Explorer Style Sidebar Navigation */}
-      <Sidebar
-        currentView={currentView}
-        onSelectView={(v) => {
-          setCurrentView(v);
-          setSelectedItem(null);
-        }}
-        pendingReviewCount={pendingReviewCount}
-        engineConnected={engineConnected}
-        licenseStatus={licenseStatus}
-        onOpenActivation={() => setIsActivationModalOpen(true)}
-      />
+      {/* WINDOWS 11 TITLE BAR & MULTI-TAB STRIP */}
+      <div className="win11-title-bar">
+        <div className="win11-tab-strip">
+          {tabs.map((tab) => {
+            const isActive = tab.id === activeTabId;
+            return (
+              <div
+                key={tab.id}
+                className={`win11-tab ${isActive ? "active" : ""}`}
+                onClick={() => handleSelectTab(tab.id)}
+                role="button"
+                tabIndex={0}
+              >
+                <Folder
+                  size={14}
+                  className="tab-icon"
+                  color={isActive ? "var(--brand-primary)" : "var(--text-muted)"}
+                />
+                <span className="tab-title">{tab.title}</span>
+                {tabs.length > 1 && (
+                  <button
+                    type="button"
+                    className="tab-close-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleCloseTab(tab.id);
+                    }}
+                    title="Close tab (Ctrl+W)"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+            );
+          })}
+          <button
+            type="button"
+            className="win11-new-tab-btn"
+            onClick={handleNewTab}
+            title="New tab (Ctrl+T)"
+          >
+            <Plus size={14} />
+          </button>
+        </div>
 
-      {/* Main Explorer Workspace */}
-      <div className="app-workspace">
-        {/* Explorer Navigation & Toolbar Header */}
-        <ExplorerHeader
-          breadcrumbs={getBreadcrumbs()}
-          onNavigateBreadcrumb={handleBreadcrumbClick}
-          canGoBack={historyIndex > 0}
-          canGoForward={historyIndex < history.length - 1}
-          onGoBack={handleGoBack}
-          onGoForward={handleGoForward}
-          onGoUp={handleGoUp}
-          onRefresh={loadData}
-          viewMode={viewMode}
-          onChangeViewMode={setViewMode}
-          searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
-          isInspectorOpen={isInspectorOpen}
-          onToggleInspector={() => setIsInspectorOpen((prev) => !prev)}
-          engineStatus={engineStatus}
-          onPauseAutomation={handlePauseAutomation}
-          onResumeAutomation={handleResumeAutomation}
+        <div className="win11-window-controls">
+          <button type="button" className="win11-control-btn minimize" title="Minimize">
+            ─
+          </button>
+          <button type="button" className="win11-control-btn maximize" title="Maximize">
+            ▢
+          </button>
+          <button type="button" className="win11-control-btn close" title="Close">
+            ✕
+          </button>
+        </div>
+      </div>
+
+      {/* MAIN CONTAINER: LEFT NAVIGATION PANE + RIGHT EXPLORER WORKSPACE */}
+      <div className="win11-main-layout">
+        {/* Windows Explorer Style Navigation Pane */}
+        <Sidebar
+          currentView={currentView}
+          currentPath={currentPath}
+          onSelectView={(v) => {
+            if (v === "clients") {
+              navigateToPath("D:\\Clients");
+            } else {
+              setCurrentView(v);
+              setSelectedItem(null);
+            }
+          }}
+          onNavigatePath={(p) => navigateToPath(p)}
+          pendingReviewCount={pendingReviewCount}
+          engineConnected={engineConnected}
           licenseStatus={licenseStatus}
           onOpenActivation={() => setIsActivationModalOpen(true)}
-          onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
+          clients={rawClients}
         />
 
-        {/* Viewport Split: Main View + Collapsible Inspector Panel */}
-        <div className="explorer-body-split">
-          <main className="explorer-main-content">
-            {(currentView === "home" || currentView === "dashboard") && (
-              <HomeView
-                recentFiles={recentExplorerFiles}
-                pendingReviewCount={pendingReviewCount}
-                onNavigateToView={(view, targetPath) => {
-                  if (targetPath) navigateToPath(targetPath);
-                  else setCurrentView(view as NavView);
-                }}
-                onSelectItem={setSelectedItem}
-                onOpenFile={(f) => f.targetPath && handleOpenFile(f.targetPath)}
-                onScanNow={handleScanNow}
-                recentEvents={recentEvents}
-              />
-            )}
-
-            {currentView === "explorer" && (
-              <ExplorerView
-                entries={explorerEntries}
-                currentLocationName={currentPath.split("\\").pop() || "Clients"}
-                viewMode={viewMode}
-                onChangeViewMode={setViewMode}
-                searchQuery={searchQuery}
-                selectedItem={selectedItem}
-                onSelectItem={setSelectedItem}
-                onOpenFolder={(folder) => {
-                  if (folder.folderPath) navigateToPath(folder.folderPath);
-                }}
-                onOpenFile={(file) => {
-                  if (file.targetPath) handleOpenFile(file.targetPath);
-                }}
-                onShowInFolder={handleShowInFolder}
-                onRefresh={loadData}
-              />
-            )}
-
-            {currentView === "clients" && <Clients />}
-
-            {currentView === "search" && <Search />}
-            {currentView === "review" && <ReviewQueue />}
-            {currentView === "automation" && <BackgroundAutomation />}
-            {currentView === "shortcuts" && <KeyboardShortcuts />}
-            {currentView === "rules" && <Rules />}
-            {currentView === "settings" && (
-              <Settings
-                licenseStatus={licenseStatus}
-                onOpenActivation={() => setIsActivationModalOpen(true)}
-                onLicenseUpdated={loadData}
-                themePreference={themePreference}
-                onSetThemePreference={handleSetThemePreference}
-              />
-            )}
-          </main>
-
-          {/* Right-Side Details & Version Inspector Pane */}
-          <InspectorPanel
-            selectedItem={selectedItem}
-            isOpen={isInspectorOpen}
-            onClose={() => setIsInspectorOpen(false)}
+        {/* Main Explorer Workspace */}
+        <div className="app-workspace">
+          {/* Windows 11 Fluent Command Bar & Interactive Address Bar */}
+          <ExplorerHeader
+            breadcrumbs={getBreadcrumbs()}
+            onNavigateBreadcrumb={handleBreadcrumbClick}
+            onNavigateAddress={navigateToPath}
+            canGoBack={historyIndex > 0}
+            canGoForward={historyIndex < history.length - 1}
+            onGoBack={handleGoBack}
+            onGoForward={handleGoForward}
+            onGoUp={handleGoUp}
+            onRefresh={loadData}
+            viewMode={viewMode}
+            onChangeViewMode={setViewMode}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            isInspectorOpen={isInspectorOpen}
+            onToggleInspector={() => setIsInspectorOpen((prev) => !prev)}
+            engineStatus={engineStatus}
+            onPauseAutomation={handlePauseAutomation}
+            onResumeAutomation={handleResumeAutomation}
+            licenseStatus={licenseStatus}
+            onOpenActivation={() => setIsActivationModalOpen(true)}
+            onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
+            onNewFolder={() => {
+              setNewFolderName("");
+              setShowNewFolderModal(true);
+            }}
+            onNewClient={() => {
+              setNewFolderName("");
+              setShowNewFolderModal(true);
+            }}
+            onNewProject={() => {
+              setNewFolderName("");
+              setShowNewFolderModal(true);
+            }}
+            onScanNow={handleScanNow}
+            hasSelection={Boolean(selectedItem)}
           />
+
+          {/* Viewport Split: Main Content + Collapsible Details Pane */}
+          <div className="explorer-body-split">
+            <main className="explorer-main-content">
+              {(currentView === "home" || currentView === "dashboard") && (
+                <HomeView
+                  recentFiles={recentExplorerFiles}
+                  pendingReviewCount={pendingReviewCount}
+                  onNavigateToView={(view, targetPath) => {
+                    if (targetPath) navigateToPath(targetPath);
+                    else if (view === "clients") navigateToPath("D:\\Clients");
+                    else setCurrentView(view as NavView);
+                  }}
+                  onSelectItem={setSelectedItem}
+                  onOpenFile={(f) => f.targetPath && handleOpenFile(f.targetPath)}
+                  onScanNow={handleScanNow}
+                />
+              )}
+
+              {(currentView === "explorer" || currentView === "clients") && (
+                <ExplorerView
+                  entries={explorerEntries}
+                  currentLocationName={currentPath.split("\\").pop() || "Clients"}
+                  viewMode={viewMode}
+                  onChangeViewMode={setViewMode}
+                  searchQuery={searchQuery}
+                  selectedItem={selectedItem}
+                  onSelectItem={setSelectedItem}
+                  onOpenFolder={(folder) => {
+                    if (folder.folderPath) navigateToPath(folder.folderPath);
+                  }}
+                  onOpenFile={(file) => {
+                    if (file.targetPath) handleOpenFile(file.targetPath);
+                  }}
+                  onShowInFolder={handleShowInFolder}
+                  onRefresh={loadData}
+                />
+              )}
+
+              {currentView === "search" && <Search />}
+              {currentView === "review" && <ReviewQueue />}
+              {currentView === "automation" && <BackgroundAutomation />}
+              {currentView === "shortcuts" && <KeyboardShortcuts />}
+              {currentView === "rules" && <Rules />}
+              {currentView === "settings" && (
+                <Settings
+                  licenseStatus={licenseStatus}
+                  onOpenActivation={() => setIsActivationModalOpen(true)}
+                  onLicenseUpdated={loadData}
+                  themePreference={themePreference}
+                  onSetThemePreference={handleSetThemePreference}
+                />
+              )}
+            </main>
+
+            {/* Right-Side Windows 11 Details Pane */}
+            <InspectorPanel
+              selectedItem={selectedItem}
+              isOpen={isInspectorOpen}
+              onClose={() => setIsInspectorOpen(false)}
+            />
+          </div>
         </div>
       </div>
 
@@ -743,9 +959,63 @@ export const AppContent: React.FC = () => {
       <CommandPalette
         isOpen={isCommandPaletteOpen}
         onClose={() => setIsCommandPaletteOpen(false)}
-        onNavigate={(view) => setCurrentView(view as NavView)}
+        onNavigate={(view) => {
+          if (view === "clients") navigateToPath("D:\\Clients");
+          else setCurrentView(view as NavView);
+        }}
         onTriggerScan={loadData}
       />
+
+      {/* Quick New Folder / Directory Modal */}
+      <Modal
+        isOpen={showNewFolderModal}
+        onClose={() => setShowNewFolderModal(false)}
+        title="Create New Folder"
+        subtitle={`Location: ${currentPath}`}
+      >
+        <form onSubmit={handleCreateFolder} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          <div className="form-field">
+            <label className="field-label">Folder Name *</label>
+            <input
+              type="text"
+              className="input-text"
+              placeholder="e.g. Acme Corporation or 2026 Brochures"
+              value={newFolderName}
+              onChange={(e) => setNewFolderName(e.target.value)}
+              required
+              autoFocus
+            />
+          </div>
+
+          <div className="form-field">
+            <label className="field-label">Color Accent</label>
+            <select
+              className="select-input"
+              value={newFolderColor}
+              onChange={(e) => setNewFolderColor(e.target.value)}
+            >
+              <option value="amber">Amber Gold</option>
+              <option value="blue">Sapphire Blue</option>
+              <option value="emerald">Emerald Green</option>
+              <option value="purple">Royal Purple</option>
+              <option value="rose">Crimson Rose</option>
+            </select>
+          </div>
+
+          <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 10 }}>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => setShowNewFolderModal(false)}
+            >
+              Cancel
+            </button>
+            <button type="submit" className="btn btn-primary">
+              Create Folder
+            </button>
+          </div>
+        </form>
+      </Modal>
 
       {/* Activation License Modal */}
       <ActivationModal

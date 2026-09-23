@@ -10,6 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **PR #43 — Official App Icons, Windows Explorer File Thumbnails & Sidebar Icon Polish**:
+  - **Official Application Icons (`FileFormatIcon.tsx`)**: Replaced all file format icons with Windows application-style official vector icons — CorelDRAW (emerald diamond-cut pencil with CDR badge), Adobe Acrobat (white document + red ribbon + official Acrobat curve glyph), Photoshop (dark navy + electric blue `Ps`), Illustrator (dark brown + orange `Ai`), InDesign (maroon + magenta `Id`), EPS (magenta badge), Excel (green `X` overlay on document), Word (blue `W` overlay on document), Images (Windows 11 Photos sky gradient), and ZIP archives (folder with zipper teeth).
+  - **FileThumbnailCard.tsx** (New Component): Windows Explorer-style realistic thumbnail preview cards for medium/large/extra-large icon view modes with content-aware canvas rendering per format — CorelDRAW ID card layout, emergency signage, or brochure cover; Acrobat PDF multi-line document sheet; Photoshop dark artboard; Illustrator vector shapes; Excel live spreadsheet grid with client/year data; image checkerboard transparency background; generic centered format icon. All cards include an official app icon corner badge.
+  - **FolderVisualIcon.tsx**: Fixed SVG gradient ID conflicts when multiple folder icons render simultaneously by generating unique IDs per color + size combination.
+  - **ExplorerView.tsx**: Small-icons mode uses flat `FileFormatIcon` (compact); medium/large/extra-large icon modes use the new `FileThumbnailCard` with content-aware rendering.
+  - **Sidebar Icon Colors (White Theme Harmony)**: Archive icon changed to `#0284c7` (sky blue) and Review Queue icon to `#d97706` (amber) for clear visibility on the pure white Windows 11 canvas.
+  - **Thumbnail CSS Section**: Added complete `.file-thumbnail-surface`, `.thumb-canvas-box`, `.thumb-corner-app-badge` styles plus per-format themed backgrounds (CDR green tint, PDF warm white, PSD dark navy, AI amber, Excel light green) and all inner layout element rules for all 8 thumbnail types.
 - **Review Queue Inspector Drawer Layout & Spacing Overhaul**:
   - **Fixed 380px Width & 16px Padding**: Structured `.review-inspector-pane` with a rigid 380px width, 16px internal padding, and 14px gap between card groupings, eliminating unstyled collapsed margins and squished elements.
   - **Classification Inspector Components**: Added standardized `.inspector-header` with Lucide `Sparkles` icon and `X` close button, `.inspector-preview-card` with file format vector badges (`CDR`, `PDF`), `.rationale-box` with amber warning styling, and full-width `.inspector-footer` primary action button.

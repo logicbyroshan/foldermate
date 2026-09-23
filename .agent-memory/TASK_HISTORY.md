@@ -692,3 +692,25 @@ Important decisions:
 
 
 
+
+### PR #43: Official App Icons, Windows Explorer File Thumbnails & Sidebar Icon Polish
+Task: Replace all file format icons with official application-style icons, add Windows Explorer-style thumbnail previews for icon/grid view modes, fix sidebar icon colors for white theme.
+Reason: User requested icons that match official installed app icons, file previews like Windows Explorer, and sidebar icons suited to the pure white theme.
+Files/areas affected:
+- apps/desktop/src/renderer/components/ui/FileFormatIcon.tsx
+- apps/desktop/src/renderer/components/ui/FileThumbnailCard.tsx (NEW)
+- apps/desktop/src/renderer/components/ui/FolderVisualIcon.tsx
+- apps/desktop/src/renderer/components/ui/index.ts
+- apps/desktop/src/renderer/views/ExplorerView.tsx
+- apps/desktop/src/renderer/components/Sidebar.tsx
+- apps/desktop/src/renderer/index.css
+What changed:
+- Redesigned 10+ file format icons to official Windows application-style vectors (CDR, PDF, PSD, AI, InDesign, EPS, Excel, Word, Images, ZIP).
+- Created FileThumbnailCard.tsx with content-aware thumbnail canvas rendering for medium/large/extra-large icon modes.
+- Fixed SVG gradient ID conflicts in FolderVisualIcon.tsx by using unique IDs per color+size.
+- Integrated FileThumbnailCard into ExplorerView.tsx for non-small icon modes.
+- Sidebar: Archive icon=#0284c7, ReviewQueue icon=#d97706 for white theme visibility.
+- Added complete thumbnail CSS section in index.css (365 lines).
+Testing performed:
+- npm run build: All workspaces compiled with 0 errors.
+Co-authored with: adarsh-id-cards (acw462011@gmail.com)

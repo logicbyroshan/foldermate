@@ -33,20 +33,9 @@ import {
   CheckSquare,
 } from "lucide-react";
 import { LicenseStatus } from "@foldermate/shared";
+import { ViewMode, BreadcrumbItem } from "../types/explorer.js";
 
-export type ViewMode =
-  | "details"
-  | "list"
-  | "small-icons"
-  | "medium-icons"
-  | "large-icons"
-  | "extra-large-icons";
-
-export interface BreadcrumbItem {
-  id: string;
-  label: string;
-  type?: "root" | "client" | "project" | "folder";
-}
+export type { ViewMode, BreadcrumbItem };
 
 interface ExplorerHeaderProps {
   breadcrumbs: BreadcrumbItem[];

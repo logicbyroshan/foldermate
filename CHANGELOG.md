@@ -10,6 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Architecture Refactoring, Dead Code Removal & Modular Service Separation**:
+  - **Dead Code Elimination**: Deleted obsolete legacy views (`Dashboard.tsx`, `Clients.tsx`, `TopBar.tsx`, `CorelStatusWidget.tsx`) from earlier iterations. Streamlined `CommandPalette.tsx` to align navigation actions with active views.
+  - **Domain Types Layer**: Added `types/explorer.ts` containing canonical definitions for `NavView`, `ViewMode`, `ExplorerFolderEntry`, `ExplorerFileEntry`, `ExplorerEntry`, `BreadcrumbItem`, `ExplorerTab`, and `ManagedDrive`.
+  - **Standardized Formatters**: Created `utils/formatters.ts` with `formatFileSize`, `getExtBadgeColors`, and `formatRelativeDate`, eliminating duplicated size/extension logic across 6+ views.
+  - **Typed Service Layer**: Created `services/foldermate-api.ts` providing typed IPC RPC methods, and `services/explorer-mapper.ts` for pure domain data transformation from SQLite records to UI Explorer folder and file models.
+  - **Custom Hooks & Orchestration**: Created `hooks/useNavigation.ts` (managing path history, tab strip, and breadcrumbs) and `hooks/useFolderMateData.ts` (managing periodic engine data synchronization, status, and drives). Streamlined monolithic `App.tsx` from 1,437 lines to ~480 lines.
+  - **Preserved 100% Visual and Functional Parity**: Validated that all views, theme settings, preview pane, desktop logos, and hotkeys remain completely identical.
 - **Search Overhaul, Windows Explorer Preview Canvas, Desktop Logos, File Type Ingestion & Canonical Renaming**:
   - **Search Overhaul & Global Recursive Discovery**: Upgraded the search experience in `App.tsx` and `ExplorerView.tsx` so typing in the search box queries all indexed files and client folders across the controlled drive recursively, matching filenames, client names, project categories, extensions, years, and versions. Displayed full file paths during search and automated preview opening upon selection.
   - **Windows File Explorer Preview Canvas**: Built `FilePreviewCanvas.tsx` embedded in `InspectorPanel.tsx` and `Search.tsx`, rendering rich realistic visual design previews:

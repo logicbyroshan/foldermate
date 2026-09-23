@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Search, LayoutDashboard, Inbox, Users, Sliders, Settings, FolderCog, Play, ArrowRight } from "lucide-react";
+import { Search, Home, Inbox, FolderTree, Sliders, Settings, FolderCog, Play, ArrowRight, Activity, Keyboard } from "lucide-react";
 
 export interface CommandPaletteProps {
   isOpen: boolean;
@@ -37,12 +37,22 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       },
     },
     {
-      id: "dash",
-      title: "Go to Dashboard",
+      id: "home",
+      title: "Go to Explorer Home",
       category: "Navigation",
-      icon: <LayoutDashboard size={16} />,
+      icon: <Home size={16} />,
       action: () => {
-        onNavigate("dashboard");
+        onNavigate("home");
+        onClose();
+      },
+    },
+    {
+      id: "explorer",
+      title: "Open File Explorer (Clients)",
+      category: "Navigation",
+      icon: <FolderTree size={16} />,
+      action: () => {
+        onNavigate("explorer");
         onClose();
       },
     },
@@ -67,12 +77,12 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       },
     },
     {
-      id: "clients",
-      title: "Open Client Library Folders",
+      id: "automation",
+      title: "Background Automation & Daemon",
       category: "Navigation",
-      icon: <Users size={16} />,
+      icon: <Activity size={16} />,
       action: () => {
-        onNavigate("clients");
+        onNavigate("automation");
         onClose();
       },
     },
@@ -87,12 +97,12 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       },
     },
     {
-      id: "folders",
-      title: "Folder Color & Icon Customization",
+      id: "shortcuts",
+      title: "Keyboard Shortcuts Reference",
       category: "Navigation",
-      icon: <FolderCog size={16} color="var(--accent-amber)" />,
+      icon: <Keyboard size={16} />,
       action: () => {
-        onNavigate("rules");
+        onNavigate("shortcuts");
         onClose();
       },
     },

@@ -14,11 +14,8 @@ import {
   FolderTree,
   ExternalLink,
 } from "lucide-react";
-import { Badge } from "../components/ui/Badge.js";
-import { Modal } from "../components/ui/Modal.js";
-import { EmptyState } from "../components/ui/EmptyState.js";
+import { Badge, Modal, EmptyState, FileFormatIcon } from "../components/ui/index.js";
 import { useToast } from "../components/ui/Toast.js";
-import { FileFormatIcon } from "../components/ui/FileFormatIcon.js";
 
 export const ReviewQueue: React.FC = () => {
   const { showToast, addToast } = useToast();

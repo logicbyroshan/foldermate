@@ -17,8 +17,8 @@ import {
   FileSpreadsheet,
 } from "lucide-react";
 import { SelectedItem } from "../components/InspectorPanel.js";
-import { ExplorerFileEntry } from "./ExplorerView.js";
-import { FileFormatIcon } from "../components/ui/FileFormatIcon.js";
+import { ExplorerFileEntry } from "../types/explorer.js";
+import { FileFormatIcon } from "../components/ui/index.js";
 
 interface HomeViewProps {
   recentFiles: ExplorerFileEntry[];

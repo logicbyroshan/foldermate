@@ -16,11 +16,12 @@ import {
   ChevronDown,
   Archive,
   AlertCircle,
-  Sliders,
   Keyboard,
   Activity,
+  Sliders,
 } from "lucide-react";
 import { LicenseStatus } from "@foldermate/shared";
+import { DriveVisualIcon, FolderVisualIcon } from "./ui/FolderVisualIcon.js";
 
 export type NavView =
   | "home"
@@ -43,7 +44,16 @@ interface SidebarProps {
   engineConnected: boolean;
   licenseStatus?: LicenseStatus | null;
   onOpenActivation?: () => void;
-  clients?: { id: string; name: string; color?: string }[];
+  clients?: { id: string; name: string; color?: string; emblem?: string }[];
+  controlledDrive?: {
+    letter: string;
+    label: string;
+    color?: string;
+    emblem?: string;
+    totalGb?: number;
+    freeGb?: number;
+  };
+  onOpenDriveCustomizer?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -56,6 +66,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
   licenseStatus,
   onOpenActivation,
   clients = [],
+  controlledDrive = {
+    letter: "D:",
+    label: "Data Storage",
+    color: "#3b82f6",
+    emblem: "hard-drive",
+    totalGb: 512,
+    freeGb: 341,
+  },
+  onOpenDriveCustomizer,
 }) => {
   const [isDriveDExpanded, setIsDriveDExpanded] = useState(true);
   const [isClientsExpanded, setIsClientsExpanded] = useState(true);
@@ -226,17 +245,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   </div>
                 )}
 
-                {/* Storage Disk (D:) */}
+                {/* Storage Disk (Controlled Drive) */}
                 <div
                   className={`win11-tree-row ${
-                    currentView === "explorer" && currentPath.startsWith("D:") && !isClientsRootActive
+                    currentView === "explorer" && currentPath.startsWith(controlledDrive.letter) && !isClientsRootActive
                       ? "selected-parent"
                       : ""
                   }`}
                   onClick={() => {
                     setIsDriveDExpanded((prev) => !prev);
-                    onNavigatePath("D:\\Clients");
+                    onNavigatePath(`${controlledDrive.letter}\\Clients`);
                   }}
+                  title={`Controlled Drive: ${controlledDrive.label} (${controlledDrive.letter})`}
                 >
                   <button
                     type="button"
@@ -248,8 +268,36 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   >
                     {isDriveDExpanded ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
                   </button>
-                  <HardDrive size={15} className="win11-tree-icon" color="var(--brand-primary)" />
-                  <span className="win11-tree-label">Data Storage (D:)</span>
+                  <DriveVisualIcon
+                    color={controlledDrive.color || "#3b82f6"}
+                    emblem={controlledDrive.emblem || "hard-drive"}
+                    size={16}
+                  />
+                  <span className="win11-tree-label truncate">
+                    {controlledDrive.label} ({controlledDrive.letter})
+                  </span>
+                  {onOpenDriveCustomizer && (
+                    <button
+                      type="button"
+                      className="win11-mini-tool-btn"
+                      title="Drive Manager & Partition Settings"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onOpenDriveCustomizer();
+                      }}
+                      style={{
+                        marginLeft: "auto",
+                        background: "transparent",
+                        border: "none",
+                        cursor: "pointer",
+                        padding: "2px 4px",
+                        color: "var(--text-muted)",
+                        borderRadius: 3,
+                      }}
+                    >
+                      <Sliders size={12} />
+                    </button>
+                  )}
                 </div>
 
                 {isDriveDExpanded && (
@@ -288,7 +336,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
                               title={`Open ${c.name}`}
                             >
                               <span className="tree-indent-spacer" />
-                              <Folder size={13} className="win11-tree-icon" color={c.color || "#f59e0b"} />
+                              <FolderVisualIcon
+                                color={c.color || "#f59e0b"}
+                                emblem={c.emblem}
+                                size={14}
+                              />
                               <span className="win11-tree-label truncate">{c.name}</span>
                             </div>
                           );

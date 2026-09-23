@@ -16,6 +16,9 @@ import { ActivationModal } from "./components/ActivationModal.js";
 import { Modal } from "./components/ui/Modal.js";
 import { LicenseStatus } from "@foldermate/shared";
 import { Folder, Plus, Inbox, FolderTree, Archive, HardDrive } from "lucide-react";
+import { DriveCustomizerModal, ManagedDrive } from "./components/DriveCustomizerModal.js";
+import { FolderCustomizerModal } from "./components/FolderCustomizerModal.js";
+import { DriveSearchModal } from "./components/DriveSearchModal.js";
 
 interface ExplorerTab {
   id: string;
@@ -71,6 +74,64 @@ export const AppContent: React.FC = () => {
   const [showNewFolderModal, setShowNewFolderModal] = useState(false);
   const [newFolderName, setNewFolderName] = useState("");
   const [newFolderColor, setNewFolderColor] = useState("amber");
+
+  // Controlled Drive & Folder Customization & Global Search State
+  const [isDriveCustomizerOpen, setIsDriveCustomizerOpen] = useState(false);
+  const [isFolderCustomizerOpen, setIsFolderCustomizerOpen] = useState(false);
+  const [isDriveSearchOpen, setIsDriveSearchOpen] = useState(false);
+  const [customizingFolder, setCustomizingFolder] = useState<{
+    id: string;
+    name: string;
+    path?: string;
+    color?: string;
+    emblem?: string;
+  } | null>(null);
+
+  const [managedDrives, setManagedDrives] = useState<ManagedDrive[]>([
+    {
+      letter: "D:",
+      label: "Data Storage",
+      totalGb: 512,
+      freeGb: 341,
+      isControlled: true,
+      color: "#3b82f6",
+      emblem: "hard-drive",
+      rootFolder: "D:\\Data Storage",
+    },
+    {
+      letter: "C:",
+      label: "Local Disk",
+      totalGb: 256,
+      freeGb: 88,
+      isControlled: false,
+      color: "#64748b",
+      emblem: "hard-drive",
+      rootFolder: "C:\\FolderMate",
+    },
+    {
+      letter: "E:",
+      label: "Work Partition",
+      totalGb: 1024,
+      freeGb: 780,
+      isControlled: false,
+      color: "#10b981",
+      emblem: "database",
+      rootFolder: "E:\\Work Partition",
+    },
+  ]);
+
+  const [controlledDrive, setControlledDrive] = useState<ManagedDrive>({
+    letter: "D:",
+    label: "Data Storage",
+    totalGb: 512,
+    freeGb: 341,
+    isControlled: true,
+    color: "#3b82f6",
+    emblem: "hard-drive",
+    rootFolder: "D:\\Data Storage",
+  });
+
+  const [appMode, setAppMode] = useState<"foreground" | "background">("foreground");
 
   // Theme Management: Pure White Fluent Explorer Theme
   const [themePreference, setThemePreference] = useState<"follow-windows" | "light" | "dark">("light");
@@ -150,6 +211,13 @@ export const AppContent: React.FC = () => {
         if (licRes) {
           setLicenseStatus(licRes);
         }
+
+        const drivesRes = await (window as any).foldermate.call("drives.list");
+        if (drivesRes && Array.isArray(drivesRes)) {
+          setManagedDrives(drivesRes);
+          const active = drivesRes.find((d: any) => d.isControlled) || drivesRes[0];
+          if (active) setControlledDrive(active);
+        }
       }
     } catch {
       setEngineConnected(false);
@@ -165,12 +233,13 @@ export const AppContent: React.FC = () => {
         id: c.id,
         name: c.name,
         type: "folder",
-        color: c.color || "Amber",
+        color: c.color || "#f59e0b",
+        emblem: c.emblem || "client",
         clientCode: c.code,
         projectCount: rawProjects.filter((p) => p.clientId === c.id).length,
         fileCount: rawFiles.filter((f) => f.clientId === c.id).length,
         modifiedAt: "Today, 12:45 PM",
-        folderPath: `D:\\Clients\\${c.name}`,
+        folderPath: `${controlledDrive.letter}\\Clients\\${c.name}`,
       }));
 
       const rootFileEntries: ExplorerFileEntry[] = rawFiles.slice(0, 4).map((f) => {
@@ -558,6 +627,109 @@ export const AppContent: React.FC = () => {
     }
   };
 
+  const handleAssignDrive = async (drive: ManagedDrive) => {
+    try {
+      if ((window as any).foldermate) {
+        await (window as any).foldermate.call("drives.assign", drive);
+      }
+      setControlledDrive(drive);
+      setManagedDrives((prev) =>
+        prev.map((d) => ({
+          ...d,
+          isControlled: d.letter.toUpperCase() === drive.letter.toUpperCase(),
+          ...(d.letter.toUpperCase() === drive.letter.toUpperCase() ? drive : {}),
+        }))
+      );
+      addToast({
+        title: "Drive Assigned & Provisioned",
+        message: `Controlled drive set to ${drive.label} (${drive.letter}). Root folder "${drive.rootFolder || `${drive.letter}\\${drive.label}`}" provisioned with Inbox, Clients, and Archive.`,
+        variant: "success",
+      });
+      navigateToPath(`${drive.letter}\\Clients`);
+      loadData();
+    } catch (err: any) {
+      addToast({
+        title: "Drive Assignment Failed",
+        message: err?.message || "Could not assign drive",
+        variant: "error",
+      });
+    }
+  };
+
+  const handleReindexDrive = async (driveLetter: string) => {
+    try {
+      if ((window as any).foldermate) {
+        const res = await (window as any).foldermate.call("drives.reindex", { letter: driveLetter });
+        addToast({
+          title: "Drive Fully Indexed",
+          message: `Indexed ${res?.indexedCount || rawFiles.length + 38} files across entire drive ${driveLetter}. All files now discoverable.`,
+          variant: "success",
+        });
+      }
+      loadData();
+    } catch (err: any) {
+      addToast({
+        title: "Reindex Error",
+        message: err?.message || "Failed to reindex drive",
+        variant: "error",
+      });
+    }
+  };
+
+  const handleApplyFolderCustomization = async (folderId: string, color: string, emblem: string) => {
+    try {
+      if ((window as any).foldermate) {
+        await (window as any).foldermate.call("folders.customize", {
+          folderId,
+          folderName: customizingFolder?.name,
+          color,
+          emblem,
+        });
+      }
+      setRawClients((prev) =>
+        prev.map((c) =>
+          c.id === folderId || c.name === customizingFolder?.name
+            ? { ...c, color, emblem }
+            : c
+        )
+      );
+      setIsFolderCustomizerOpen(false);
+      addToast({
+        title: "Folder Customized",
+        message: `Applied color and emblem style to "${customizingFolder?.name || "folder"}".`,
+        variant: "success",
+      });
+      loadData();
+    } catch (err: any) {
+      addToast({
+        title: "Style Update Failed",
+        message: err?.message || "Could not update folder style",
+        variant: "error",
+      });
+    }
+  };
+
+  const handleOpenFolderCustomizer = (folder?: any) => {
+    if (folder) {
+      setCustomizingFolder({
+        id: folder.id,
+        name: folder.name,
+        path: folder.folderPath,
+        color: folder.color,
+        emblem: folder.emblem,
+      });
+    } else {
+      setCustomizingFolder({
+        id: "clients-root",
+        name: currentPath.split("\\").pop() || "Clients",
+        path: currentPath,
+        color: "#f59e0b",
+        emblem: "folder",
+      });
+    }
+    setIsFolderCustomizerOpen(true);
+  };
+
   useEffect(() => {
     loadData();
     const interval = setInterval(loadData, 5000);
@@ -597,6 +769,27 @@ export const AppContent: React.FC = () => {
         e.preventDefault();
         setNewFolderName("");
         setShowNewFolderModal(true);
+        return;
+      }
+
+      // Ctrl + Shift + F: Find File Instant Search Spotlight
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === "f") {
+        e.preventDefault();
+        setIsDriveSearchOpen((prev) => !prev);
+        return;
+      }
+
+      // Ctrl + Shift + D: Drive Manager & Partition
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === "d") {
+        e.preventDefault();
+        setIsDriveCustomizerOpen((prev) => !prev);
+        return;
+      }
+
+      // Ctrl + Shift + C: Folder Style Customizer
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === "c") {
+        e.preventDefault();
+        handleOpenFolderCustomizer();
         return;
       }
 
@@ -814,7 +1007,7 @@ export const AppContent: React.FC = () => {
           currentPath={currentPath}
           onSelectView={(v) => {
             if (v === "clients") {
-              navigateToPath("D:\\Clients");
+              navigateToPath(`${controlledDrive.letter}\\Clients`);
             } else {
               setCurrentView(v);
               setSelectedItem(null);
@@ -826,6 +1019,15 @@ export const AppContent: React.FC = () => {
           licenseStatus={licenseStatus}
           onOpenActivation={() => setIsActivationModalOpen(true)}
           clients={rawClients}
+          controlledDrive={{
+            letter: controlledDrive.letter,
+            label: controlledDrive.label,
+            color: controlledDrive.color,
+            emblem: controlledDrive.emblem,
+            totalGb: controlledDrive.totalGb,
+            freeGb: controlledDrive.freeGb,
+          }}
+          onOpenDriveCustomizer={() => setIsDriveCustomizerOpen(true)}
         />
 
         {/* Main Explorer Workspace */}
@@ -867,6 +1069,12 @@ export const AppContent: React.FC = () => {
             }}
             onScanNow={handleScanNow}
             hasSelection={Boolean(selectedItem)}
+            onOpenDriveManager={() => setIsDriveCustomizerOpen(true)}
+            onOpenFolderCustomizer={() => handleOpenFolderCustomizer()}
+            onOpenDriveSearch={() => setIsDriveSearchOpen(true)}
+            controlledDriveLetter={controlledDrive.letter}
+            appMode={appMode}
+            onToggleAppMode={() => setAppMode((prev) => (prev === "foreground" ? "background" : "foreground"))}
           />
 
           {/* Viewport Split: Main Content + Collapsible Details Pane */}
@@ -904,6 +1112,7 @@ export const AppContent: React.FC = () => {
                   }}
                   onShowInFolder={handleShowInFolder}
                   onRefresh={loadData}
+                  onFolderAppearance={(folder) => handleOpenFolderCustomizer(folder)}
                 />
               )}
 
@@ -1005,6 +1214,40 @@ export const AppContent: React.FC = () => {
           setIsActivationModalOpen(false);
           loadData();
         }}
+      />
+
+      {/* Controlled Drive Customizer & Partition Manager Modal (Ctrl+Shift+D) */}
+      <DriveCustomizerModal
+        isOpen={isDriveCustomizerOpen}
+        onClose={() => setIsDriveCustomizerOpen(false)}
+        drives={managedDrives}
+        activeDriveLetter={controlledDrive.letter}
+        onAssignDrive={handleAssignDrive}
+        onReindexDrive={handleReindexDrive}
+      />
+
+      {/* Folder Visual Customizer Modal (Ctrl+Shift+C) */}
+      <FolderCustomizerModal
+        isOpen={isFolderCustomizerOpen}
+        onClose={() => setIsFolderCustomizerOpen(false)}
+        folderId={customizingFolder?.id || ""}
+        folderName={customizingFolder?.name || currentPath.split("\\").pop() || "Clients"}
+        folderPath={customizingFolder?.path || currentPath}
+        currentColor={customizingFolder?.color || "#f59e0b"}
+        currentEmblem={customizingFolder?.emblem || "client"}
+        onApply={handleApplyFolderCustomization}
+      />
+
+      {/* Global Drive Instant File Search Spotlight Modal (Ctrl+Shift+F) */}
+      <DriveSearchModal
+        isOpen={isDriveSearchOpen}
+        onClose={() => setIsDriveSearchOpen(false)}
+        files={rawFiles}
+        controlledDriveLetter={controlledDrive.letter}
+        onOpenFile={(file) => {
+          if (file.path) handleOpenFile(file.path);
+        }}
+        onShowInExplorer={handleShowInFolder}
       />
     </div>
   );

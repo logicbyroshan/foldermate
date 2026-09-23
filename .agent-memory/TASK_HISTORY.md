@@ -463,4 +463,39 @@ Important decisions:
 - The desktop shell must maintain pure white high-contrast light theme without dark UI element leakage.
 - Automatic modals must never be triggered inside periodic polling loops.
 
+## 2026-09-23 — Realistic Desktop Icons, Folder & Drive Customization, Controlled Drive Assignment & Instant Search
+Task: Replace plain text tags with authentic vector desktop file icons (CDR, PSD, AI, INDD, PDF, etc.), build visual folder and drive customizers with unlimited colors and emblem badges, implement controlled drive assignment with partition management and root folder provisioning, add global instant drive search spotlight (`Ctrl+Shift+F`), and support foreground and background dual-mode operation.
+Reason: User requested: "The uil looking much better clean it more and use the proepr icosn of cdr, psd etc one mroe thing that for folders standard icon but we can chagne as much colros we want or can add any icon on the fodler icon so i want lie kthat for drives too one mroe thing this project how it will work is that when its intalled user can assign it one drive on which it can work or option to create new partition and that dirve will be controlled by tis foldaermate so whole drive will have acceres to it inside that dirve it will creae one folder smae name as drive then that fodler isndie it will have nciely orgnaised things propelry. so make it like that also it will be working in not only bakcorud in forgroudn too now if working bakcorud it needs shortcut if working in forgorud thne user can use it without shrotcuts too. mainly it will know all fiels inside its drive and can find any and anytime, so fully make it working".
+Files/areas affected:
+- `apps/desktop/src/renderer/components/ui/FileFormatIcon.tsx` (New)
+- `apps/desktop/src/renderer/components/ui/FolderVisualIcon.tsx` (New)
+- `apps/desktop/src/renderer/components/FolderCustomizerModal.tsx` (New)
+- `apps/desktop/src/renderer/components/DriveCustomizerModal.tsx` (New)
+- `apps/desktop/src/renderer/components/DriveSearchModal.tsx` (New)
+- `apps/desktop/src/renderer/views/ExplorerView.tsx`
+- `apps/desktop/src/renderer/components/ExplorerHeader.tsx`
+- `apps/desktop/src/renderer/components/Sidebar.tsx`
+- `apps/desktop/src/renderer/mock-bridge.ts`
+- `apps/desktop/src/renderer/App.tsx`
+- `CHANGELOG.md`
+- `.agent-memory/CURRENT_STATE.md`
+- `.agent-memory/TASK_HISTORY.md`
+- `.agent-memory/DECISIONS.md`
+What changed:
+- Built `FileFormatIcon.tsx` with authentic, scalable desktop vector graphics for CDR, PSD, AI, INDD, PDF, EPS, PNG/JPG, XLSX, DOCX, and ZIP.
+- Built `FolderVisualIcon.tsx` and `DriveVisualIcon` rendering Windows 11 Fluent 3D silhouettes with unlimited color accents and 16+ emblem badge overlays.
+- Created `FolderCustomizerModal.tsx` (`Ctrl+Shift+C` / "Folder Style" / right-click context menu "Customize Folder (Color & Emblem)...") with 14 preset colors, live 64px preview, custom hex input, and 15 emblem badges (`Star`, `Client`, `Briefcase`, `Project`, `Shield`, `Lock`, `Code`, `Image`, `Design`, `Approved`, `Archive`, etc.).
+- Created `DriveCustomizerModal.tsx` (`Ctrl+Shift+D` / "Drive D:") supporting volume assignment (`D:`, `C:`, `E:`), partition management guidance (`diskmgmt.msc`), drive color/emblem customizer, capacity usage bar, automatic root folder provisioning (`Inbox`, `Clients`, `Archive`, `Review`), and whole-drive re-indexing.
+- Created `DriveSearchModal.tsx` (`Ctrl+Shift+F` / "Find File") for global instant search across all files on the controlled drive, supporting real-time keyword filtering, format filter chips (CDR, PSD, AI, PDF, Images, Spreadsheets), and one-click "Show in Explorer" / "Open File" actions.
+- Added foreground/background mode switch badge on the command bar, demonstrating seamless dual-mode capability (interactive visual Explorer in foreground, global hotkeys and autonomous ingestion in background).
+- Updated `Sidebar.tsx` to render the assigned controlled drive with custom emblem, color, and partition management shortcut.
+- Updated `mock-bridge.ts` to implement `drives.list`, `drives.assign`, `drives.reindex`, and `folders.customize`.
+Testing performed:
+- `npm test` (39/39 tests passed across 13 test suites).
+- `npm run build:renderer --workspace=apps/desktop` (Vite production build succeeded in 15.5s).
+- Browser subagent interactive verification targeting exclusively `http://localhost:5188/` validating desktop file icons (CDR, PDF), command bar buttons, Drive Manager modal, Folder Customizer modal, Drive Search spotlight, and foreground/background mode toggle.
+Important decisions:
+- The controlled drive root folder matches the drive label (e.g. `D:\Data Storage\`), and automatically provisions the canonical folder structure (`Inbox/`, `Clients/`, `Archive/`, and `Review/`).
+- Foreground mode must expose all capabilities through clickable ribbon/command bar controls and context menus without requiring shortcut memorization, while background daemon mode remains fully accessible via system hotkeys (`Ctrl+Shift+F`, `Ctrl+Shift+D`, `Ctrl+Shift+C`).
+
 

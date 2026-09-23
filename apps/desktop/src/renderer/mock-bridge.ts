@@ -35,9 +35,43 @@ export function setupBrowserMockBridge() {
       code: "ZENITH",
       aliases: ["ZENITH CORP", "ZENITH TECH"],
       color: "Purple",
+      emblem: "briefcase",
       folderPath: "D:\\Clients\\Zenith Corp",
       isActive: true,
       createdAt: new Date().toISOString(),
+    },
+  ];
+
+  let drives = [
+    {
+      letter: "D:",
+      label: "Data Storage",
+      totalGb: 512,
+      freeGb: 341,
+      isControlled: true,
+      color: "#3b82f6",
+      emblem: "hard-drive",
+      rootFolder: "D:\\Data Storage",
+    },
+    {
+      letter: "C:",
+      label: "Local Disk",
+      totalGb: 256,
+      freeGb: 88,
+      isControlled: false,
+      color: "#64748b",
+      emblem: "hard-drive",
+      rootFolder: "C:\\FolderMate",
+    },
+    {
+      letter: "E:",
+      label: "Work Partition",
+      totalGb: 1024,
+      freeGb: 780,
+      isControlled: false,
+      color: "#10b981",
+      emblem: "database",
+      rootFolder: "E:\\Work Partition",
     },
   ];
 
@@ -790,6 +824,45 @@ export function setupBrowserMockBridge() {
         case "settings.update":
           settings = { ...settings, ...payload };
           return settings;
+
+        case "drives.list":
+          return drives;
+
+        case "drives.assign": {
+          drives = drives.map((d) => {
+            const isMatch = d.letter.toUpperCase() === payload.letter.toUpperCase();
+            return {
+              ...d,
+              isControlled: isMatch,
+              ...(isMatch
+                ? {
+                    label: payload.label || d.label,
+                    color: payload.color || d.color,
+                    emblem: payload.emblem || d.emblem,
+                    rootFolder: `${payload.letter}\\${payload.label || "Data Storage"}`,
+                  }
+                : {}),
+            };
+          });
+          return { success: true, drives };
+        }
+
+        case "drives.reindex": {
+          return {
+            success: true,
+            indexedCount: files.length + 38,
+            message: `Scanned and indexed entire drive ${payload.letter}.`,
+          };
+        }
+
+        case "folders.customize": {
+          const client = clients.find((c) => c.id === payload.folderId || c.name === payload.folderName);
+          if (client) {
+            client.color = payload.color;
+            (client as any).emblem = payload.emblem;
+          }
+          return { success: true };
+        }
 
         default:
           return {};

@@ -79,6 +79,12 @@ interface ExplorerHeaderProps {
   onNewProject?: () => void;
   onScanNow?: () => void;
   hasSelection?: boolean;
+  onOpenDriveManager?: () => void;
+  onOpenFolderCustomizer?: () => void;
+  onOpenDriveSearch?: () => void;
+  controlledDriveLetter?: string;
+  appMode?: "foreground" | "background";
+  onToggleAppMode?: () => void;
 }
 
 export const ExplorerHeader: React.FC<ExplorerHeaderProps> = ({
@@ -108,6 +114,12 @@ export const ExplorerHeader: React.FC<ExplorerHeaderProps> = ({
   onNewProject,
   onScanNow,
   hasSelection = false,
+  onOpenDriveManager,
+  onOpenFolderCustomizer,
+  onOpenDriveSearch,
+  controlledDriveLetter = "D:",
+  appMode = "foreground",
+  onToggleAppMode,
 }) => {
   const [isAddressInputMode, setIsAddressInputMode] = useState(false);
   const [rawAddress, setRawAddress] = useState("");
@@ -528,6 +540,47 @@ export const ExplorerHeader: React.FC<ExplorerHeaderProps> = ({
           )}
         </div>
 
+        <div className="win11-command-divider" />
+
+        {/* Drive Manager Quick Action */}
+        {onOpenDriveManager && (
+          <button
+            type="button"
+            className="win11-btn"
+            onClick={onOpenDriveManager}
+            title="Controlled Drive Manager (Ctrl+Shift+D) - Assign drive volume, setup partition, or customize icon"
+          >
+            <HardDrive size={14} color="var(--brand-primary)" />
+            <span>Drive {controlledDriveLetter}</span>
+          </button>
+        )}
+
+        {/* Folder Appearance Quick Action */}
+        {onOpenFolderCustomizer && (
+          <button
+            type="button"
+            className="win11-btn"
+            onClick={onOpenFolderCustomizer}
+            title="Customize Folder (Ctrl+Shift+C) - Pick colors and emblem icons"
+          >
+            <Sliders size={14} color="#f59e0b" />
+            <span>Folder Style</span>
+          </button>
+        )}
+
+        {/* Find File Spotlight Quick Action */}
+        {onOpenDriveSearch && (
+          <button
+            type="button"
+            className="win11-btn"
+            onClick={onOpenDriveSearch}
+            title="Instant Drive Search (Ctrl+Shift+F) - Find any file across entire controlled drive"
+          >
+            <Search size={14} color="#0284c7" />
+            <span>Find File</span>
+          </button>
+        )}
+
         {/* Details Pane Toggle on Command Bar Right */}
         <button
           type="button"
@@ -538,6 +591,39 @@ export const ExplorerHeader: React.FC<ExplorerHeaderProps> = ({
           {isInspectorOpen ? <SidebarClose size={15} /> : <SidebarOpen size={15} />}
           <span>Details</span>
         </button>
+
+        {/* Dual Mode Foreground/Background Indicator */}
+        {onToggleAppMode && (
+          <button
+            type="button"
+            className="win11-btn"
+            onClick={onToggleAppMode}
+            title={
+              appMode === "background"
+                ? "Running as Background Daemon. Click to switch to Foreground Explorer mode."
+                : "Running in Foreground Explorer mode. Click to test Background Daemon mode."
+            }
+            style={{
+              fontSize: 11,
+              padding: "4px 8px",
+              background: appMode === "background" ? "rgba(100, 116, 139, 0.1)" : "rgba(22, 163, 74, 0.1)",
+              borderColor: appMode === "background" ? "rgba(100, 116, 139, 0.3)" : "rgba(22, 163, 74, 0.3)",
+              color: appMode === "background" ? "#475569" : "#15803d",
+            }}
+          >
+            <span
+              style={{
+                width: 6,
+                height: 6,
+                borderRadius: "50%",
+                background: appMode === "background" ? "#64748b" : "#16a34a",
+                display: "inline-block",
+                marginRight: 4,
+              }}
+            />
+            <span>{appMode === "background" ? "Background" : "Foreground"}</span>
+          </button>
+        )}
 
         {/* Subtle Engine Heartbeat Dropdown */}
         <div ref={pauseMenuRef} className="command-bar-dropdown-wrap">

@@ -498,4 +498,25 @@ Important decisions:
 - The controlled drive root folder matches the drive label (e.g. `D:\Data Storage\`), and automatically provisions the canonical folder structure (`Inbox/`, `Clients/`, `Archive/`, and `Review/`).
 - Foreground mode must expose all capabilities through clickable ribbon/command bar controls and context menus without requiring shortcut memorization, while background daemon mode remains fully accessible via system hotkeys (`Ctrl+Shift+F`, `Ctrl+Shift+D`, `Ctrl+Shift+C`).
 
+## 2026-09-23 — Sidebar Controlled Drive Filter & Internal Folders Presentation
+Task: Filter navigation pane to show exclusively the user's selected controlled drive under "This PC", removing all unselected drives, and display the organized internal folders directly inside that drive.
+Reason: User requested: "The ui is mostly fine now but it shoudl not show in sidebar other dirves we must show the drive selected only nto rest we must show the only the selected and then inside folders".
+Files/areas affected:
+- `apps/desktop/src/renderer/components/Sidebar.tsx`
+- `apps/desktop/src/renderer/App.tsx`
+- `CHANGELOG.md`
+- `.agent-memory/CURRENT_STATE.md`
+- `.agent-memory/TASK_HISTORY.md`
+What changed:
+- Removed `Local Disk (C:)` and other unselected drive volumes from the navigation pane under "This PC".
+- Displayed exclusively the active selected/controlled drive (`controlledDrive.label (${controlledDrive.letter})`) with its custom color, emblem, and drive manager trigger.
+- Organized the controlled drive's internal quadrant folders clearly inside its tree node: `Inbox`, `Clients` (expandable with client subfolders), `Archive`, and `Review Queue` (with badge counter).
+- Dynamically bound all sidebar click actions and navigation path normalizations in `App.tsx` and `Sidebar.tsx` to `${controlledDrive.letter}`.
+Testing performed:
+- `npm test` (39/39 tests passed across 13 test suites).
+- `npm run build:renderer --workspace=apps/desktop` (Vite production build succeeded in 5.66s).
+- Browser subagent interactive verification targeting exclusively `http://localhost:5188/` validating that only the selected controlled drive appears in the sidebar and that its internal folders navigate cleanly.
+Important decisions:
+- The sidebar navigation tree strictly isolates file management to the user's assigned controlled drive to prevent accidental navigation into unmanaged OS partitions.
+
 

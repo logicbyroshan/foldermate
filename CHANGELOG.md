@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Sidebar Controlled Drive Filter & Internal Folders Presentation**:
+  - Filtered the navigation tree under "This PC" to display exclusively the active selected/controlled drive (`controlledDrive`), removing all other unselected drives (e.g. `Local Disk (C:)`) to prevent clutter.
+  - Formatted the selected drive's internal quadrant folders cleanly inside the tree: `Inbox` (watcher folder), `Clients` (expandable directory listing client folders with their visual color/emblems), `Archive`, and `Review Queue` (with badge counter).
+  - Dynamically bound all sidebar click actions and navigation path normalizations in `App.tsx` and `Sidebar.tsx` to `${controlledDrive.letter}`.
 - **Realistic Desktop File Icons, Folder & Drive Customizer, Controlled Drive Assignment & Instant Search**:
   - Implemented authentic, scalable desktop vector file icons in `FileFormatIcon.tsx` for CorelDRAW (`.cdr`), Photoshop (`.psd`), Illustrator (`.ai`), InDesign (`.indd`), Acrobat (`.pdf`), EPS, PNG/JPG images, Excel (`.xlsx`), Word (`.docx`), and ZIP archives, replacing plain text tags across Details table, List, and Grid view modes.
   - Created `FolderVisualIcon.tsx` and `DriveVisualIcon` rendering Windows 11 Fluent 3D silhouettes with unlimited color customization and 16+ emblem badge overlays (`Star`, `Client`, `Briefcase`, `Project`, `Shield`, `Lock`, `Code`, `Design`, `Approved`, `Archive`, etc.).

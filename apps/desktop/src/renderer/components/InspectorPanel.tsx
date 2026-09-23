@@ -15,9 +15,7 @@ import {
   Clock,
   Palette,
 } from "lucide-react";
-import { useToast } from "./ui/Toast.js";
-import { FileFormatIcon } from "./ui/FileFormatIcon.js";
-import { FilePreviewCanvas } from "./ui/FilePreviewCanvas.js";
+import { useToast, FileFormatIcon, FilePreviewCanvas } from "./ui/index.js";
 
 export interface SelectedFileItem {
   type: "file";

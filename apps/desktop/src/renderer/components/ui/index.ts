@@ -10,3 +10,6 @@ export * from "./Toast.js";
 export * from "./EmptyState.js";
 export * from "./FolderColorPicker.js";
 export * from "./CommandPalette.js";
+export * from "./FileFormatIcon.js";
+export * from "./FolderVisualIcon.js";
+export * from "./FilePreviewCanvas.js";

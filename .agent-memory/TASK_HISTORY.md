@@ -570,4 +570,56 @@ Important decisions:
 - Renderer uses browser-safe `canonical-renamer.ts` to prevent Node.js `EventEmitter` / `net` rollup bundle errors while keeping canonical naming rules synchronized with the engine daemon.
 - Folder templates dynamically support `{FileType}` to structure client projects by format without breaking legacy schema expectations in automated migration tests.
 
+## 2026-09-23 — Architecture Refactoring, Dead Code Removal & Modular Service Separation
+Task: Eliminate dead/unused code, divide files into dedicated domain services and hooks, centralize types and formatting utilities, and maximize reusability across components while preserving 100% visual and functional parity.
+Reason: User requested: "Another deep issues is with code code shodl be proeprly arcitecture and code msut not have dead code which is not in used and also the fiels and thign devided nicely liek services seprate or feature etc and ui shoudl be same to and as much we can reuse is better."
+Files/areas affected:
+- `apps/desktop/src/renderer/views/Dashboard.tsx` (Deleted)
+- `apps/desktop/src/renderer/views/Clients.tsx` (Deleted)
+- `apps/desktop/src/renderer/components/TopBar.tsx` (Deleted)
+- `apps/desktop/src/renderer/components/CorelStatusWidget.tsx` (Deleted)
+- `apps/desktop/src/renderer/types/explorer.ts` (New)
+- `apps/desktop/src/renderer/utils/formatters.ts` (New)
+- `apps/desktop/src/renderer/services/foldermate-api.ts` (New)
+- `apps/desktop/src/renderer/services/explorer-mapper.ts` (New)
+- `apps/desktop/src/renderer/hooks/useNavigation.ts` (New)
+- `apps/desktop/src/renderer/hooks/useFolderMateData.ts` (New)
+- `apps/desktop/src/renderer/components/ui/index.ts`
+- `apps/desktop/src/renderer/components/ui/CommandPalette.tsx`
+- `apps/desktop/src/renderer/components/ExplorerHeader.tsx`
+- `apps/desktop/src/renderer/components/Sidebar.tsx`
+- `apps/desktop/src/renderer/components/InspectorPanel.tsx`
+- `apps/desktop/src/renderer/views/ExplorerView.tsx`
+- `apps/desktop/src/renderer/views/HomeView.tsx`
+- `apps/desktop/src/renderer/views/Search.tsx`
+- `apps/desktop/src/renderer/views/ReviewQueue.tsx`
+- `apps/desktop/src/renderer/App.tsx`
+- `CHANGELOG.md`
+- `.agent-memory/CURRENT_STATE.md`
+- `.agent-memory/TASK_HISTORY.md`
+- `.agent-memory/DECISIONS.md`
+What changed:
+- **Dead Code Elimination**: Removed obsolete legacy files (`Dashboard.tsx`, `Clients.tsx`, `TopBar.tsx`, `CorelStatusWidget.tsx`). Cleaned up `CommandPalette.tsx` to align navigation actions with active views (`home`, `explorer`, `search`, `review`, `automation`, `rules`, `shortcuts`, `settings`).
+- **Domain Types Layer**: Created `types/explorer.ts` containing canonical definitions for `NavView`, `ViewMode`, `ExplorerFolderEntry`, `ExplorerFileEntry`, `ExplorerEntry`, `BreadcrumbItem`, `ExplorerTab`, and `ManagedDrive`.
+- **Reusable Utilities**: Created `utils/formatters.ts` with standardized functions `formatFileSize`, `getExtBadgeColors`, and `formatRelativeDate`, eliminating duplicated size/extension logic across views.
+- **Service Layer (API & Mapper)**:
+  - Created `services/foldermate-api.ts` providing typed methods for all desktop engine RPC calls (`system`, `files`, `clients`, `projects`, `reviewQueue`, `drives`, `folderRules`).
+  - Created `services/explorer-mapper.ts` with pure domain functions `mapToExplorerEntries` and `mapToRecentFiles`, isolating complex data transformations from the UI layer.
+- **Custom Hooks**:
+  - Created `hooks/useNavigation.ts` encapsulating path history, back/forward/up navigation, tab strip state, and breadcrumb generation.
+  - Created `hooks/useFolderMateData.ts` managing engine communication, periodic polling, status tracking, and drive state.
+- **Streamlined App.tsx**: Refactored `App.tsx` from a 1,437-line monolithic component down to ~480 lines of clean orchestration code, maintaining 100% UI and functional fidelity.
+- **Barrel Exports**: Unified UI component exports in `components/ui/index.ts` including `FileFormatIcon`, `FolderVisualIcon`, and `FilePreviewCanvas`.
+Testing performed:
+- Automated tests: `npm test` (all 40 tests passed across 13 test suites).
+- Production build: `npm run build:renderer --workspace=apps/desktop` passed with 0 errors in 5.81s.
+- Browser subagent visual verification on `http://localhost:5188/`:
+  - Verified initial Explorer view loads cleanly at `D:\Clients` with pure white Fluent theme and authentic desktop icons (`initial_explorer_view_1790162519621.png`).
+  - Verified search and selecting a file opens the Preview Pane with CorelDRAW vector ID card preview (`preview_pane_open_1790162644140.png`).
+  - Verified Command Palette opens with updated clean commands (`command_palette_1790162736581.png`).
+  - Confirmed 0 visual regressions and 0 console errors.
+Important decisions:
+- Deleting obsolete views (`Dashboard.tsx`, `Clients.tsx`) reduces cognitive overhead and prevents bundle bloat while ensuring the desktop shell strictly follows the Windows File Explorer mental model.
+- Decoupling API calls and domain mapping into `services/` and `hooks/` provides clean testability and maximum reusability.
+
 

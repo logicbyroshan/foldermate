@@ -21,19 +21,10 @@ import {
   Sliders,
 } from "lucide-react";
 import { LicenseStatus } from "@foldermate/shared";
-import { DriveVisualIcon, FolderVisualIcon } from "./ui/FolderVisualIcon.js";
+import { DriveVisualIcon, FolderVisualIcon } from "./ui/index.js";
+import { NavView } from "../types/explorer.js";
 
-export type NavView =
-  | "home"
-  | "explorer"
-  | "clients"
-  | "search"
-  | "review"
-  | "automation"
-  | "shortcuts"
-  | "rules"
-  | "settings"
-  | "dashboard";
+export type { NavView };
 
 interface SidebarProps {
   currentView: NavView;

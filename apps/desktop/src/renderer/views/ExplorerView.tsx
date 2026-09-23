@@ -21,46 +21,18 @@ import {
   LayoutGrid,
 } from "lucide-react";
 import { SelectedItem, SelectedFileItem, SelectedFolderItem } from "../components/InspectorPanel.js";
-import { ViewMode } from "../components/ExplorerHeader.js";
 import { useToast } from "../components/ui/Toast.js";
 import { FileFormatIcon } from "../components/ui/FileFormatIcon.js";
 import { FolderVisualIcon } from "../components/ui/FolderVisualIcon.js";
 import { canonicalizeFilename } from "../utils/canonical-renamer.js";
+import {
+  ExplorerFolderEntry,
+  ExplorerFileEntry,
+  ExplorerEntry,
+  ViewMode,
+} from "../types/explorer.js";
 
-export interface ExplorerFolderEntry {
-  id: string;
-  name: string;
-  type: "folder";
-  color?: string;
-  emblem?: string;
-  clientCode?: string;
-  projectCount?: number;
-  fileCount?: number;
-  totalSize?: string;
-  modifiedAt?: string;
-  folderPath?: string;
-}
-
-export interface ExplorerFileEntry {
-  id: string;
-  name: string;
-  type: "file";
-  ext: string;
-  extColor: string;
-  extBg: string;
-  clientName?: string;
-  projectName?: string;
-  year?: number;
-  versionNumber?: number;
-  sizeBytes?: number;
-  formattedSize?: string;
-  modifiedAt?: string;
-  targetPath?: string;
-  sha256?: string;
-  lineage?: { versionNumber: number; filename: string; createdAt: string; isCurrent: boolean }[];
-}
-
-export type ExplorerEntry = ExplorerFolderEntry | ExplorerFileEntry;
+export type { ExplorerFolderEntry, ExplorerFileEntry, ExplorerEntry, ViewMode };
 
 interface ExplorerViewProps {
   entries: ExplorerEntry[];

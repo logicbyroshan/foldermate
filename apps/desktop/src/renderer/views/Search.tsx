@@ -18,16 +18,19 @@ import {
   Eye,
   FileCode,
 } from "lucide-react";
-import { SearchBar } from "../components/ui/SearchBar.js";
-import { Card } from "../components/ui/Card.js";
-import { Badge, StatusBadge } from "../components/ui/Badge.js";
-import { Button } from "../components/ui/Button.js";
-import { IconButton } from "../components/ui/IconButton.js";
-import { Select } from "../components/ui/Select.js";
-import { EmptyState } from "../components/ui/EmptyState.js";
+import {
+  SearchBar,
+  Card,
+  Badge,
+  Button,
+  IconButton,
+  Select,
+  EmptyState,
+  FileFormatIcon,
+  FilePreviewCanvas,
+} from "../components/ui/index.js";
 import { useToast } from "../components/ui/Toast.js";
-import { FileFormatIcon } from "../components/ui/FileFormatIcon.js";
-import { FilePreviewCanvas } from "../components/ui/FilePreviewCanvas.js";
+import { formatFileSize } from "../utils/formatters.js";
 
 export const Search: React.FC = () => {
   const [query, setQuery] = useState("");
@@ -340,7 +343,7 @@ export const Search: React.FC = () => {
                             </>
                           )}
                           <span>•</span>
-                          <span>{sizeKb > 1024 ? `${(sizeKb / 1024).toFixed(1)} MB` : `${sizeKb} KB`}</span>
+                          <span>{formatFileSize(item.fileSizeBytes || (sizeKb ? sizeKb * 1024 : 0))}</span>
                         </div>
                       </div>
                     </div>

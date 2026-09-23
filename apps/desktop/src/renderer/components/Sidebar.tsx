@@ -76,9 +76,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   },
   onOpenDriveCustomizer,
 }) => {
-  const [isDriveDExpanded, setIsDriveDExpanded] = useState(true);
+  const [isControlledDriveExpanded, setIsControlledDriveExpanded] = useState(true);
   const [isClientsExpanded, setIsClientsExpanded] = useState(true);
-  const [isDriveCExpanded, setIsDriveCExpanded] = useState(false);
   const [isQuickAccessExpanded, setIsQuickAccessExpanded] = useState(true);
   const [isThisPcExpanded, setIsThisPcExpanded] = useState(true);
 
@@ -88,11 +87,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
     currentPath.toLowerCase().includes("inbox");
   const isClientsRootActive =
     (currentView === "explorer" || currentView === "clients") &&
-    (currentPath === "D:\\Clients" || currentPath === "Clients" || currentPath === "D:\\Clients\\");
+    (currentPath.toLowerCase() === `${controlledDrive.letter.toLowerCase()}\\clients` ||
+      currentPath.toLowerCase() === "clients" ||
+      currentPath.toLowerCase() === `${controlledDrive.letter.toLowerCase()}\\clients\\`);
   const isArchiveActive =
     (currentView === "explorer" || currentView === "clients") &&
     currentPath.toLowerCase().includes("archive");
-  const isReviewActive = currentView === "review";
+  const isReviewActive = currentView === "review" || currentPath.toLowerCase().includes("review");
 
   return (
     <aside className="win11-sidebar">
@@ -136,10 +137,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <div className="win11-tree-subgroup">
                 <div
                   className={`win11-tree-row ${isInboxActive ? "selected" : ""}`}
-                  onClick={() => onNavigatePath("C:\\FolderMate\\Inbox")}
+                  onClick={() => onNavigatePath(`${controlledDrive.letter}\\Inbox`)}
                   role="button"
                   tabIndex={0}
-                  title="Inbox Watcher (C:\FolderMate\Inbox)"
+                  title={`Inbox Watcher (${controlledDrive.letter}\\Inbox)`}
                 >
                   <span className="tree-indent-spacer" />
                   <Inbox size={15} className="win11-tree-icon" color="#f59e0b" />
@@ -148,10 +149,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
                 <div
                   className={`win11-tree-row ${isClientsRootActive ? "selected" : ""}`}
-                  onClick={() => onNavigatePath("D:\\Clients")}
+                  onClick={() => onNavigatePath(`${controlledDrive.letter}\\Clients`)}
                   role="button"
                   tabIndex={0}
-                  title="Clients Storage (D:\Clients)"
+                  title={`Clients Storage (${controlledDrive.letter}\\Clients)`}
                 >
                   <span className="tree-indent-spacer" />
                   <FolderTree size={15} className="win11-tree-icon" color="#3b82f6" />
@@ -160,10 +161,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
                 <div
                   className={`win11-tree-row ${isArchiveActive ? "selected" : ""}`}
-                  onClick={() => onNavigatePath("D:\\Archive")}
+                  onClick={() => onNavigatePath(`${controlledDrive.letter}\\Archive`)}
                   role="button"
                   tabIndex={0}
-                  title="Archive (D:\Archive)"
+                  title={`Archive (${controlledDrive.letter}\\Archive)`}
                 >
                   <span className="tree-indent-spacer" />
                   <Archive size={15} className="win11-tree-icon" color="#8b5cf6" />
@@ -210,50 +211,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
             {isThisPcExpanded && (
               <div className="win11-tree-subgroup">
-                {/* Local Disk (C:) */}
-                <div
-                  className="win11-tree-row"
-                  onClick={() => {
-                    setIsDriveCExpanded((prev) => !prev);
-                    onNavigatePath("C:\\FolderMate\\Inbox");
-                  }}
-                >
-                  <button
-                    type="button"
-                    className="win11-expand-toggle"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setIsDriveCExpanded((prev) => !prev);
-                    }}
-                  >
-                    {isDriveCExpanded ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
-                  </button>
-                  <HardDrive size={15} className="win11-tree-icon" color="var(--text-muted)" />
-                  <span className="win11-tree-label">Local Disk (C:)</span>
-                </div>
-
-                {isDriveCExpanded && (
-                  <div className="win11-tree-subgroup level-2">
-                    <div
-                      className={`win11-tree-row ${isInboxActive ? "selected" : ""}`}
-                      onClick={() => onNavigatePath("C:\\FolderMate\\Inbox")}
-                    >
-                      <span className="tree-indent-spacer" />
-                      <Folder size={14} className="win11-tree-icon" color="#f59e0b" />
-                      <span className="win11-tree-label">FolderMate / Inbox</span>
-                    </div>
-                  </div>
-                )}
-
-                {/* Storage Disk (Controlled Drive) */}
+                {/* Selected Controlled Drive ONLY */}
                 <div
                   className={`win11-tree-row ${
-                    currentView === "explorer" && currentPath.startsWith(controlledDrive.letter) && !isClientsRootActive
+                    currentView === "explorer" && currentPath.toLowerCase().startsWith(controlledDrive.letter.toLowerCase()) && !isClientsRootActive
                       ? "selected-parent"
                       : ""
                   }`}
                   onClick={() => {
-                    setIsDriveDExpanded((prev) => !prev);
+                    setIsControlledDriveExpanded((prev) => !prev);
                     onNavigatePath(`${controlledDrive.letter}\\Clients`);
                   }}
                   title={`Controlled Drive: ${controlledDrive.label} (${controlledDrive.letter})`}
@@ -263,10 +229,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     className="win11-expand-toggle"
                     onClick={(e) => {
                       e.stopPropagation();
-                      setIsDriveDExpanded((prev) => !prev);
+                      setIsControlledDriveExpanded((prev) => !prev);
                     }}
                   >
-                    {isDriveDExpanded ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
+                    {isControlledDriveExpanded ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
                   </button>
                   <DriveVisualIcon
                     color={controlledDrive.color || "#3b82f6"}
@@ -300,12 +266,25 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   )}
                 </div>
 
-                {isDriveDExpanded && (
+                {/* Inside Folders of Selected Drive */}
+                {isControlledDriveExpanded && (
                   <div className="win11-tree-subgroup level-2">
-                    {/* Clients Directory */}
+                    {/* 1. Inbox Folder */}
+                    <div
+                      className={`win11-tree-row ${isInboxActive ? "selected" : ""}`}
+                      onClick={() => onNavigatePath(`${controlledDrive.letter}\\Inbox`)}
+                      title={`Inbox Watcher (${controlledDrive.letter}\\Inbox)`}
+                    >
+                      <span className="tree-indent-spacer" />
+                      <Inbox size={14} className="win11-tree-icon" color="#f59e0b" />
+                      <span className="win11-tree-label">Inbox</span>
+                    </div>
+
+                    {/* 2. Clients Directory & Subfolders */}
                     <div
                       className={`win11-tree-row ${isClientsRootActive ? "selected" : ""}`}
-                      onClick={() => onNavigatePath("D:\\Clients")}
+                      onClick={() => onNavigatePath(`${controlledDrive.letter}\\Clients`)}
+                      title={`Clients Storage (${controlledDrive.letter}\\Clients)`}
                     >
                       <button
                         type="button"
@@ -317,11 +296,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       >
                         {isClientsExpanded ? <ChevronDown size={11} /> : <ChevronRight size={11} />}
                       </button>
-                      <FolderOpen size={14} className="win11-tree-icon" color="#f59e0b" />
+                      <FolderOpen size={14} className="win11-tree-icon" color="#3b82f6" />
                       <span className="win11-tree-label">Clients</span>
                     </div>
 
-                    {/* Expandable Client Subfolders */}
+                    {/* Expandable Client Subfolders inside Clients */}
                     {isClientsExpanded && (
                       <div className="win11-tree-subgroup level-3">
                         {clients.map((c) => {
@@ -332,8 +311,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             <div
                               key={c.id}
                               className={`win11-tree-row ${isClientActive ? "selected" : ""}`}
-                              onClick={() => onNavigatePath(`D:\\Clients\\${c.name}`)}
-                              title={`Open ${c.name}`}
+                              onClick={() => onNavigatePath(`${controlledDrive.letter}\\Clients\\${c.name}`)}
+                              title={`Open ${c.name} (${controlledDrive.letter}\\Clients\\${c.name})`}
                             >
                               <span className="tree-indent-spacer" />
                               <FolderVisualIcon
@@ -348,14 +327,29 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       </div>
                     )}
 
-                    {/* Archive Folder */}
+                    {/* 3. Archive Folder */}
                     <div
                       className={`win11-tree-row ${isArchiveActive ? "selected" : ""}`}
-                      onClick={() => onNavigatePath("D:\\Archive")}
+                      onClick={() => onNavigatePath(`${controlledDrive.letter}\\Archive`)}
+                      title={`Archive (${controlledDrive.letter}\\Archive)`}
                     >
                       <span className="tree-indent-spacer" />
-                      <Folder size={14} className="win11-tree-icon" color="#8b5cf6" />
+                      <Archive size={14} className="win11-tree-icon" color="#8b5cf6" />
                       <span className="win11-tree-label">Archive</span>
+                    </div>
+
+                    {/* 4. Review Queue Folder */}
+                    <div
+                      className={`win11-tree-row ${isReviewActive ? "selected" : ""}`}
+                      onClick={() => onSelectView("review")}
+                      title="Review Queue (Ambiguous Files)"
+                    >
+                      <span className="tree-indent-spacer" />
+                      <AlertCircle size={14} className="win11-tree-icon" color="#ef4444" />
+                      <span className="win11-tree-label">Review Queue</span>
+                      {pendingReviewCount > 0 && (
+                        <span className="win11-badge-counter">{pendingReviewCount}</span>
+                      )}
                     </div>
                   </div>
                 )}

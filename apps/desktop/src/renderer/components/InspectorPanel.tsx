@@ -14,6 +14,8 @@ import {
   Copy,
   Clock,
   Palette,
+  X,
+  Info,
 } from "lucide-react";
 import { useToast, FileFormatIcon, FilePreviewCanvas } from "./ui/index.js";
 
@@ -104,9 +106,17 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
   return (
     <aside className="explorer-inspector-pane animate-fade-in">
       <div className="inspector-header">
-        <span className="inspector-title">Details &amp; Intelligence</span>
-        <button type="button" className="inspector-close-btn" onClick={onClose} title="Close Pane">
-          ✕
+        <div className="inspector-title">
+          <Info size={14} className="inspector-title-icon" color="var(--brand-primary)" />
+          <span>Details &amp; Intelligence</span>
+        </div>
+        <button
+          type="button"
+          className="inspector-close-btn"
+          onClick={onClose}
+          title="Close Details Pane (Ctrl+I)"
+        >
+          <X size={15} />
         </button>
       </div>
 

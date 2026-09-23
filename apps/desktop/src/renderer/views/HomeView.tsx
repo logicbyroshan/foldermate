@@ -238,7 +238,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                   </td>
                   <td className="td-path">
                     <span className="file-location-path">
-                      {file.clientName ? `D:\\Clients\\${file.clientName}` : "C:\\FolderMate\\Inbox"}
+                      {file.targetPath || (file.clientName ? `Clients\\${file.clientName}` : "Inbox")}
                     </span>
                   </td>
                 </tr>

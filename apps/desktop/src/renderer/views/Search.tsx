@@ -22,6 +22,7 @@ import {
   SearchBar,
   Card,
   Badge,
+  StatusBadge,
   Button,
   IconButton,
   Select,
@@ -464,63 +465,26 @@ export const Search: React.FC = () => {
                 </code>
               </div>
 
-              {/* Structured Metadata Grid */}
-              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                <span style={{ fontSize: 11, fontWeight: 600, color: "var(--text-muted)", textTransform: "uppercase" }}>
-                  File & Classification Metadata
-                </span>
-
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
-                  <div style={{ padding: "8px 10px", backgroundColor: "var(--bg-surface)", borderRadius: "var(--radius-sm)", border: "1px solid var(--border-subtle)" }}>
-                    <div style={{ fontSize: 10, color: "var(--text-muted)" }}>Client Name</div>
-                    <div style={{ fontSize: 12, fontWeight: 600, color: "var(--text-primary)", marginTop: 2 }}>
-                      {selectedFile.clientName || "—"}
-                    </div>
+              {/* Classification Confidence if available */}
+              {selectedFile.classificationConfidence !== undefined && (
+                <div style={{ padding: "8px 12px", backgroundColor: "var(--bg-surface)", borderRadius: "var(--radius-sm)", border: "1px solid var(--border-subtle)" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
+                    <span style={{ fontSize: 11, fontWeight: 600, color: "var(--text-muted)" }}>Classification Confidence</span>
+                    <span style={{ fontSize: 11, fontWeight: 700, color: "var(--status-success)" }}>
+                      {Math.round(selectedFile.classificationConfidence * 100)}%
+                    </span>
                   </div>
-
-                  <div style={{ padding: "8px 10px", backgroundColor: "var(--bg-surface)", borderRadius: "var(--radius-sm)", border: "1px solid var(--border-subtle)" }}>
-                    <div style={{ fontSize: 10, color: "var(--text-muted)" }}>Project Scope</div>
-                    <div style={{ fontSize: 12, fontWeight: 600, color: "var(--text-primary)", marginTop: 2 }}>
-                      {selectedFile.projectName || selectedFile.category || "—"}
-                    </div>
-                  </div>
-
-                  <div style={{ padding: "8px 10px", backgroundColor: "var(--bg-surface)", borderRadius: "var(--radius-sm)", border: "1px solid var(--border-subtle)" }}>
-                    <div style={{ fontSize: 10, color: "var(--text-muted)" }}>Year Scope</div>
-                    <div style={{ fontSize: 12, fontWeight: 600, color: "var(--text-primary)", marginTop: 2 }}>
-                      {selectedFile.year || "—"}
-                    </div>
-                  </div>
-
-                  <div style={{ padding: "8px 10px", backgroundColor: "var(--bg-surface)", borderRadius: "var(--radius-sm)", border: "1px solid var(--border-subtle)" }}>
-                    <div style={{ fontSize: 10, color: "var(--text-muted)" }}>File Size</div>
-                    <div style={{ fontSize: 12, fontWeight: 600, color: "var(--text-primary)", marginTop: 2 }}>
-                      {Math.round((selectedFile.fileSizeBytes || selectedFile.sizeBytes || 0) / 1024)} KB
-                    </div>
+                  <div style={{ width: "100%", height: 4, backgroundColor: "var(--border-subtle)", borderRadius: 2, overflow: "hidden" }}>
+                    <div
+                      style={{
+                        width: `${Math.round(selectedFile.classificationConfidence * 100)}%`,
+                        height: "100%",
+                        backgroundColor: "var(--status-success)",
+                      }}
+                    />
                   </div>
                 </div>
-
-                {/* Classification Confidence */}
-                {selectedFile.classificationConfidence !== undefined && (
-                  <div style={{ padding: "8px 10px", backgroundColor: "var(--bg-surface)", borderRadius: "var(--radius-sm)", border: "1px solid var(--border-subtle)", marginTop: 2 }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
-                      <span style={{ fontSize: 10, color: "var(--text-muted)" }}>Confidence Score</span>
-                      <span style={{ fontSize: 11, fontWeight: 700, color: "var(--status-success)" }}>
-                        {Math.round(selectedFile.classificationConfidence * 100)}%
-                      </span>
-                    </div>
-                    <div style={{ width: "100%", height: 4, backgroundColor: "var(--border-subtle)", borderRadius: 2, overflow: "hidden" }}>
-                      <div
-                        style={{
-                          width: `${Math.round(selectedFile.classificationConfidence * 100)}%`,
-                          height: "100%",
-                          backgroundColor: "var(--status-success)",
-                        }}
-                      />
-                    </div>
-                  </div>
-                )}
-              </div>
+              )}
 
               {/* Version History Lineage */}
               <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 4 }}>

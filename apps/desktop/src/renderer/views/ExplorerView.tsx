@@ -542,11 +542,11 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
                           </div>
                         </td>
                         <td className="col-type">
-                          <span className="type-badge folder-badge">Folder</span>
+                          <span className="cell-muted">File folder</span>
                         </td>
                         <td className="col-client">
                           <span className="client-subtext">
-                            {entry.projectCount ? `${entry.projectCount} Projects` : "Folder"}
+                            {entry.projectCount ? `${entry.projectCount} Projects` : "—"}
                           </span>
                         </td>
                         <td className="col-date">{entry.modifiedAt || "Yesterday"}</td>
@@ -555,7 +555,7 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
                         </td>
                         <td className="col-status" style={{ textAlign: "center" }}>
                           <span className="folder-pill">
-                            {entry.fileCount !== undefined ? `${entry.fileCount} files` : "Folder"}
+                            {entry.fileCount !== undefined ? `${entry.fileCount} items` : "—"}
                           </span>
                         </td>
                       </tr>
@@ -598,22 +598,22 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
                         </div>
                       </td>
                       <td className="col-type">
-                        <span className="type-badge file-badge">
+                        <span className="cell-muted">
                           {file.ext.toUpperCase()} File
                         </span>
                       </td>
                       <td className="col-client">
                         <span className="client-subtext" title={file.targetPath}>
                           {searchQuery
-                            ? file.targetPath || `${file.clientName} / ${file.projectName}`
+                            ? file.targetPath || file.clientName || "—"
                             : file.clientName
                             ? `${file.clientName} / ${file.projectName || "General"}`
-                            : "Unassigned"}
+                            : "—"}
                         </span>
                       </td>
                       <td className="col-date">{file.modifiedAt || "Today"}</td>
                       <td className="col-size" style={{ textAlign: "right" }}>
-                        {file.formattedSize || "24.6 MB"}
+                        {file.formattedSize || "—"}
                       </td>
                       <td className="col-status" style={{ textAlign: "center" }}>
                         <span className="version-tag-pill">

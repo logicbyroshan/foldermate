@@ -11,6 +11,7 @@ import {
   Lock,
   Globe,
   AlertCircle,
+  X,
 } from "lucide-react";
 import { Button } from "./ui/Button.js";
 import { Badge } from "./ui/Badge.js";
@@ -197,8 +198,8 @@ export const ActivationModal: React.FC<ActivationModalProps> = ({
               v1.0.0
             </Badge>
             {onClose && (
-              <Button variant="ghost" size="sm" onClick={onClose} style={{ padding: "4px 8px" }}>
-                ✕
+              <Button variant="ghost" size="sm" onClick={onClose} style={{ padding: "4px 8px" }} title="Close">
+                <X size={15} />
               </Button>
             )}
           </div>

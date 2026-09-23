@@ -31,6 +31,7 @@ import {
   FileCode,
   Check,
   CheckSquare,
+  X,
 } from "lucide-react";
 import { LicenseStatus } from "@foldermate/shared";
 import { ViewMode, BreadcrumbItem } from "../types/explorer.js";
@@ -806,8 +807,9 @@ export const ExplorerHeader: React.FC<ExplorerHeaderProps> = ({
               type="button"
               className="search-clear-btn"
               onClick={() => onSearchChange("")}
+              title="Clear search"
             >
-              ✕
+              <X size={12} />
             </button>
           )}
         </div>

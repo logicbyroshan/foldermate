@@ -29,35 +29,35 @@ export const Button: React.FC<ButtonProps> = ({
 
   const variantStyles: Record<string, React.CSSProperties> = {
     primary: {
-      backgroundColor: "var(--accent-amber)",
-      color: "var(--text-inverse)",
+      backgroundColor: "var(--brand-primary, #d97706)",
+      color: "#ffffff",
       fontWeight: 600,
-      border: "1px solid rgba(247, 199, 29, 0.5)",
-      boxShadow: "0 1px 0 rgba(0,0,0,0.2)",
+      border: "1px solid var(--brand-primary-strong, #b45309)",
+      boxShadow: "0 1px 2px rgba(0, 0, 0, 0.08)",
     },
     amber: {
-      backgroundColor: "var(--accent-amber-subtle)",
-      color: "var(--accent-amber-text)",
+      backgroundColor: "var(--accent-amber-subtle, #fef3c7)",
+      color: "var(--accent-amber-text, #92400e)",
       fontWeight: 600,
-      border: "1px solid rgba(247, 199, 29, 0.28)",
+      border: "1px solid rgba(217, 119, 6, 0.3)",
     },
     secondary: {
-      backgroundColor: "var(--bg-elevated)",
-      color: "var(--text-primary)",
+      backgroundColor: "var(--bg-elevated, #ffffff)",
+      color: "var(--text-primary, #0f172a)",
       fontWeight: 500,
-      border: "1px solid var(--border-subtle)",
+      border: "1px solid var(--border-medium, #cbd5e1)",
     },
     ghost: {
       backgroundColor: "transparent",
-      color: "var(--text-secondary)",
+      color: "var(--text-secondary, #334155)",
       fontWeight: 500,
       border: "1px solid transparent",
     },
     danger: {
-      backgroundColor: "var(--status-danger-bg)",
-      color: "var(--status-danger-text)",
-      fontWeight: 500,
-      border: "1px solid rgba(239, 68, 68, 0.28)",
+      backgroundColor: "var(--status-danger-bg, #fee2e2)",
+      color: "var(--status-danger-text, #b91c1c)",
+      fontWeight: 600,
+      border: "1px solid rgba(220, 38, 38, 0.28)",
     },
   };
 

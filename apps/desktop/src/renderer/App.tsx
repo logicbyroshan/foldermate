@@ -15,7 +15,7 @@ import { ActivationModal } from "./components/ActivationModal.js";
 import { DriveCustomizerModal } from "./components/DriveCustomizerModal.js";
 import { FolderCustomizerModal } from "./components/FolderCustomizerModal.js";
 import { DriveSearchModal } from "./components/DriveSearchModal.js";
-import { Folder, Plus } from "lucide-react";
+import { Folder, Plus, Minus, Square, X } from "lucide-react";
 
 import { NavView, ViewMode, ManagedDrive } from "./types/explorer.js";
 import { useNavigation } from "./hooks/useNavigation.js";
@@ -486,7 +486,7 @@ export const AppContent: React.FC = () => {
                     }}
                     title="Close tab (Ctrl+W)"
                   >
-                    ✕
+                    <X size={11} />
                   </button>
                 )}
               </div>
@@ -504,13 +504,13 @@ export const AppContent: React.FC = () => {
 
         <div className="win11-window-controls">
           <button type="button" className="win11-control-btn minimize" title="Minimize">
-            ─
+            <Minus size={13} />
           </button>
           <button type="button" className="win11-control-btn maximize" title="Maximize">
-            ▢
+            <Square size={10} />
           </button>
           <button type="button" className="win11-control-btn close" title="Close">
-            ✕
+            <X size={13} />
           </button>
         </div>
       </div>

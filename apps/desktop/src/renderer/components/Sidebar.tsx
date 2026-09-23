@@ -72,17 +72,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const [isQuickAccessExpanded, setIsQuickAccessExpanded] = useState(true);
   const [isThisPcExpanded, setIsThisPcExpanded] = useState(true);
 
-  const isHomeActive = currentView === "home" || currentView === "dashboard";
+  const isHomeActive = currentView === "home";
   const isInboxActive =
-    (currentView === "explorer" || currentView === "clients") &&
+    currentView === "explorer" &&
     currentPath.toLowerCase().includes("inbox");
   const isClientsRootActive =
-    (currentView === "explorer" || currentView === "clients") &&
+    currentView === "explorer" &&
     (currentPath.toLowerCase() === `${controlledDrive.letter.toLowerCase()}\\clients` ||
       currentPath.toLowerCase() === "clients" ||
       currentPath.toLowerCase() === `${controlledDrive.letter.toLowerCase()}\\clients\\`);
   const isArchiveActive =
-    (currentView === "explorer" || currentView === "clients") &&
+    currentView === "explorer" &&
     currentPath.toLowerCase().includes("archive");
   const isReviewActive = currentView === "review" || currentPath.toLowerCase().includes("review");
 
@@ -296,7 +296,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       <div className="win11-tree-subgroup level-3">
                         {clients.map((c) => {
                           const isClientActive =
-                            (currentView === "explorer" || currentView === "clients") &&
+                            currentView === "explorer" &&
                             currentPath.toLowerCase().includes(c.name.toLowerCase());
                           return (
                             <div

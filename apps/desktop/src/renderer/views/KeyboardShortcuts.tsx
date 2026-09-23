@@ -8,6 +8,7 @@ import {
   Sliders,
   Sparkles,
   Command,
+  X,
 } from "lucide-react";
 import { Badge } from "../components/ui/Badge.js";
 import { useToast } from "../components/ui/Toast.js";
@@ -445,7 +446,7 @@ export const KeyboardShortcuts: React.FC = () => {
                           onClick={() => setEditingId(null)}
                           title="Cancel editing"
                         >
-                          ✕
+                          <X size={14} />
                         </button>
                       </div>
                     ) : (

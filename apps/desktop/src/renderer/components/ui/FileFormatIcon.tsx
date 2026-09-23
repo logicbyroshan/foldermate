@@ -38,8 +38,8 @@ export const FileFormatIcon: React.FC<FileFormatIconProps> = ({
         xmlns="http://www.w3.org/2000/svg"
         className={`file-format-icon icon-cdr ${className}`}
         style={{ flexShrink: 0, ...style }}
-        title="CorelDRAW Vector Drawing (.cdr)"
       >
+        <title>CorelDRAW Vector Drawing (.cdr)</title>
         <rect x="2" y="2" width="28" height="28" rx="6" fill="#047857" />
         <rect x="3" y="3" width="26" height="26" rx="5" fill="#059669" />
         <path
@@ -76,8 +76,8 @@ export const FileFormatIcon: React.FC<FileFormatIconProps> = ({
         xmlns="http://www.w3.org/2000/svg"
         className={`file-format-icon icon-psd ${className}`}
         style={{ flexShrink: 0, ...style }}
-        title="Adobe Photoshop Document (.psd)"
       >
+        <title>Adobe Photoshop Document (.psd)</title>
         <rect x="2" y="2" width="28" height="28" rx="6" fill="#03254c" />
         <rect x="3" y="3" width="26" height="26" rx="5" fill="#001e36" stroke="#31a8ff" strokeWidth="1.5" />
         <text
@@ -107,8 +107,8 @@ export const FileFormatIcon: React.FC<FileFormatIconProps> = ({
         xmlns="http://www.w3.org/2000/svg"
         className={`file-format-icon icon-ai ${className}`}
         style={{ flexShrink: 0, ...style }}
-        title="Adobe Illustrator Artwork (.ai)"
       >
+        <title>Adobe Illustrator Artwork (.ai)</title>
         <rect x="2" y="2" width="28" height="28" rx="6" fill="#331400" />
         <rect x="3" y="3" width="26" height="26" rx="5" fill="#260f00" stroke="#ff9a00" strokeWidth="1.5" />
         <text
@@ -138,8 +138,8 @@ export const FileFormatIcon: React.FC<FileFormatIconProps> = ({
         xmlns="http://www.w3.org/2000/svg"
         className={`file-format-icon icon-indd ${className}`}
         style={{ flexShrink: 0, ...style }}
-        title="Adobe InDesign Document (.indd)"
       >
+        <title>Adobe InDesign Document (.indd)</title>
         <rect x="2" y="2" width="28" height="28" rx="6" fill="#49021f" />
         <rect x="3" y="3" width="26" height="26" rx="5" fill="#2b0012" stroke="#ff3366" strokeWidth="1.5" />
         <text
@@ -169,8 +169,8 @@ export const FileFormatIcon: React.FC<FileFormatIconProps> = ({
         xmlns="http://www.w3.org/2000/svg"
         className={`file-format-icon icon-pdf ${className}`}
         style={{ flexShrink: 0, ...style }}
-        title="Portable Document Format (.pdf)"
       >
+        <title>Portable Document Format (.pdf)</title>
         <path d="M5 4C5 2.89543 5.89543 2 7 2H20L27 9V28C27 29.1046 26.1046 30 25 30H7C5.89543 30 5 29.1046 5 28V4Z" fill="#dc2626" />
         <path d="M20 2V9H27L20 2Z" fill="#b91c1c" />
         <rect x="3" y="16" width="26" height="11" rx="3" fill="#ffffff" />
@@ -201,8 +201,8 @@ export const FileFormatIcon: React.FC<FileFormatIconProps> = ({
         xmlns="http://www.w3.org/2000/svg"
         className={`file-format-icon icon-eps ${className}`}
         style={{ flexShrink: 0, ...style }}
-        title="Encapsulated PostScript (.eps)"
       >
+        <title>Encapsulated PostScript (.eps)</title>
         <rect x="2" y="2" width="28" height="28" rx="6" fill="#be185d" />
         <rect x="3" y="3" width="26" height="26" rx="5" fill="#9d174d" stroke="#f472b6" strokeWidth="1" />
         <text
@@ -232,8 +232,8 @@ export const FileFormatIcon: React.FC<FileFormatIconProps> = ({
         xmlns="http://www.w3.org/2000/svg"
         className={`file-format-icon icon-img ${className}`}
         style={{ flexShrink: 0, ...style }}
-        title={`Image file (.${ext})`}
       >
+        <title>{`Image file (.${ext})`}</title>
         <path d="M5 4C5 2.89543 5.89543 2 7 2H20L27 9V28C27 29.1046 26.1046 30 25 30H7C5.89543 30 5 29.1046 5 28V4Z" fill="#0284c7" />
         <path d="M20 2V9H27L20 2Z" fill="#0369a1" />
         <circle cx="11" cy="14" r="2.5" fill="#fef08a" />
@@ -264,8 +264,8 @@ export const FileFormatIcon: React.FC<FileFormatIconProps> = ({
         xmlns="http://www.w3.org/2000/svg"
         className={`file-format-icon icon-excel ${className}`}
         style={{ flexShrink: 0, ...style }}
-        title={`Spreadsheet file (.${ext})`}
       >
+        <title>{`Spreadsheet file (.${ext})`}</title>
         <path d="M5 4C5 2.89543 5.89543 2 7 2H20L27 9V28C27 29.1046 26.1046 30 25 30H7C5.89543 30 5 29.1046 5 28V4Z" fill="#15803d" />
         <path d="M20 2V9H27L20 2Z" fill="#166534" />
         <rect x="3" y="16" width="26" height="11" rx="3" fill="#ffffff" />
@@ -295,8 +295,8 @@ export const FileFormatIcon: React.FC<FileFormatIconProps> = ({
         xmlns="http://www.w3.org/2000/svg"
         className={`file-format-icon icon-word ${className}`}
         style={{ flexShrink: 0, ...style }}
-        title={`Word document (.${ext})`}
       >
+        <title>{`Word document (.${ext})`}</title>
         <path d="M5 4C5 2.89543 5.89543 2 7 2H20L27 9V28C27 29.1046 26.1046 30 25 30H7C5.89543 30 5 29.1046 5 28V4Z" fill="#1d4ed8" />
         <path d="M20 2V9H27L20 2Z" fill="#1e40af" />
         <rect x="3" y="16" width="26" height="11" rx="3" fill="#ffffff" />
@@ -326,8 +326,8 @@ export const FileFormatIcon: React.FC<FileFormatIconProps> = ({
         xmlns="http://www.w3.org/2000/svg"
         className={`file-format-icon icon-zip ${className}`}
         style={{ flexShrink: 0, ...style }}
-        title={`Archive (.${ext})`}
       >
+        <title>{`Archive (.${ext})`}</title>
         <path d="M5 4C5 2.89543 5.89543 2 7 2H20L27 9V28C27 29.1046 26.1046 30 25 30H7C5.89543 30 5 29.1046 5 28V4Z" fill="#7c3aed" />
         <path d="M20 2V9H27L20 2Z" fill="#6d28d9" />
         <rect x="14" y="6" width="4" height="2" fill="#ede9fe" />
@@ -348,8 +348,8 @@ export const FileFormatIcon: React.FC<FileFormatIconProps> = ({
       xmlns="http://www.w3.org/2000/svg"
       className={`file-format-icon icon-generic ${className}`}
       style={{ flexShrink: 0, ...style }}
-      title={`File (.${ext})`}
     >
+      <title>{`File (.${ext})`}</title>
       <path d="M5 4C5 2.89543 5.89543 2 7 2H20L27 9V28C27 29.1046 26.1046 30 25 30H7C5.89543 30 5 29.1046 5 28V4Z" fill="#f8fafc" stroke="#cbd5e1" strokeWidth="1.5" />
       <path d="M20 2V9H27L20 2Z" fill="#e2e8f0" stroke="#cbd5e1" strokeWidth="1" />
       <line x1="9" y1="14" x2="23" y2="14" stroke="#94a3b8" strokeWidth="1.5" strokeLinecap="round" />

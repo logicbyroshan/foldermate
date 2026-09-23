@@ -51,7 +51,7 @@ export interface FolderVisualIconProps {
   isOpen?: boolean;
 }
 
-export const EMBLEM_ICON_MAP: Record<string, React.ComponentType<{ size: number; color?: string }>> = {
+export const EMBLEM_ICON_MAP: Record<string, React.ComponentType<{ size?: number | string; color?: string }>> = {
   star: Star,
   client: User,
   briefcase: Briefcase,
@@ -179,7 +179,7 @@ export type DriveEmblem =
   | "lock"
   | "zap";
 
-export const DRIVE_EMBLEM_MAP: Record<string, React.ComponentType<{ size: number; color?: string }>> = {
+export const DRIVE_EMBLEM_MAP: Record<string, React.ComponentType<{ size?: number | string; color?: string }>> = {
   "hard-drive": HardDrive,
   database: Database,
   server: Server,

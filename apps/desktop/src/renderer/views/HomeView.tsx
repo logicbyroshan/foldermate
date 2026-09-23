@@ -234,7 +234,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                     </span>
                   </td>
                   <td className="td-size" style={{ textAlign: "right" }}>
-                    {file.formattedSize || "24.6 MB"}
+                    {file.formattedSize || (file.sizeBytes ? `${(file.sizeBytes / (1024 * 1024)).toFixed(1)} MB` : "—")}
                   </td>
                   <td className="td-path">
                     <span className="file-location-path">

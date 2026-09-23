@@ -409,7 +409,7 @@ export const Search: React.FC = () => {
                 formattedSize={
                   selectedFile.fileSizeBytes
                     ? `${(selectedFile.fileSizeBytes / (1024 * 1024)).toFixed(1)} MB`
-                    : "24.6 MB"
+                    : "—"
                 }
                 sizeBytes={selectedFile.fileSizeBytes}
                 modifiedAt={selectedFile.modifiedAt}

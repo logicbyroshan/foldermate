@@ -618,8 +618,48 @@ Testing performed:
   - Verified search and selecting a file opens the Preview Pane with CorelDRAW vector ID card preview (`preview_pane_open_1790162644140.png`).
   - Verified Command Palette opens with updated clean commands (`command_palette_1790162736581.png`).
   - Confirmed 0 visual regressions and 0 console errors.
+### UI/UX Contrast & Styling Polish, Text Overflow Prevention & Redundant Info Elimination
+Task: Resolve low-contrast buttons/dropdowns, remove dark/black artifacts, fix table row hover greyness, eliminate redundant/fake information cards, prevent text leaking across components, and synchronize Command Bar sorting.
+Reason: The user identified recurring contrast issues (white text on amber, black dropdown artifacts), harsh grey table row hover, redundant metadata repeating table columns in panels and dropdowns, inaccurate cards with hardcoded fallbacks (e.g. 24.6 MB, 15.4 MB, D:\Clients), and text leaking out of containers.
+Files/areas affected:
+- `apps/desktop/src/renderer/components/ui/Button.tsx`
+- `apps/desktop/src/renderer/components/ui/FilePreviewCanvas.tsx`
+- `apps/desktop/src/renderer/components/ExplorerHeader.tsx`
+- `apps/desktop/src/renderer/components/InspectorPanel.tsx`
+- `apps/desktop/src/renderer/views/ExplorerView.tsx`
+- `apps/desktop/src/renderer/views/HomeView.tsx`
+- `apps/desktop/src/renderer/views/ReviewQueue.tsx`
+- `apps/desktop/src/renderer/views/Search.tsx`
+- `apps/desktop/src/renderer/App.tsx`
+- `apps/desktop/src/renderer/index.css`
+- `CHANGELOG.md`
+- `.agent-memory/CURRENT_STATE.md`
+- `.agent-memory/TASK_HISTORY.md`
+What changed:
+- **Button & Dropdown Contrast**:
+  - Refined `--brand-primary` to `#d97706` with clean `#ffffff` text and `#b45309` border in `Button.tsx`, achieving full WCAG AA contrast compliance.
+  - Enhanced native `<select>` and `.select-input` with a custom SVG chevron icon, 28px right padding, and pure white `<option>` backgrounds with dark text, eliminating native browser dark/grey dropdown artifacts.
+- **Table Hover Greyness**:
+  - Replaced dark `#f1f5f9` hover with subtle, luminous Windows 11 Fluent tint `rgba(2, 132, 199, 0.04)` across Details view (`ExplorerView.tsx`), Recent files (`HomeView.tsx`), Review Queue (`ReviewQueue.tsx`), and Tree Navigation (`Sidebar.tsx`).
+- **Elimination of Repetitive Information & Badges**:
+  - Removed 4 redundant metadata cards from `Search.tsx` (Client Name, Project Scope, Year Scope, File Size) that duplicated table rows.
+  - Removed 5 redundant metadata rows from `InspectorPanel.tsx` that duplicated table columns, replacing them with a focused Storage Location / Path inspector.
+  - Removed triple-repetition of "Folder" in `ExplorerView.tsx` columns (now displaying clean Explorer muted type text and stats).
+  - Removed duplicate confidence badge from `ReviewQueue.tsx` inspector header.
+  - Cleaned up client select dropdown in `ReviewQueue.tsx` to prevent redundant `Apex Healthcare (Apex Healthcare)` text.
+- **Accurate Information & Fake Value Removal**:
+  - Eliminated fake `"24.6 MB"` fallback across `FilePreviewCanvas.tsx`, `InspectorPanel.tsx`, `Search.tsx`, and `HomeView.tsx`, computing actual size dynamically from `sizeBytes` or falling back to a safe dash `"—"`.
+  - Removed fake `"15.4 MB"` fallback from `ReviewQueue.tsx`.
+  - Replaced rigid hardcoded `D:\Clients\...` target path previews with dynamic relative destinations.
+- **Text Overflow & Leaking Prevention**:
+  - Applied `min-width: 0`, `overflow: hidden`, `text-overflow: ellipsis`, and `word-break: break-all` across `.file-entry-cell`, `.file-entry-label`, `.file-location-path`, and `.target-path-preview`.
+- **Command Bar Sorting Synchronization**:
+  - Connected the Command Bar "Sort by" dropdown in `ExplorerHeader.tsx` to active sort state and callbacks, dynamically rendering checkmark indicators for `Name`, `Date modified`, `Type`, and `Size`.
+Testing performed:
+- `npm run build`: All packages (`@foldermate/desktop`, `@foldermate/engine`, `@foldermate/config`, `@foldermate/database`, `@foldermate/shared`, `@foldermate/landing`) compiled with 0 errors.
+- `npm test`: All 40 unit and integration tests passed across 13 test suites.
 Important decisions:
-- Deleting obsolete views (`Dashboard.tsx`, `Clients.tsx`) reduces cognitive overhead and prevents bundle bloat while ensuring the desktop shell strictly follows the Windows File Explorer mental model.
-- Decoupling API calls and domain mapping into `services/` and `hooks/` provides clean testability and maximum reusability.
+- Removing redundant cards from inspector panels declutters the interface and keeps the user focused on actionable details (preview, actions, path, and version lineage) without repeating what is already displayed in the main table.
+- Using a high-contrast amber tone (`#d97706`) preserves FolderMate's signature amber brand identity while guaranteeing WCAG AA accessibility standards.
 
 

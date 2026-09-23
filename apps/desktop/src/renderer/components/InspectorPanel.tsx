@@ -136,7 +136,7 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
                     <GitBranch size={11} />
                     <span>Version v{selectedItem.versionNumber || 1}</span>
                     <span className="dot-sep">•</span>
-                    <span>{selectedItem.formattedSize || "24.6 MB"}</span>
+                    <span>{selectedItem.formattedSize || (selectedItem.sizeBytes ? `${(selectedItem.sizeBytes / (1024 * 1024)).toFixed(1)} MB` : "—")}</span>
                   </div>
                 </div>
               </div>
@@ -187,28 +187,14 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
                 </button>
               </div>
 
-              {/* Metadata Table */}
+              {/* Storage Location */}
               <div className="inspector-meta-group">
-                <div className="inspector-meta-heading">Metadata &amp; Lineage</div>
-                <div className="inspector-meta-row">
-                  <span className="meta-key"><User size={13} /> Client</span>
-                  <span className="meta-val">{selectedItem.clientName || "Unassigned"}</span>
-                </div>
-                <div className="inspector-meta-row">
-                  <span className="meta-key"><Layers size={13} /> Project</span>
-                  <span className="meta-val">{selectedItem.projectName || "General"}</span>
-                </div>
-                <div className="inspector-meta-row">
-                  <span className="meta-key"><Calendar size={13} /> Year</span>
-                  <span className="meta-val">{selectedItem.year || new Date().getFullYear()}</span>
-                </div>
-                <div className="inspector-meta-row">
-                  <span className="meta-key"><HardDrive size={13} /> Size</span>
-                  <span className="meta-val">{selectedItem.formattedSize || "N/A"}</span>
-                </div>
-                <div className="inspector-meta-row">
-                  <span className="meta-key"><Clock size={13} /> Modified</span>
-                  <span className="meta-val">{selectedItem.modifiedAt || "Today"}</span>
+                <div className="inspector-meta-heading">Storage Location</div>
+                <div className="inspector-meta-row" style={{ flexDirection: "column", alignItems: "flex-start", gap: 4 }}>
+                  <span className="meta-key"><Folder size={12} /> Target Path</span>
+                  <code className="meta-val code-font" style={{ fontSize: 11, wordBreak: "break-all", textAlign: "left", whiteSpace: "normal" }}>
+                    {selectedItem.targetPath || (selectedItem.clientName ? `Clients\\${selectedItem.clientName}` : "Inbox")}
+                  </code>
                 </div>
               </div>
 

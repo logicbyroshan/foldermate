@@ -10,6 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **UI/UX Polish, High-Contrast Theming, Text Overflow Prevention & Redundant Info Elimination**:
+  - **High-Contrast Primary Buttons & Form Selects**: Redefined `--brand-primary` to `#d97706` with pure `#ffffff` text and `#b45309` border, exceeding WCAG AA standards. Enhanced `.select-input` with custom SVG chevron arrow, proper right padding, and clean light-mode options, removing harsh native browser dropdown boxes.
+  - **Table Hover Greyness Elimination**: Replaced dark `#f1f5f9` table row hover backgrounds with subtle, luminous Windows 11 Fluent tint `rgba(2, 132, 199, 0.04)` across Details view, Home recent files, Review Queue, and Sidebar navigation tree.
+  - **Elimination of Repetitive Information & Badges**: Removed duplicate metadata cards in `Search.tsx` and `InspectorPanel.tsx` that repeated client, project, year, size, and modified date already shown in the table. Removed triple-repeated "Folder" badges in `ExplorerView.tsx` and redundant confidence tags in `ReviewQueue.tsx`.
+  - **Accurate Information & Fake Metric Removal**: Eliminated hardcoded `"24.6 MB"` and `"15.4 MB"` fallback strings across `FilePreviewCanvas.tsx`, `InspectorPanel.tsx`, `Search.tsx`, and `HomeView.tsx`, computing actual size dynamically or falling back to safe dashes. Replaced hardcoded `D:\Clients\...` target paths with dynamic relative paths.
+  - **Text Overflow & Leaking Prevention**: Hardened table cells, filenames, and directory paths across the project with `min-width: 0`, `overflow: hidden`, `text-overflow: ellipsis`, and `word-break: break-all` (`.file-entry-cell`, `.file-entry-label`, `.file-location-path`, `.target-path-preview`).
+  - **Interactive Command Bar Sorting**: Synchronized the Command Bar "Sort by" dropdown menu with the active table sort state (`Name`, `Date modified`, `Type`, `Size`) with dynamic checkmark indicators.
 - **Architecture Refactoring, Dead Code Removal & Modular Service Separation**:
   - **Dead Code Elimination**: Deleted obsolete legacy views (`Dashboard.tsx`, `Clients.tsx`, `TopBar.tsx`, `CorelStatusWidget.tsx`) from earlier iterations. Streamlined `CommandPalette.tsx` to align navigation actions with active views.
   - **Domain Types Layer**: Added `types/explorer.ts` containing canonical definitions for `NavView`, `ViewMode`, `ExplorerFolderEntry`, `ExplorerFileEntry`, `ExplorerEntry`, `BreadcrumbItem`, `ExplorerTab`, and `ManagedDrive`.

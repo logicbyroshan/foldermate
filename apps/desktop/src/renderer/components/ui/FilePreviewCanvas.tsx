@@ -35,7 +35,7 @@ export const FilePreviewCanvas: React.FC<FilePreviewCanvasProps> = ({
   projectName = "Design Deliverable",
   year = 2026,
   versionNumber = 1,
-  formattedSize = "24.6 MB",
+  formattedSize = "—",
   sizeBytes,
   modifiedAt = "Today",
   targetPath,

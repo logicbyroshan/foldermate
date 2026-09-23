@@ -47,6 +47,8 @@ interface ExplorerViewProps {
   onRefresh?: () => void;
   onShowInFolder?: (path: string) => void;
   onFolderAppearance?: (folder: ExplorerFolderEntry) => void;
+  sortField?: SortField;
+  onSortBy?: (field: SortField) => void;
 }
 
 type SortField = "name" | "type" | "modifiedAt" | "size";
@@ -81,13 +83,16 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
   onRefresh,
   onShowInFolder,
   onFolderAppearance,
+  sortField: externalSortField,
+  onSortBy,
 }) => {
   const { addToast } = useToast();
   const containerRef = useRef<HTMLDivElement>(null);
   const renameInputRef = useRef<HTMLInputElement>(null);
 
   // Sorting State
-  const [sortField, setSortField] = useState<SortField>("name");
+  const [internalSortField, setInternalSortField] = useState<SortField>("name");
+  const sortField = externalSortField !== undefined ? externalSortField : internalSortField;
   const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
 
   // Multi-Selection State (Set of Entry IDs)
@@ -107,10 +112,11 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
   });
 
   const handleSort = (field: SortField) => {
+    onSortBy?.(field);
     if (sortField === field) {
       setSortDirection(sortDirection === "asc" ? "desc" : "asc");
     } else {
-      setSortField(field);
+      setInternalSortField(field);
       setSortDirection("asc");
     }
   };

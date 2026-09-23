@@ -13,3 +13,4 @@ export * from "./CommandPalette.js";
 export * from "./FileFormatIcon.js";
 export * from "./FolderVisualIcon.js";
 export * from "./FilePreviewCanvas.js";
+export * from "./FileThumbnailCard.js";

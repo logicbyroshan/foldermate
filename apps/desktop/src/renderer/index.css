@@ -374,7 +374,7 @@ kbd {
 }
 
 .win11-tree-row:hover {
-  background-color: rgba(2, 132, 199, 0.05);
+  background-color: var(--bg-hover);
   color: var(--text-primary);
 }
 
@@ -382,6 +382,8 @@ kbd {
   background-color: var(--accent-amber-subtle, #fef3c7);
   color: var(--accent-amber-text, #92400e);
   font-weight: 600;
+  border-left: 3px solid var(--brand-primary, #d97706);
+  padding-left: 5px;
 }
 
 .win11-tree-row.selected-parent {
@@ -532,27 +534,38 @@ kbd {
   height: 32px;
   padding: 0 10px;
   border-radius: 5px;
-  border: none;
+  border: 1px solid transparent;
   background: transparent;
   color: var(--text-primary);
   font-size: 12.5px;
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.1s;
+  transition: all 0.1s ease;
 }
 
 .win11-btn:hover {
   background-color: var(--bg-hover);
+  border-color: var(--border-subtle);
 }
 
 .win11-btn.primary-new-btn {
   font-weight: 600;
+  background-color: var(--brand-primary);
+  color: #ffffff;
+  border-color: var(--brand-primary-strong);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.win11-btn.primary-new-btn:hover {
+  background-color: var(--brand-primary-strong);
+  border-color: var(--brand-primary-strong);
 }
 
 .win11-btn.active-pane {
   background-color: var(--accent-amber-subtle, #fef3c7);
   color: var(--accent-amber-text, #92400e);
   font-weight: 600;
+  border-color: rgba(217, 119, 6, 0.3);
 }
 
 .win11-btn.right-btn {
@@ -566,15 +579,16 @@ kbd {
   align-items: center;
   justify-content: center;
   border-radius: 5px;
-  border: none;
+  border: 1px solid transparent;
   background: transparent;
   color: var(--text-primary);
   cursor: pointer;
-  transition: background 0.1s;
+  transition: all 0.1s ease;
 }
 
 .win11-icon-btn:hover:not(:disabled) {
   background-color: var(--bg-hover);
+  border-color: var(--border-subtle);
 }
 
 .win11-icon-btn:disabled {
@@ -625,10 +639,12 @@ kbd {
   cursor: pointer;
   text-align: left;
   width: 100%;
+  transition: background-color 0.08s ease;
 }
 
 .win11-dropdown-item:hover {
-  background-color: rgba(2, 132, 199, 0.06);
+  background-color: var(--bg-hover);
+  color: var(--text-primary);
 }
 
 .win11-dropdown-item.active {

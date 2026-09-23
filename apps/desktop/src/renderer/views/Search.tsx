@@ -511,7 +511,7 @@ export const Search: React.FC = () => {
                         {Math.round(selectedFile.classificationConfidence * 100)}%
                       </span>
                     </div>
-                    <div style={{ width: "100%", height: 4, backgroundColor: "rgba(255,255,255,0.06)", borderRadius: 2, overflow: "hidden" }}>
+                    <div style={{ width: "100%", height: 4, backgroundColor: "var(--border-subtle)", borderRadius: 2, overflow: "hidden" }}>
                       <div
                         style={{
                           width: `${Math.round(selectedFile.classificationConfidence * 100)}%`,

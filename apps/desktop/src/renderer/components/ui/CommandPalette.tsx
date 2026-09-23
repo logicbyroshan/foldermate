@@ -151,8 +151,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         alignItems: "flex-start",
         justifyContent: "center",
         paddingTop: "14vh",
-        backgroundColor: "rgba(0, 0, 0, 0.75)",
-        backdropFilter: "blur(6px)",
+        backgroundColor: "rgba(15, 23, 42, 0.45)",
+        backdropFilter: "blur(4px)",
       }}
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
@@ -163,9 +163,10 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         style={{
           width: "100%",
           maxWidth: 540,
-          backgroundColor: "var(--bg-surface)",
+          backgroundColor: "var(--bg-elevated)",
           border: "1px solid var(--border-medium)",
-          boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.7)",
+          boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05)",
+          borderRadius: "var(--radius-lg)",
           display: "flex",
           flexDirection: "column",
           overflow: "hidden",

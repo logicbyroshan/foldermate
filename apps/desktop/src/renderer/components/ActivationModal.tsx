@@ -30,7 +30,7 @@ export const ActivationModal: React.FC<ActivationModalProps> = ({
   isOpen,
   onActivated,
   onClose,
-  isClosable = false,
+  isClosable = true,
 }) => {
   const { showToast } = useToast();
   const [inputKey, setInputKey] = useState("");
@@ -132,9 +132,9 @@ export const ActivationModal: React.FC<ActivationModalProps> = ({
       style={{
         position: "fixed",
         inset: 0,
-        backgroundColor: "rgba(3, 7, 18, 0.85)",
-        backdropFilter: "blur(14px)",
-        WebkitBackdropFilter: "blur(14px)",
+        backgroundColor: "rgba(15, 23, 42, 0.45)",
+        backdropFilter: "blur(6px)",
+        WebkitBackdropFilter: "blur(6px)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -146,10 +146,10 @@ export const ActivationModal: React.FC<ActivationModalProps> = ({
         style={{
           width: "100%",
           maxWidth: 620,
-          backgroundColor: "var(--bg-surface)",
+          backgroundColor: "var(--bg-elevated)",
           border: "1px solid var(--border-medium)",
-          borderRadius: 14,
-          boxShadow: "0 25px 60px -12px rgba(0, 0, 0, 0.8), 0 0 40px 0 rgba(247, 199, 29, 0.12)",
+          borderRadius: 12,
+          boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05)",
           overflow: "hidden",
           display: "flex",
           flexDirection: "column",
@@ -164,7 +164,7 @@ export const ActivationModal: React.FC<ActivationModalProps> = ({
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            background: "linear-gradient(180deg, rgba(23, 33, 54, 0.8), rgba(16, 24, 39, 0.6))",
+            background: "var(--bg-surface)",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -177,7 +177,7 @@ export const ActivationModal: React.FC<ActivationModalProps> = ({
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                border: "1px solid var(--border-focus)",
+                border: "1px solid var(--border-medium)",
               }}
             >
               <img src="/logo.png?v=2" alt="Logo" style={{ width: 24, height: 24, objectFit: "contain" }} />
@@ -196,7 +196,7 @@ export const ActivationModal: React.FC<ActivationModalProps> = ({
             <Badge variant="amber" size="sm">
               v1.0.0
             </Badge>
-            {isClosable && onClose && (
+            {onClose && (
               <Button variant="ghost" size="sm" onClick={onClose} style={{ padding: "4px 8px" }}>
                 ✕
               </Button>
@@ -382,12 +382,12 @@ export const ActivationModal: React.FC<ActivationModalProps> = ({
                 </Button>
               </div>
 
-              {/* Option 2: Sponsor / VIP */}
+              {/* Option 2: Sponsor / Supporter */}
               <div
                 style={{
                   padding: "14px 14px",
-                  backgroundColor: "rgba(247, 199, 29, 0.04)",
-                  border: "1px solid var(--border-focus)",
+                  backgroundColor: "var(--bg-canvas)",
+                  border: "1px solid var(--border-medium)",
                   borderRadius: 10,
                   display: "flex",
                   flexDirection: "column",
@@ -398,12 +398,12 @@ export const ActivationModal: React.FC<ActivationModalProps> = ({
                 <div>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
                     <Badge variant="amber" size="sm">
-                      ⭐ VIP Supporter
+                      Supporter
                     </Badge>
                     <Heart size={14} color="#f43f5e" fill="#f43f5e" />
                   </div>
-                  <div style={{ fontSize: 13, fontWeight: 700, color: "var(--accent-amber-text)", marginBottom: 3 }}>
-                    Sponsor / Superchat
+                  <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)", marginBottom: 3 }}>
+                    Project Supporter
                   </div>
                   <div style={{ fontSize: 11, color: "var(--text-muted)", lineHeight: 1.4 }}>
                     Support project development and get a universal lifetime reusable key for all machines.
@@ -417,7 +417,7 @@ export const ActivationModal: React.FC<ActivationModalProps> = ({
                   onClick={handleOpenSponsorPortal}
                   style={{ width: "100%", justifyContent: "center" }}
                 >
-                  Sponsor Portal 💖
+                  Support Project
                 </Button>
               </div>
             </div>
@@ -426,15 +426,15 @@ export const ActivationModal: React.FC<ActivationModalProps> = ({
           {/* Offline Security Footer Note */}
           <div
             style={{
-              padding: "8px 12px",
-              backgroundColor: "rgba(255, 255, 255, 0.02)",
+              padding: "10px 14px",
+              backgroundColor: "var(--bg-canvas)",
               borderRadius: 6,
               border: "1px solid var(--border-subtle)",
               display: "flex",
               alignItems: "center",
               gap: 8,
               fontSize: 11,
-              color: "var(--text-muted)",
+              color: "var(--text-secondary)",
             }}
           >
             <Lock size={13} color="var(--status-success)" style={{ flexShrink: 0 }} />

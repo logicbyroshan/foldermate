@@ -17,6 +17,8 @@ import {
   Sparkles,
   Info,
   Check,
+  LayoutList,
+  LayoutGrid,
 } from "lucide-react";
 import { SelectedItem, SelectedFileItem, SelectedFolderItem } from "../components/InspectorPanel.js";
 import { ViewMode } from "../components/ExplorerHeader.js";
@@ -779,13 +781,24 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
         </div>
 
         <div className="status-bar-section">
-          <span style={{ fontSize: 11, color: "var(--text-muted)" }}>
-            Ctrl + Wheel to Scale Views
-          </span>
-          <span className="status-bar-divider" />
-          <span style={{ color: "var(--status-success-text)", fontWeight: 600 }}>
-            ● SQLite WAL Active
-          </span>
+          <button
+            type="button"
+            className={`win11-icon-btn ${viewMode === "details" ? "active" : ""}`}
+            style={{ width: 24, height: 24 }}
+            onClick={() => onChangeViewMode?.("details")}
+            title="Details view (Ctrl+1)"
+          >
+            <LayoutList size={13} />
+          </button>
+          <button
+            type="button"
+            className={`win11-icon-btn ${viewMode === "large-icons" ? "active" : ""}`}
+            style={{ width: 24, height: 24 }}
+            onClick={() => onChangeViewMode?.("large-icons")}
+            title="Large icons view (Ctrl+5)"
+          >
+            <LayoutGrid size={13} />
+          </button>
         </div>
       </footer>
 

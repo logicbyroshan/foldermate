@@ -1,55 +1,56 @@
-:root {
-  /* Brand Palette - FolderMate signature yellow-gold */
-  --brand-primary: #f7c71d;
-  --brand-primary-strong: #f5b000;
-  --brand-primary-soft: #fff0a8;
-  --brand-primary-glow: rgba(247, 199, 29, 0.28);
-  --brand-secondary: #f1a90a;
+:root,
+[data-theme="light"] {
+  /* Brand Palette - FolderMate signature gold */
+  --brand-primary: #d97706;
+  --brand-primary-strong: #b45309;
+  --brand-primary-soft: #fef3c7;
+  --brand-primary-glow: rgba(217, 119, 6, 0.2);
+  --brand-secondary: #f59e0b;
 
-  /* Surface & Canvas Palette (Windows 11 Dark Acrylic / Mica Inspired) */
-  --bg-canvas: #090d16;
-  --bg-surface: #0e1524;
-  --bg-elevated: #141e33;
-  --bg-card: rgba(16, 24, 40, 0.94);
-  --bg-hover: rgba(255, 255, 255, 0.05);
-  --bg-active: rgba(255, 255, 255, 0.09);
-  --bg-selected: rgba(247, 199, 29, 0.14);
+  /* Surface & Canvas Palette (Windows 11 Clean Pure White Fluent Explorer) */
+  --bg-canvas: #ffffff;
+  --bg-surface: #f8fafc;
+  --bg-elevated: #ffffff;
+  --bg-card: #ffffff;
+  --bg-hover: #f1f5f9;
+  --bg-active: #e2e8f0;
+  --bg-selected: #e0f2fe;
 
   /* Borders */
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-medium: rgba(255, 255, 255, 0.15);
-  --border-focus: rgba(247, 199, 29, 0.7);
+  --border-subtle: #e2e8f0;
+  --border-medium: #cbd5e1;
+  --border-focus: #0284c7;
 
-  /* Primary Accent: FolderMate Brand Gold */
-  --accent-amber: var(--brand-primary);
-  --accent-amber-hover: var(--brand-secondary);
-  --accent-amber-active: #d79500;
-  --accent-amber-subtle: rgba(247, 199, 29, 0.12);
-  --accent-amber-glow: var(--brand-primary-glow);
-  --accent-amber-text: #ffe782;
+  /* Primary Accent: Folder Amber */
+  --accent-amber: #f59e0b;
+  --accent-amber-hover: #d97706;
+  --accent-amber-active: #b45309;
+  --accent-amber-subtle: #fef3c7;
+  --accent-amber-glow: rgba(245, 158, 11, 0.15);
+  --accent-amber-text: #92400e;
 
   /* Semantic Status Colors */
-  --status-success: #10b981;
-  --status-success-bg: rgba(16, 185, 129, 0.12);
-  --status-success-text: #34d399;
+  --status-success: #16a34a;
+  --status-success-bg: #dcfce7;
+  --status-success-text: #15803d;
 
-  --status-warning: var(--brand-primary);
-  --status-warning-bg: rgba(247, 199, 29, 0.12);
-  --status-warning-text: #ffe782;
+  --status-warning: #d97706;
+  --status-warning-bg: #fef3c7;
+  --status-warning-text: #b45309;
 
-  --status-danger: #ef4444;
-  --status-danger-bg: rgba(239, 68, 68, 0.12);
-  --status-danger-text: #f87171;
+  --status-danger: #dc2626;
+  --status-danger-bg: #fee2e2;
+  --status-danger-text: #b91c1c;
 
-  --status-info: #3b82f6;
-  --status-info-bg: rgba(59, 130, 246, 0.12);
-  --status-info-text: #60a5fa;
+  --status-info: #0284c7;
+  --status-info-bg: #e0f2fe;
+  --status-info-text: #0369a1;
 
-  /* Typography Colors */
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-muted: #526075;
-  --text-inverse: #0f172a;
+  /* Typography Colors - High Contrast Dark on White */
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  --text-inverse: #ffffff;
 
   /* Spacing scale */
   --space-1: 4px;
@@ -70,62 +71,31 @@
   font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
   font-size: 14px;
   line-height: 1.5;
-  color-scheme: dark;
+  color-scheme: light;
 
   /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.65);
-  --shadow-amber: 0 4px 18px rgba(247, 199, 29, 0.22);
-}
-
-/* Light Theme (Windows 11 Native Clean Explorer Mode) */
-[data-theme="light"] {
-  --bg-canvas: #f3f3f3;
-  --bg-surface: #fafafa;
-  --bg-elevated: #ffffff;
-  --bg-card: #ffffff;
-  --bg-hover: rgba(0, 0, 0, 0.04);
-  --bg-active: rgba(0, 0, 0, 0.08);
-  --bg-selected: rgba(245, 176, 0, 0.18);
-
-  --border-subtle: rgba(0, 0, 0, 0.09);
-  --border-medium: rgba(0, 0, 0, 0.18);
-  --border-focus: rgba(217, 130, 0, 0.8);
-
-  --text-primary: #111827;
-  --text-secondary: #4b5563;
-  --text-muted: #6b7280;
-  --text-inverse: #ffffff;
-
-  --accent-amber-text: #92400e;
-  --accent-amber-subtle: rgba(245, 176, 0, 0.14);
-
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 3px 8px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.14);
-  --shadow-amber: 0 4px 14px rgba(217, 130, 0, 0.18);
-  color-scheme: light;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+  --shadow-amber: 0 4px 14px rgba(245, 158, 11, 0.15);
 }
 
 [data-theme="dark"] {
-  --bg-canvas: #090d16;
-  --bg-surface: #0e1524;
-  --bg-elevated: #141e33;
-  --bg-card: rgba(16, 24, 40, 0.94);
-  --bg-hover: rgba(255, 255, 255, 0.05);
-  --bg-active: rgba(255, 255, 255, 0.09);
-  --bg-selected: rgba(247, 199, 29, 0.14);
-
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-medium: rgba(255, 255, 255, 0.15);
-  --border-focus: rgba(247, 199, 29, 0.7);
-
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-muted: #526075;
-  --text-inverse: #0f172a;
-  color-scheme: dark;
+  --bg-canvas: #ffffff;
+  --bg-surface: #f8fafc;
+  --bg-elevated: #ffffff;
+  --bg-card: #ffffff;
+  --bg-hover: #f1f5f9;
+  --bg-active: #e2e8f0;
+  --bg-selected: #e0f2fe;
+  --border-subtle: #e2e8f0;
+  --border-medium: #cbd5e1;
+  --border-focus: #0284c7;
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  --text-inverse: #ffffff;
+  color-scheme: light;
 }
 
 * {
@@ -151,11 +121,11 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.16);
   border-radius: var(--radius-full);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.24);
+  background: rgba(0, 0, 0, 0.28);
 }
 
 /* Keyboard Tag */
@@ -167,10 +137,10 @@ kbd {
   font-weight: 600;
   line-height: 1;
   color: var(--text-primary);
-  background-color: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  background-color: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.12);
   border-radius: 4px;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
 }
 
 .code-font {
@@ -3106,6 +3076,11 @@ kbd {
   font-family: inherit;
   outline: none;
   transition: border-color 0.12s ease;
+}
+
+select option {
+  background-color: #ffffff;
+  color: #0f172a;
 }
 
 .input-text:focus, .select-input:focus {

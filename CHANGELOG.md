@@ -10,6 +10,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Windows 11 Pure White Explorer Theme & Modal UX Fixes**:
+  - Overhauled application theme to a complete **pure white Windows 11 Fluent Light palette** (`#ffffff` canvas, `#f8fafc` surface, `#0f172a` high-contrast typography, `#e2e8f0` subtle borders).
+  - Resolved Details & Intelligence Inspector pane auto-opening on startup by initializing `isInspectorOpen` to `false`.
+  - Fixed recurring activation modal popups by removing the auto-opening conditional from the periodic background `loadData()` polling loop.
+  - Made `ActivationModal` always closable (`isClosable = true`), softened overlay backdrop, replaced dark header gradients with clean light panels, and removed marketing clutter (e.g. replaced "⭐ VIP Supporter" with "Supporter").
+  - Fixed dark dropdown options by applying white background and slate text in `Select.tsx` and adding global `select option` rules in `index.css`.
+  - Refined `Badge.tsx` `zinc` and `neutral` variants with crisp slate text and subtle borders for high legibility on light backgrounds.
+  - Locked Appearance setting to Windows 11 Pure White Explorer mode and simplified License Card in `Settings.tsx`.
+  - Fixed missing `LayoutList` and `LayoutGrid` icon imports in `ExplorerView.tsx`.
+  - Maintained complete port uniqueness (port 5188) and protected background subagent browser sessions on other ports.
 - **Windows 11 File Explorer Complete UI Transformation**:
   - Completely overhauled FolderMate Desktop UI to eliminate legacy web dashboard mental models and establish an authentic, production-grade **Windows 11 File Explorer** experience.
   - Set default application launch view to **File Explorer** at `D:\Clients`, immediately presenting directory contents, folders, and files upon startup.

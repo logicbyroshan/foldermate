@@ -121,74 +121,56 @@ export const Settings: React.FC<SettingsProps> = ({
         </Button>
       </Card>
 
-      {/* License & Community Support Section */}
+      {/* License & Offline Activation Section */}
       <Card
         style={{
           display: "flex",
           flexDirection: "column",
           gap: 16,
-          background: licenseStatus?.isActivated && (licenseStatus.licenseType === "VIP" || licenseStatus.licenseType === "SPONSOR")
-            ? "linear-gradient(135deg, rgba(247, 199, 29, 0.08), rgba(16, 24, 39, 0.95))"
-            : "var(--bg-surface)",
-          border: licenseStatus?.isActivated && (licenseStatus.licenseType === "VIP" || licenseStatus.licenseType === "SPONSOR")
-            ? "1px solid var(--border-focus)"
-            : "1px solid var(--border-subtle)",
+          background: "var(--bg-surface)",
+          border: "1px solid var(--border-subtle)",
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid var(--border-subtle)", paddingBottom: 12 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             {licenseStatus?.isActivated ? (
-              licenseStatus.licenseType === "VIP" ? (
-                <Star size={18} color="var(--accent-amber)" fill="var(--accent-amber)" />
-              ) : licenseStatus.licenseType === "SPONSOR" ? (
-                <Heart size={18} color="#f43f5e" fill="#f43f5e" />
-              ) : (
-                <ShieldCheck size={18} color="var(--status-success)" />
-              )
+              <ShieldCheck size={18} color="var(--status-success)" />
             ) : (
-              <Key size={18} color="var(--status-danger)" />
+              <Key size={18} color="var(--text-muted)" />
             )}
             <div>
               <h3 style={{ fontSize: 14, fontWeight: 700, color: "var(--text-primary)" }}>
-                License & Community Support
+                License & Activation
               </h3>
               <span style={{ fontSize: 11, color: "var(--text-muted)" }}>
-                Offline activation status, community credits, and project sponsorship perks.
+                Offline cryptographic license verification and feature entitlements.
               </span>
             </div>
           </div>
 
           <Badge
-            variant={
-              licenseStatus?.isActivated
-                ? licenseStatus.licenseType === "VIP" || licenseStatus.licenseType === "SPONSOR"
-                  ? "amber"
-                  : "success"
-                : "danger"
-            }
+            variant={licenseStatus?.isActivated ? "success" : "neutral"}
             size="md"
           >
             {licenseStatus?.isActivated
-              ? licenseStatus.sponsorTier || licenseStatus.licenseType
-              : "Unactivated"}
+              ? licenseStatus.sponsorTier || licenseStatus.licenseType || "Activated"
+              : "Standard"}
           </Badge>
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
           <div style={{ padding: "12px 14px", backgroundColor: "var(--bg-canvas)", borderRadius: "var(--radius-md)", border: "1px solid var(--border-subtle)" }}>
-            <div style={{ fontSize: 11, color: "var(--text-muted)", marginBottom: 2 }}>Current Active Key</div>
+            <div style={{ fontSize: 11, color: "var(--text-muted)", marginBottom: 2 }}>Installed License Key</div>
             <code className="mono-font" style={{ fontSize: 12, color: "var(--text-primary)", fontWeight: 600 }}>
-              {licenseStatus?.key ? `${licenseStatus.key.slice(0, 16)}••••••••` : "No key installed"}
+              {licenseStatus?.key ? `${licenseStatus.key.slice(0, 16)}••••••••` : "Standard License Active"}
             </code>
           </div>
 
           <div style={{ padding: "12px 14px", backgroundColor: "var(--bg-canvas)", borderRadius: "var(--radius-md)", border: "1px solid var(--border-subtle)" }}>
-            <div style={{ fontSize: 11, color: "var(--text-muted)", marginBottom: 2 }}>Activated Date / Tier</div>
+            <div style={{ fontSize: 11, color: "var(--text-muted)", marginBottom: 2 }}>Entitlement Status</div>
             <div style={{ fontSize: 12, color: "var(--text-primary)", fontWeight: 600 }}>
-              {licenseStatus?.activatedAt
-                ? new Date(licenseStatus.activatedAt).toLocaleDateString()
-                : "Not activated yet"}
-              {licenseStatus?.donorName ? ` • Supporter: ${licenseStatus.donorName}` : ""}
+              {licenseStatus?.isActivated ? "Full Unrestricted Access" : "Standard Features Active"}
+              {licenseStatus?.donorName ? ` • ${licenseStatus.donorName}` : ""}
             </div>
           </div>
         </div>
@@ -196,21 +178,12 @@ export const Settings: React.FC<SettingsProps> = ({
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 10 }}>
           <div style={{ display: "flex", gap: 8 }}>
             <Button
-              variant="amber"
-              size="sm"
-              leftIcon={<Heart size={13} />}
-              onClick={() => window.open("https://github.com/sponsors/FolderMate", "_blank")}
-            >
-              Sponsor on GitHub 💖
-            </Button>
-
-            <Button
               variant="secondary"
               size="sm"
               leftIcon={<ExternalLink size={13} />}
-              onClick={() => window.open("https://buymeacoffee.com/foldermate", "_blank")}
+              onClick={() => window.open("https://github.com/sponsors/FolderMate", "_blank")}
             >
-              Superchat / Tip ☕
+              Support Project
             </Button>
           </div>
 
@@ -221,7 +194,7 @@ export const Settings: React.FC<SettingsProps> = ({
               leftIcon={<Key size={13} />}
               onClick={onOpenActivation}
             >
-              {licenseStatus?.isActivated ? "Change / Upgrade License Key" : "Activate License Now"}
+              {licenseStatus?.isActivated ? "Change License Key" : "Enter License Key"}
             </Button>
 
             {licenseStatus?.isActivated && (
@@ -230,11 +203,11 @@ export const Settings: React.FC<SettingsProps> = ({
                 size="sm"
                 leftIcon={<RotateCcw size={13} />}
                 onClick={async () => {
-                  if (confirm("Reset local license to test activation wizard?")) {
+                  if (confirm("Reset local license state?")) {
                     if ((window as any).foldermate) {
                       await (window as any).foldermate.call("system.resetLicense");
                       onLicenseUpdated?.();
-                      showToast("License reset to unactivated state for testing", "info");
+                      showToast("License reset to default", "info");
                     }
                   }
                 }}
@@ -246,95 +219,40 @@ export const Settings: React.FC<SettingsProps> = ({
         </div>
       </Card>
 
-      {/* Appearance & Windows Theme Section */}
+      {/* Appearance Section */}
       <Card style={{ display: "flex", flexDirection: "column", gap: 16 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, borderBottom: "1px solid var(--border-subtle)", paddingBottom: 12 }}>
           <Palette size={18} color="var(--accent-amber)" />
           <div>
             <h3 style={{ fontSize: 14, fontWeight: 700, color: "var(--text-primary)" }}>
-              Appearance & Windows System Theme
+              Appearance
             </h3>
             <span style={{ fontSize: 11, color: "var(--text-muted)" }}>
-              Configure light/dark themes and automatic Windows OS system preference synchronization.
+              Windows 11 Fluent Light file explorer visual mode.
             </span>
           </div>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
-          <button
-            type="button"
-            onClick={() => onSetThemePreference?.("follow-windows")}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 12 }}>
+          <div
             style={{
               display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-start",
-              padding: "12px 14px",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "14px 16px",
               borderRadius: "var(--radius-md)",
-              border: themePreference === "follow-windows" ? "1.5px solid var(--brand-primary)" : "1px solid var(--border-subtle)",
-              backgroundColor: themePreference === "follow-windows" ? "var(--bg-selected)" : "var(--bg-surface)",
-              cursor: "pointer",
-              textAlign: "left",
-              transition: "all 0.1s ease",
+              border: "1.5px solid var(--brand-primary)",
+              backgroundColor: "var(--bg-selected)",
             }}
           >
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", marginBottom: 4 }}>
-              <strong style={{ fontSize: 13, color: "var(--text-primary)" }}>Follow Windows</strong>
-              {themePreference === "follow-windows" && <Badge variant="amber" size="sm">Active</Badge>}
+            <div>
+              <strong style={{ fontSize: 13, color: "var(--text-primary)" }}>Pure White Fluent Theme</strong>
+              <div style={{ fontSize: 11, color: "var(--text-secondary)", marginTop: 2 }}>
+                High-contrast clean white explorer theme matching native Windows 11 design language.
+              </div>
             </div>
-            <span style={{ fontSize: 11, color: "var(--text-muted)" }}>
-              Automatically tracks Windows 11 light or dark system theme.
-            </span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => onSetThemePreference?.("light")}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-start",
-              padding: "12px 14px",
-              borderRadius: "var(--radius-md)",
-              border: themePreference === "light" ? "1.5px solid var(--brand-primary)" : "1px solid var(--border-subtle)",
-              backgroundColor: themePreference === "light" ? "var(--bg-selected)" : "var(--bg-surface)",
-              cursor: "pointer",
-              textAlign: "left",
-              transition: "all 0.1s ease",
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", marginBottom: 4 }}>
-              <strong style={{ fontSize: 13, color: "var(--text-primary)" }}>Light Theme</strong>
-              {themePreference === "light" && <Badge variant="amber" size="sm">Active</Badge>}
-            </div>
-            <span style={{ fontSize: 11, color: "var(--text-muted)" }}>
-              Crisp Windows Explorer clean light palette with dark text.
-            </span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => onSetThemePreference?.("dark")}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-start",
-              padding: "12px 14px",
-              borderRadius: "var(--radius-md)",
-              border: themePreference === "dark" ? "1.5px solid var(--brand-primary)" : "1px solid var(--border-subtle)",
-              backgroundColor: themePreference === "dark" ? "var(--bg-selected)" : "var(--bg-surface)",
-              cursor: "pointer",
-              textAlign: "left",
-              transition: "all 0.1s ease",
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", marginBottom: 4 }}>
-              <strong style={{ fontSize: 13, color: "var(--text-primary)" }}>Dark Theme</strong>
-              {themePreference === "dark" && <Badge variant="amber" size="sm">Active</Badge>}
-            </div>
-            <span style={{ fontSize: 11, color: "var(--text-muted)" }}>
-              Deep neutral dark mode with FolderMate signature gold accents.
-            </span>
-          </button>
+            <Badge variant="amber" size="sm">Active</Badge>
+          </div>
         </div>
       </Card>
 

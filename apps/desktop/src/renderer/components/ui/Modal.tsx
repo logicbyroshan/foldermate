@@ -42,8 +42,8 @@ export const Modal: React.FC<ModalProps> = ({
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "rgba(0, 0, 0, 0.7)",
-        backdropFilter: "blur(6px)",
+        backgroundColor: "rgba(15, 23, 42, 0.45)",
+        backdropFilter: "blur(4px)",
         padding: 20,
       }}
       onClick={(e) => {
@@ -55,9 +55,10 @@ export const Modal: React.FC<ModalProps> = ({
         style={{
           width: "100%",
           maxWidth,
-          backgroundColor: "var(--bg-surface)",
+          backgroundColor: "var(--bg-elevated)",
           border: "1px solid var(--border-medium)",
-          boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.6)",
+          boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05)",
+          borderRadius: "var(--radius-lg)",
           display: "flex",
           flexDirection: "column",
           maxHeight: "90vh",
@@ -105,7 +106,7 @@ export const Modal: React.FC<ModalProps> = ({
               display: "flex",
               justifyContent: "flex-end",
               gap: 10,
-              backgroundColor: "rgba(0, 0, 0, 0.2)",
+              backgroundColor: "var(--bg-surface)",
             }}
           >
             {footer}

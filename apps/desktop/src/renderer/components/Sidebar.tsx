@@ -313,34 +313,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
       </div>
 
-      {/* Windows 11 Bottom Minimal Anchor: Settings & License Info */}
+      {/* Windows 11 Bottom Minimal Anchor: Settings */}
       <div className="win11-sidebar-bottom">
         <button
           type="button"
           className="win11-sidebar-bottom-btn"
           onClick={() => onSelectView("settings")}
-          title="FolderMate Settings & Appearance"
+          title="FolderMate Settings"
         >
           <Settings size={15} />
           <span>Settings</span>
         </button>
-
-        <div
-          className="win11-license-pill"
-          onClick={onOpenActivation}
-          role="button"
-          tabIndex={0}
-          title={
-            licenseStatus?.isActivated
-              ? `License: ${licenseStatus.licenseType || "Active"}`
-              : "Click to activate license"
-          }
-        >
-          <span className={`license-dot ${licenseStatus?.isActivated ? "active" : "locked"}`} />
-          <span className="license-text">
-            {licenseStatus?.isActivated ? (licenseStatus.licenseType === "VIP" ? "VIP" : "Licensed") : "Community"}
-          </span>
-        </div>
       </div>
     </aside>
   );

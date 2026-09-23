@@ -31,7 +31,7 @@ export const AppContent: React.FC = () => {
   const [currentView, setCurrentView] = useState<NavView>("explorer");
   const [currentPath, setCurrentPath] = useState("D:\\Clients");
   const [viewMode, setViewMode] = useState<ViewMode>("details");
-  const [isInspectorOpen, setIsInspectorOpen] = useState(true);
+  const [isInspectorOpen, setIsInspectorOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
   const [history, setHistory] = useState<string[]>(["D:\\Clients"]);
@@ -72,42 +72,23 @@ export const AppContent: React.FC = () => {
   const [newFolderName, setNewFolderName] = useState("");
   const [newFolderColor, setNewFolderColor] = useState("amber");
 
-  // Theme Management: Follow Windows / Light / Dark
-  const [themePreference, setThemePreference] = useState<"follow-windows" | "light" | "dark">(() => {
-    return (localStorage.getItem("foldermate_theme_preference") as any) || "follow-windows";
-  });
+  // Theme Management: Pure White Fluent Explorer Theme
+  const [themePreference, setThemePreference] = useState<"follow-windows" | "light" | "dark">("light");
 
   useEffect(() => {
-    const applyTheme = () => {
-      let resolvedTheme = "dark";
-      if (themePreference === "light") {
-        resolvedTheme = "light";
-      } else if (themePreference === "dark") {
-        resolvedTheme = "dark";
-      } else {
-        const isSystemDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-        resolvedTheme = isSystemDark ? "dark" : "light";
-      }
-      document.documentElement.setAttribute("data-theme", resolvedTheme);
-      document.body.setAttribute("data-theme", resolvedTheme);
-    };
-
-    applyTheme();
-
-    if (themePreference === "follow-windows" && window.matchMedia) {
-      const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-      const handler = () => applyTheme();
-      mediaQuery.addEventListener("change", handler);
-      return () => mediaQuery.removeEventListener("change", handler);
-    }
-  }, [themePreference]);
+    document.documentElement.setAttribute("data-theme", "light");
+    document.body.setAttribute("data-theme", "light");
+    localStorage.setItem("foldermate_theme_preference", "light");
+  }, []);
 
   const handleSetThemePreference = (pref: "follow-windows" | "light" | "dark") => {
-    setThemePreference(pref);
-    localStorage.setItem("foldermate_theme_preference", pref);
+    setThemePreference("light");
+    localStorage.setItem("foldermate_theme_preference", "light");
+    document.documentElement.setAttribute("data-theme", "light");
+    document.body.setAttribute("data-theme", "light");
     addToast({
-      title: "Theme Updated",
-      message: `Appearance set to ${pref === "follow-windows" ? "Follow Windows" : pref === "light" ? "Light Mode" : "Dark Mode"}.`,
+      title: "Appearance Set",
+      message: "FolderMate is configured in Windows 11 Pure White Explorer mode.",
       variant: "info",
     });
   };
@@ -168,9 +149,6 @@ export const AppContent: React.FC = () => {
         const licRes = await (window as any).foldermate.call("system.getLicenseStatus");
         if (licRes) {
           setLicenseStatus(licRes);
-          if (!licRes.isActivated) {
-            setIsActivationModalOpen(true);
-          }
         }
       }
     } catch {

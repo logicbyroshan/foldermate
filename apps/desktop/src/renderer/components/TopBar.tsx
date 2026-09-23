@@ -27,11 +27,9 @@ export const TopBar: React.FC<TopBarProps> = ({
   return (
     <header
       style={{
-        height: 54,
+        height: 48,
         borderBottom: "1px solid var(--border-subtle)",
-        background: "linear-gradient(180deg, rgba(13,19,34,0.85) 0%, rgba(7,9,15,0.7) 100%)",
-        backdropFilter: "blur(20px) saturate(180%)",
-        WebkitBackdropFilter: "blur(20px) saturate(180%)",
+        background: "var(--bg-canvas)",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
@@ -47,16 +45,15 @@ export const TopBar: React.FC<TopBarProps> = ({
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          backgroundColor: "rgba(7,9,15,0.6)",
+          backgroundColor: "var(--bg-surface)",
           border: "1px solid var(--border-subtle)",
           padding: "6px 12px",
           borderRadius: "var(--radius-md)",
           cursor: "pointer",
-          width: 340,
+          width: 320,
           color: "var(--text-muted)",
           fontSize: 12,
           transition: "all 0.15s ease",
-          backdropFilter: "blur(8px)",
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.borderColor = "var(--border-medium)";

@@ -14,3 +14,10 @@ Reason: Users expect familiarity with standard Windows File Explorer workflows w
 Alternatives: Card grids and generic dashboard KPI cards were rejected as inappropriate for serious file-management operations.
 Consequences: All primary file/folder views utilize Explorer table layouts with customizable folder accent colors, recognizable format badges, and collapsible right-side inspector panes.
 
+## 2026-09-23
+Decision: Implement dedicated controlled drive assignment with auto-provisioned quadrant directory structure, authentic vector desktop file icons, and dual-mode foreground/background accessibility.
+Context: FolderMate requires clear ownership of user design deliverables across dedicated drives or partitions (e.g. `D:\Data Storage\`) with autonomous indexing of all files across the drive into SQLite FTS5 for global instant search (`Ctrl+Shift+F`).
+Reason: Users need both zero-effort visual discovery in foreground Explorer mode and instant hotkey recall in background daemon mode. High-fidelity vector icons for CDR, PSD, AI, and PDF provide immediate professional recognition identical to native desktop suites.
+Alternatives: Relying on generic system icon fonts or arbitrary scattered folders was rejected as it prevents structured organization and reliable file discovery.
+Consequences: FolderMate creates and monitors a canonical root folder matching the drive label containing `Inbox/`, `Clients/`, `Archive/`, and `Review/`. All files are indexed and searchable anytime.
+

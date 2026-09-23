@@ -10,6 +10,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Realistic Desktop File Icons, Folder & Drive Customizer, Controlled Drive Assignment & Instant Search**:
+  - Implemented authentic, scalable desktop vector file icons in `FileFormatIcon.tsx` for CorelDRAW (`.cdr`), Photoshop (`.psd`), Illustrator (`.ai`), InDesign (`.indd`), Acrobat (`.pdf`), EPS, PNG/JPG images, Excel (`.xlsx`), Word (`.docx`), and ZIP archives, replacing plain text tags across Details table, List, and Grid view modes.
+  - Created `FolderVisualIcon.tsx` and `DriveVisualIcon` rendering Windows 11 Fluent 3D silhouettes with unlimited color customization and 16+ emblem badge overlays (`Star`, `Client`, `Briefcase`, `Project`, `Shield`, `Lock`, `Code`, `Design`, `Approved`, `Archive`, etc.).
+  - Built `FolderCustomizerModal.tsx` (`Ctrl+Shift+C` / "Folder Style" / right-click context menu "Customize Folder (Color & Emblem)...") with 14 preset colors, native color picker, hex code input, and live 64px preview.
+  - Built `DriveCustomizerModal.tsx` (`Ctrl+Shift+D` / "Drive D:") supporting drive volume selection, Windows partition tools launch (`diskmgmt.msc`), custom drive colors & emblems, storage capacity meter, automatic root folder provisioning (`Inbox`, `Clients`, `Archive`, `Review`), and full drive re-indexing.
+  - Built `DriveSearchModal.tsx` (`Ctrl+Shift+F` / "Find File") instant spotlight dialog indexing all files across the controlled drive with format badges, type filters, and one-click reveal/open actions.
+  - Added dual-mode indicator on the command bar ("Foreground Explorer" / "Background Mode") for effortless operation with or without keyboard shortcuts.
+  - Enhanced `Sidebar.tsx` to display controlled drive status with custom emblem, color, and drive settings launcher.
+  - Implemented `drives.list`, `drives.assign`, `drives.reindex`, and `folders.customize` in `mock-bridge.ts`.
 - **Windows 11 Pure White Explorer Theme & Modal UX Fixes**:
   - Overhauled application theme to a complete **pure white Windows 11 Fluent Light palette** (`#ffffff` canvas, `#f8fafc` surface, `#0f172a` high-contrast typography, `#e2e8f0` subtle borders).
   - Resolved Details & Intelligence Inspector pane auto-opening on startup by initializing `isInspectorOpen` to `false`.

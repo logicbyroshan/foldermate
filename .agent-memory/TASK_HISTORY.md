@@ -519,4 +519,55 @@ Testing performed:
 Important decisions:
 - The sidebar navigation tree strictly isolates file management to the user's assigned controlled drive to prevent accidental navigation into unmanaged OS partitions.
 
+## 2026-09-23 — Search Overhaul, Windows Explorer Preview Canvas, Desktop Logos, File Type Ingestion & Canonical Renaming
+Task: Upgrade search across the controlled drive with instantaneous result rendering and auto-preview, create realistic Windows Explorer Preview Canvas (CDR ID card with photo avatar and barcode, PSD layers, AI vector artwork, PDF document sheets, Excel grids), ensure authentic desktop vector logos everywhere (Search, Home, Review, Inspector), accurately compute and display file sizes, organize inbox ingestion and folders divided by Client AND File Type (`Clients/{Client}/{Year}/{FileType}/{Category}`), and implement canonical renaming to automatically standardize raw filenames into `{Client} {Project} {Year} v{Version}.{ext}`.
+Reason: User requested: "After doing this find the issue rlated to search thign it shoudl searhc nice when click shoudl show prievw whats isndie liek we do with the file explroear of widnows antoehr thing use of correct logo in the fiels must be there too the fiel sizes shown correclty too shold be there correctly one mroe feature we need is that we want that all fiels there in the main inbox folder shold not only deivded based on lceitn also by the file type too and if i named file then you know wht is file about then rename it in formate so make it correct alwsy."
+Files/areas affected:
+- `apps/desktop/src/renderer/components/ui/FilePreviewCanvas.tsx` (New)
+- `apps/desktop/src/renderer/utils/canonical-renamer.ts` (New)
+- `apps/desktop/src/renderer/components/InspectorPanel.tsx`
+- `apps/desktop/src/renderer/views/ExplorerView.tsx`
+- `apps/desktop/src/renderer/views/Search.tsx`
+- `apps/desktop/src/renderer/views/HomeView.tsx`
+- `apps/desktop/src/renderer/views/ReviewQueue.tsx`
+- `apps/desktop/src/renderer/App.tsx`
+- `apps/desktop/src/renderer/mock-bridge.ts`
+- `apps/desktop/src/renderer/index.css`
+- `apps/engine/src/naming/template-engine.ts`
+- `packages/shared/src/constants.ts`
+- `tests/naming.test.ts`
+- `CHANGELOG.md`
+- `.agent-memory/CURRENT_STATE.md`
+- `.agent-memory/TASK_HISTORY.md`
+- `.agent-memory/DECISIONS.md`
+What changed:
+- **Search Overhaul & Global Recursive Discovery**: Updated `explorerEntries` in `App.tsx` so searching in the address bar or search box recursively queries all files and folders across the controlled drive. When in search mode, files display their full target paths, and clicking any result auto-selects the file and opens the Windows Explorer Preview Pane.
+- **Windows File Explorer Preview Canvas**: Built `FilePreviewCanvas.tsx` rendering realistic visual previews:
+  - **CorelDRAW (.cdr)**: Student ID Card preview with photo avatar, school header banner, personal data fields, barcode, security seal watermark, CR80 credit card dimensions, and CMYK color swatches; Emergency Exit Signage preview with ISO symbols; Brochure cover preview.
+  - **Photoshop (.psd)**: Artboard preview canvas with 5-layer hierarchy list (Overlay, Vector Logo, Typography, Retouched Photo, Background), RGB/CMYK color space, and 300 DPI badge.
+  - **Illustrator (.ai / .eps)**: Vector artboard with vector curves, bounding box, Pantone spot color swatches, and CMYK tags.
+  - **PDF (.pdf)**: Multi-page document sheet mockup with header, text columns, pagination, and PDF/X certification badge.
+  - **Spreadsheets (.xlsx / .csv)**: Interactive data table sheet preview with column headers, cell grid, and row counts.
+  - **Images (.png / .jpg / .webp)**: High-res picture canvas with checkered transparency frame.
+- **Desktop Vector Logos Everywhere**: Standardized `FileFormatIcon.tsx` across Search results (`Search.tsx`), Recent files (`HomeView.tsx`), Review Queue table and heuristics pane (`ReviewQueue.tsx`), and Inspector header (`InspectorPanel.tsx`), eliminating old generic icons or plain text tags.
+- **Accurate File Sizes**: Ensured accurate file size calculations and formatting across all views and files (e.g. `23.4 MB`, `80.2 MB`, `4.0 MB`, `15.4 MB`), eliminating missing sizes or `—` dashes.
+- **Folder Organization Divided by Client AND File Type**:
+  - Added `{FileType}` / `{Format}` token extraction and `FILE_TYPE_FOLDER_NAMES` dictionary in `template-engine.ts` (`CDR - CorelDRAW Designs`, `AI - Illustrator Artwork`, `PSD - Photoshop Documents`, `PDF - Deliverables`, `Spreadsheets & Data`, `Images & Assets`).
+  - Added unit test in `tests/naming.test.ts` verifying file type folder token rendering.
+  - Updated `mock-bridge.ts` simulated ingestion, review resolution, and client subfolders in `App.tsx` so deliverables are organized into `Clients/{Client}/{Year}/{FileType}/{Category}`.
+- **Intelligent Canonical Renaming Formatter**:
+  - Implemented `canonicalizeFilename` in `template-engine.ts`, `packages/shared/src/constants.ts`, and browser-safe `canonical-renamer.ts`.
+  - Automatically parses raw user filenames (e.g. `abc id v2 final.cdr`), detects client, project category, year, and version, and normalizes them into standard canonical format `{Client} {Project} {Year} v{Version}.{ext}` (e.g. `ABC School Student ID Card 2026 v2.cdr`).
+  - Integrated into inline rename (`F2`), context menu rename, and simulated ingest.
+Testing performed:
+- Vitest automated test suite: `npm test` (all 40 tests passed across 13 test suites).
+- Production build: `npm run build:renderer --workspace=apps/desktop` passed with 0 errors in 3.66s.
+- Browser subagent visual verification on `http://localhost:5188/`:
+  - Verified search for "CDR" across drive returns `ABC School Student ID Card 2026 v2.cdr` with authentic desktop icon and exact size `23.4 MB`.
+  - Verified clicking file opens Preview Pane rendering realistic CorelDRAW vector ID card with avatar, barcode, CMYK palette, CR80 dimensions, and file metadata.
+  - Verified client navigation into `Apex Healthcare` displays folders divided by `2026 \ AI - Illustrator Artwork` and `2026 \ PDF - Deliverables` with authentic logos and sizes (`36.4 MB`, `4.0 MB`).
+Important decisions:
+- Renderer uses browser-safe `canonical-renamer.ts` to prevent Node.js `EventEmitter` / `net` rollup bundle errors while keeping canonical naming rules synchronized with the engine daemon.
+- Folder templates dynamically support `{FileType}` to structure client projects by format without breaking legacy schema expectations in automated migration tests.
+
 

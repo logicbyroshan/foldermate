@@ -26,6 +26,8 @@ import { IconButton } from "../components/ui/IconButton.js";
 import { Select } from "../components/ui/Select.js";
 import { EmptyState } from "../components/ui/EmptyState.js";
 import { useToast } from "../components/ui/Toast.js";
+import { FileFormatIcon } from "../components/ui/FileFormatIcon.js";
+import { FilePreviewCanvas } from "../components/ui/FilePreviewCanvas.js";
 
 export const Search: React.FC = () => {
   const [query, setQuery] = useState("");
@@ -308,20 +310,7 @@ export const Search: React.FC = () => {
                     }}
                   >
                     <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0 }}>
-                      <div
-                        style={{
-                          width: 36,
-                          height: 36,
-                          borderRadius: "var(--radius-sm)",
-                          backgroundColor: fileIcon.bg,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          flexShrink: 0,
-                        }}
-                      >
-                        <FileText size={18} color={fileIcon.color} />
-                      </div>
+                      <FileFormatIcon extension={item.extension} size={32} />
 
                       <div style={{ minWidth: 0 }}>
                         <div
@@ -383,20 +372,7 @@ export const Search: React.FC = () => {
             <div style={{ flex: 1, overflowY: "auto", padding: "18px 20px", display: "flex", flexDirection: "column", gap: 16 }}>
               {/* Header Preview */}
               <div style={{ display: "flex", alignItems: "flex-start", gap: 12, borderBottom: "1px solid var(--border-subtle)", paddingBottom: 14 }}>
-                <div
-                  style={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: "var(--radius-md)",
-                    backgroundColor: getFileIconColor(selectedFile.extension).bg,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    flexShrink: 0,
-                  }}
-                >
-                  <FileText size={22} color={getFileIconColor(selectedFile.extension).color} />
-                </div>
+                <FileFormatIcon extension={selectedFile.extension} size="lg" />
 
                 <div style={{ minWidth: 0, flex: 1 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
@@ -417,6 +393,25 @@ export const Search: React.FC = () => {
                   </h3>
                 </div>
               </div>
+
+              {/* Windows Explorer Style Preview Canvas */}
+              <FilePreviewCanvas
+                filename={selectedFile.filename || selectedFile.currentName || selectedFile.originalName}
+                extension={selectedFile.extension}
+                clientName={selectedFile.clientName}
+                projectName={selectedFile.projectName || selectedFile.category}
+                year={selectedFile.year}
+                versionNumber={selectedFile.version || selectedFile.versionNumber}
+                formattedSize={
+                  selectedFile.fileSizeBytes
+                    ? `${(selectedFile.fileSizeBytes / (1024 * 1024)).toFixed(1)} MB`
+                    : "24.6 MB"
+                }
+                sizeBytes={selectedFile.fileSizeBytes}
+                modifiedAt={selectedFile.modifiedAt}
+                targetPath={selectedFile.path || selectedFile.currentPath}
+                sha256={selectedFile.sha256Hash}
+              />
 
               {/* Action Buttons */}
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>

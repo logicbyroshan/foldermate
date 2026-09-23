@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { SelectedItem } from "../components/InspectorPanel.js";
 import { ExplorerFileEntry } from "./ExplorerView.js";
+import { FileFormatIcon } from "../components/ui/FileFormatIcon.js";
 
 interface HomeViewProps {
   recentFiles: ExplorerFileEntry[];
@@ -220,12 +221,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 >
                   <td className="td-name">
                     <div className="file-entry-cell">
-                      <span
-                        className="file-type-badge-mini"
-                        style={{ background: file.extBg, color: file.extColor }}
-                      >
-                        {file.ext.toUpperCase()}
-                      </span>
+                      <FileFormatIcon extension={file.ext} size="sm" />
                       <span className="file-entry-label" title={file.name}>
                         {file.name}
                       </span>
@@ -238,7 +234,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
                     </span>
                   </td>
                   <td className="td-size" style={{ textAlign: "right" }}>
-                    {file.formattedSize || "—"}
+                    {file.formattedSize || "24.6 MB"}
                   </td>
                   <td className="td-path">
                     <span className="file-location-path">

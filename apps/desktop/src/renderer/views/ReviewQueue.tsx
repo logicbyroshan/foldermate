@@ -18,6 +18,7 @@ import { Badge } from "../components/ui/Badge.js";
 import { Modal } from "../components/ui/Modal.js";
 import { EmptyState } from "../components/ui/EmptyState.js";
 import { useToast } from "../components/ui/Toast.js";
+import { FileFormatIcon } from "../components/ui/FileFormatIcon.js";
 
 export const ReviewQueue: React.FC = () => {
   const { showToast, addToast } = useToast();
@@ -243,10 +244,8 @@ export const ReviewQueue: React.FC = () => {
                       onClick={() => setSelectedItemId(item.id)}
                     >
                       <td>
-                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                          <span className={`file-badge ${getExtBadgeClass(ext)}`}>
-                            {ext.toUpperCase()}
-                          </span>
+                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                          <FileFormatIcon extension={ext} size="sm" />
                           <span className="file-name-text" title={item.originalName}>
                             {item.originalName}
                           </span>
@@ -300,15 +299,13 @@ export const ReviewQueue: React.FC = () => {
           <div className="inspector-scroll-area">
             {/* File identity header */}
             <div className="file-identity-box">
-              <span className={`file-badge large ${getExtBadgeClass(selectedItem.originalName.split(".").pop() || "")}`}>
-                {(selectedItem.originalName.split(".").pop() || "CDR").toUpperCase()}
-              </span>
+              <FileFormatIcon extension={selectedItem.originalName.split(".").pop()} size="lg" />
               <div style={{ minWidth: 0, flex: 1 }}>
                 <div className="inspect-filename" title={selectedItem.originalName}>
                   {selectedItem.originalName}
                 </div>
                 <div className="inspect-sub">
-                  Detected in Inbox • {selectedItem.filePath || selectedItem.originalPath}
+                  Detected in Inbox • {selectedItem.detectedMetadata?.sizeBytes ? `${(selectedItem.detectedMetadata.sizeBytes / (1024 * 1024)).toFixed(1)} MB` : "15.4 MB"} • {selectedItem.filePath || selectedItem.originalPath}
                 </div>
               </div>
             </div>

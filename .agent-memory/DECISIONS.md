@@ -21,3 +21,10 @@ Reason: Users need both zero-effort visual discovery in foreground Explorer mode
 Alternatives: Relying on generic system icon fonts or arbitrary scattered folders was rejected as it prevents structured organization and reliable file discovery.
 Consequences: FolderMate creates and monitors a canonical root folder matching the drive label containing `Inbox/`, `Clients/`, `Archive/`, and `Review/`. All files are indexed and searchable anytime.
 
+## 2026-09-23
+Decision: Windows File Explorer Preview Canvas, Subfolder Division by Client & File Type, and Canonical Renaming Standard.
+Context: Creative agencies and design studios generate diverse file formats (CDR, PSD, AI, PDF, XLSX, images). Users need to inspect files visually without launching heavy desktop suites (CorelDRAW, Photoshop, Illustrator), organize deliverables by format within client projects, and ensure files are canonically renamed according to client, project, year, and version rules.
+Reason: A rich Windows File Explorer-style preview pane with realistic mockups (vector cards with CMYK swatches, layer stacks, Pantone palettes, document sheets) provides instant confidence during triage. Organizing by client AND file type prevents cluttered folders. Canonical renaming ensures deterministic version control and search indexing.
+Alternatives: Relying on external OS thumbnail generation (which often fails on raw CDR/PSD files without shell extensions installed) or flat client directories without format separation was rejected.
+Consequences: All file selection across Explorer and Search displays the preview canvas. Folder hierarchy supports `Clients/{Client}/{Year}/{FileType}/{Category}`. Ingestion and renaming pipelines automatically convert raw names into standard `{Client} {Project} {Year} v{Version}.{ext}` format.
+

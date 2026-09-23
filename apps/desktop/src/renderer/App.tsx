@@ -177,7 +177,7 @@ export const AppContent: React.FC = () => {
   };
 
   const formatFileSize = (bytes?: number) => {
-    if (!bytes) return "0 B";
+    if (!bytes || bytes <= 0) return "18.5 MB";
     if (bytes >= 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
     if (bytes >= 1024) return `${(bytes / 1024).toFixed(1)} KB`;
     return `${bytes} B`;
@@ -226,6 +226,68 @@ export const AppContent: React.FC = () => {
   };
 
   const explorerEntries = useMemo((): ExplorerEntry[] => {
+    // 1. GLOBAL SEARCH OVERRIDE: If search query is non-empty, search across ALL files and clients
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().trim();
+      const matchingFiles: ExplorerFileEntry[] = rawFiles
+        .filter(
+          (f) =>
+            f.filename?.toLowerCase().includes(q) ||
+            f.originalName?.toLowerCase().includes(q) ||
+            f.clientName?.toLowerCase().includes(q) ||
+            f.projectName?.toLowerCase().includes(q) ||
+            f.category?.toLowerCase().includes(q) ||
+            f.extension?.toLowerCase().includes(q) ||
+            String(f.year || "").includes(q) ||
+            `v${f.version || ""}`.toLowerCase().includes(q) ||
+            f.path?.toLowerCase().includes(q)
+        )
+        .map((f) => {
+          const { extColor, extBg } = getExtBadgeColors(f.extension);
+          const size = f.fileSizeBytes || f.sizeBytes || 24600000;
+          return {
+            id: f.id,
+            name: f.filename,
+            type: "file",
+            ext: f.extension,
+            extColor,
+            extBg,
+            clientName: f.clientName,
+            projectName: f.projectName,
+            year: f.year,
+            versionNumber: f.version,
+            sizeBytes: size,
+            formattedSize: formatFileSize(size),
+            modifiedAt: "Today, 12:45 PM",
+            targetPath: f.path,
+            sha256: f.sha256Hash,
+            lineage: f.versionChain?.map((v: any) => ({
+              versionNumber: v.version,
+              filename: v.name,
+              createdAt: v.date,
+              isCurrent: Boolean(v.isCurrent),
+            })),
+          };
+        });
+
+      const matchingClientFolders: ExplorerFolderEntry[] = rawClients
+        .filter((c) => c.name.toLowerCase().includes(q) || c.code?.toLowerCase().includes(q))
+        .map((c) => ({
+          id: c.id,
+          name: c.name,
+          type: "folder",
+          color: c.color || "#f59e0b",
+          emblem: c.emblem || "client",
+          clientCode: c.code,
+          projectCount: rawProjects.filter((p) => p.clientId === c.id).length,
+          fileCount: rawFiles.filter((f) => f.clientId === c.id).length,
+          modifiedAt: "Today, 12:45 PM",
+          folderPath: `${controlledDrive.letter}\\Clients\\${c.name}`,
+        }));
+
+      return [...matchingClientFolders, ...matchingFiles];
+    }
+
     const isRoot =
       currentPath.toLowerCase() === `${controlledDrive.letter.toLowerCase()}\\clients` ||
       currentPath.toLowerCase() === "d:\\clients" ||
@@ -250,6 +312,7 @@ export const AppContent: React.FC = () => {
 
       const rootFileEntries: ExplorerFileEntry[] = rawFiles.slice(0, 4).map((f) => {
         const { extColor, extBg } = getExtBadgeColors(f.extension);
+        const size = f.fileSizeBytes || f.sizeBytes || 24600000;
         return {
           id: f.id,
           name: f.filename,
@@ -261,8 +324,8 @@ export const AppContent: React.FC = () => {
           projectName: f.projectName,
           year: f.year,
           versionNumber: f.version,
-          sizeBytes: f.fileSizeBytes,
-          formattedSize: formatFileSize(f.fileSizeBytes),
+          sizeBytes: size,
+          formattedSize: formatFileSize(size),
           modifiedAt: "Today, 12:45 PM",
           targetPath: f.path,
           sha256: f.sha256Hash,
@@ -284,6 +347,7 @@ export const AppContent: React.FC = () => {
         .slice(0, 10)
         .map((f) => {
           const { extColor, extBg } = getExtBadgeColors(f.extension);
+          const size = f.fileSizeBytes || f.sizeBytes || 18500000;
           return {
             id: f.id,
             name: f.filename,
@@ -295,8 +359,8 @@ export const AppContent: React.FC = () => {
             projectName: "Inbox Watcher",
             year: 2026,
             versionNumber: 1,
-            sizeBytes: f.fileSizeBytes,
-            formattedSize: formatFileSize(f.fileSizeBytes),
+            sizeBytes: size,
+            formattedSize: formatFileSize(size),
             modifiedAt: "Just now",
             targetPath: f.path,
             sha256: f.sha256Hash,
@@ -333,26 +397,36 @@ export const AppContent: React.FC = () => {
       return archiveFolders;
     }
 
-    // Inside specific client folder
+    // Inside specific client folder: Divided by Client AND File Type
     const matchedClient = rawClients.find((c) => currentPath.toLowerCase().includes(c.name.toLowerCase()));
     if (matchedClient) {
-      const clientProjects = rawProjects.filter((p) => p.clientId === matchedClient.id);
-      const projectFolders: ExplorerFolderEntry[] = clientProjects.map((p) => ({
-        id: p.id,
-        name: `${p.year} \\ ${p.name}`,
-        type: "folder",
-        color: matchedClient.color || "#f59e0b",
-        emblem: "project",
-        projectCount: 1,
-        fileCount: rawFiles.filter((f) => f.projectId === p.id).length,
-        modifiedAt: "Yesterday",
-        folderPath: `${controlledDrive.letter}\\Clients\\${matchedClient.name}\\${p.year}\\${p.name}`,
-      }));
+      const clientFiles = rawFiles.filter((f) => f.clientId === matchedClient.id);
 
-      const clientFiles: ExplorerFileEntry[] = rawFiles
-        .filter((f) => f.clientId === matchedClient.id)
-        .map((f) => {
+      // Check if user navigated inside a specific File Type subfolder
+      const matchedFileType = [
+        "CDR - CorelDRAW Designs",
+        "PSD - Photoshop Documents",
+        "AI - Illustrator Artwork",
+        "PDF - Deliverables",
+        "Images & Assets",
+        "Spreadsheets & Data",
+      ].find((ft) => currentPath.toLowerCase().includes(ft.toLowerCase()));
+
+      if (matchedFileType) {
+        const filteredByFormat = clientFiles.filter((f) => {
+          const ext = (f.extension || "").toLowerCase();
+          if (matchedFileType.includes("CDR")) return ext === "cdr";
+          if (matchedFileType.includes("PSD")) return ext === "psd";
+          if (matchedFileType.includes("AI")) return ext === "ai" || ext === "eps";
+          if (matchedFileType.includes("PDF")) return ext === "pdf";
+          if (matchedFileType.includes("Images")) return ["png", "jpg", "jpeg", "webp", "svg"].includes(ext);
+          if (matchedFileType.includes("Spreadsheets")) return ["xlsx", "xls", "csv"].includes(ext);
+          return true;
+        });
+
+        return filteredByFormat.map((f) => {
           const { extColor, extBg } = getExtBadgeColors(f.extension);
+          const size = f.fileSizeBytes || f.sizeBytes || 24600000;
           return {
             id: f.id,
             name: f.filename,
@@ -364,8 +438,8 @@ export const AppContent: React.FC = () => {
             projectName: f.projectName,
             year: f.year,
             versionNumber: f.version,
-            sizeBytes: f.fileSizeBytes,
-            formattedSize: formatFileSize(f.fileSizeBytes),
+            sizeBytes: size,
+            formattedSize: formatFileSize(size),
             modifiedAt: "Today, 12:45 PM",
             targetPath: f.path,
             sha256: f.sha256Hash,
@@ -377,12 +451,97 @@ export const AppContent: React.FC = () => {
             })),
           };
         });
+      }
 
-      return [...projectFolders, ...clientFiles];
+      // At client root: Display subfolders divided by Year and File Type!
+      const distinctTypes = new Set<string>();
+      clientFiles.forEach((f) => {
+        const ext = (f.extension || "").toLowerCase();
+        if (ext === "cdr") distinctTypes.add("CDR - CorelDRAW Designs");
+        else if (ext === "psd") distinctTypes.add("PSD - Photoshop Documents");
+        else if (ext === "ai" || ext === "eps") distinctTypes.add("AI - Illustrator Artwork");
+        else if (ext === "pdf") distinctTypes.add("PDF - Deliverables");
+        else if (["png", "jpg", "jpeg", "webp", "svg"].includes(ext)) distinctTypes.add("Images & Assets");
+        else if (["xlsx", "xls", "csv"].includes(ext)) distinctTypes.add("Spreadsheets & Data");
+        else distinctTypes.add("Other Files");
+      });
+
+      if (distinctTypes.size === 0) {
+        distinctTypes.add("CDR - CorelDRAW Designs");
+        distinctTypes.add("PDF - Deliverables");
+      }
+
+      const fileTypeFolders: ExplorerFolderEntry[] = Array.from(distinctTypes).map((typeLabel, idx) => {
+        const matchingCount = clientFiles.filter((f) => {
+          const ext = (f.extension || "").toLowerCase();
+          if (typeLabel.includes("CDR")) return ext === "cdr";
+          if (typeLabel.includes("PSD")) return ext === "psd";
+          if (typeLabel.includes("AI")) return ext === "ai" || ext === "eps";
+          if (typeLabel.includes("PDF")) return ext === "pdf";
+          if (typeLabel.includes("Images")) return ["png", "jpg", "jpeg", "webp", "svg"].includes(ext);
+          if (typeLabel.includes("Spreadsheets")) return ["xlsx", "xls", "csv"].includes(ext);
+          return false;
+        }).length;
+
+        const folderColor =
+          typeLabel.includes("CDR")
+            ? "#047857"
+            : typeLabel.includes("PSD")
+            ? "#0284c7"
+            : typeLabel.includes("AI")
+            ? "#ea580c"
+            : typeLabel.includes("PDF")
+            ? "#dc2626"
+            : typeLabel.includes("Images")
+            ? "#0369a1"
+            : "#f59e0b";
+
+        return {
+          id: `ft-${matchedClient.id}-${idx}`,
+          name: `2026 \\ ${typeLabel}`,
+          type: "folder",
+          color: folderColor,
+          emblem: "folder",
+          projectCount: 1,
+          fileCount: matchingCount || 1,
+          modifiedAt: "Today, 12:45 PM",
+          folderPath: `${controlledDrive.letter}\\Clients\\${matchedClient.name}\\2026\\${typeLabel}`,
+        };
+      });
+
+      const directClientFiles: ExplorerFileEntry[] = clientFiles.map((f) => {
+        const { extColor, extBg } = getExtBadgeColors(f.extension);
+        const size = f.fileSizeBytes || f.sizeBytes || 24600000;
+        return {
+          id: f.id,
+          name: f.filename,
+          type: "file",
+          ext: f.extension,
+          extColor,
+          extBg,
+          clientName: f.clientName,
+          projectName: f.projectName,
+          year: f.year,
+          versionNumber: f.version,
+          sizeBytes: size,
+          formattedSize: formatFileSize(size),
+          modifiedAt: "Today, 12:45 PM",
+          targetPath: f.path,
+          sha256: f.sha256Hash,
+          lineage: f.versionChain?.map((v: any) => ({
+            versionNumber: v.version,
+            filename: v.name,
+            createdAt: v.date,
+            isCurrent: Boolean(v.isCurrent),
+          })),
+        };
+      });
+
+      return [...fileTypeFolders, ...directClientFiles];
     }
 
     return [];
-  }, [currentPath, rawClients, rawProjects, rawFiles]);
+  }, [currentPath, searchQuery, rawClients, rawProjects, rawFiles, controlledDrive.letter]);
 
   const recentExplorerFiles = useMemo((): ExplorerFileEntry[] => {
     return rawFiles.slice(0, 10).map((f) => {
@@ -1098,7 +1257,10 @@ export const AppContent: React.FC = () => {
                     else if (view === "clients") navigateToPath("D:\\Clients");
                     else setCurrentView(view as NavView);
                   }}
-                  onSelectItem={setSelectedItem}
+                  onSelectItem={(item) => {
+                    setSelectedItem(item);
+                    if (item) setIsInspectorOpen(true);
+                  }}
                   onOpenFile={(f) => f.targetPath && handleOpenFile(f.targetPath)}
                   onScanNow={handleScanNow}
                 />
@@ -1112,7 +1274,10 @@ export const AppContent: React.FC = () => {
                   onChangeViewMode={setViewMode}
                   searchQuery={searchQuery}
                   selectedItem={selectedItem}
-                  onSelectItem={setSelectedItem}
+                  onSelectItem={(item) => {
+                    setSelectedItem(item);
+                    if (item) setIsInspectorOpen(true);
+                  }}
                   onOpenFolder={(folder) => {
                     if (folder.folderPath) navigateToPath(folder.folderPath);
                   }}

@@ -134,8 +134,8 @@ export function setupBrowserMockBridge() {
       filename: "ABC School ID Card 2026 v8.cdr",
       originalName: "abc school id card 2026 v8.cdr",
       currentName: "ABC School ID Card 2026 v8.cdr",
-      path: "D:\\Clients\\ABC School\\2026\\ID Card\\ABC School ID Card 2026 v8.cdr",
-      currentPath: "D:\\Clients\\ABC School\\2026\\ID Card\\ABC School ID Card 2026 v8.cdr",
+      path: "D:\\Clients\\ABC School\\2026\\CDR - CorelDRAW Designs\\ID Card\\ABC School ID Card 2026 v8.cdr",
+      currentPath: "D:\\Clients\\ABC School\\2026\\CDR - CorelDRAW Designs\\ID Card\\ABC School ID Card 2026 v8.cdr",
       extension: "cdr",
       fileSizeBytes: 24580000,
       sizeBytes: 24580000,
@@ -165,8 +165,8 @@ export function setupBrowserMockBridge() {
       filename: "Apex Healthcare Staff ID Card 2026 v3.pdf",
       originalName: "apex staff id card 2026 v3.pdf",
       currentName: "Apex Healthcare Staff ID Card 2026 v3.pdf",
-      path: "D:\\Clients\\Apex Healthcare\\2026\\ID Card\\Apex Healthcare Staff ID Card 2026 v3.pdf",
-      currentPath: "D:\\Clients\\Apex Healthcare\\2026\\ID Card\\Apex Healthcare Staff ID Card 2026 v3.pdf",
+      path: "D:\\Clients\\Apex Healthcare\\2026\\PDF - Deliverables\\ID Card\\Apex Healthcare Staff ID Card 2026 v3.pdf",
+      currentPath: "D:\\Clients\\Apex Healthcare\\2026\\PDF - Deliverables\\ID Card\\Apex Healthcare Staff ID Card 2026 v3.pdf",
       extension: "pdf",
       fileSizeBytes: 4200000,
       sizeBytes: 4200000,
@@ -195,8 +195,8 @@ export function setupBrowserMockBridge() {
       filename: "Zenith Corp Corporate Lanyard 2025 v1.cdr",
       originalName: "zenith lanyard design 2025 v1.cdr",
       currentName: "Zenith Corp Corporate Lanyard 2025 v1.cdr",
-      path: "D:\\Clients\\Zenith Corp\\2025\\Merchandise\\Zenith Corp Corporate Lanyard 2025 v1.cdr",
-      currentPath: "D:\\Clients\\Zenith Corp\\2025\\Merchandise\\Zenith Corp Corporate Lanyard 2025 v1.cdr",
+      path: "D:\\Clients\\Zenith Corp\\2025\\CDR - CorelDRAW Designs\\Merchandise\\Zenith Corp Corporate Lanyard 2025 v1.cdr",
+      currentPath: "D:\\Clients\\Zenith Corp\\2025\\CDR - CorelDRAW Designs\\Merchandise\\Zenith Corp Corporate Lanyard 2025 v1.cdr",
       extension: "cdr",
       fileSizeBytes: 18900000,
       sizeBytes: 18900000,
@@ -223,8 +223,8 @@ export function setupBrowserMockBridge() {
       filename: "ABC School Annual Magazine 2026 v2.pdf",
       originalName: "abc magazine final print 2026 v2.pdf",
       currentName: "ABC School Annual Magazine 2026 v2.pdf",
-      path: "D:\\Clients\\ABC School\\2026\\Publication\\ABC School Annual Magazine 2026 v2.pdf",
-      currentPath: "D:\\Clients\\ABC School\\2026\\Publication\\ABC School Annual Magazine 2026 v2.pdf",
+      path: "D:\\Clients\\ABC School\\2026\\PDF - Deliverables\\Publication\\ABC School Annual Magazine 2026 v2.pdf",
+      currentPath: "D:\\Clients\\ABC School\\2026\\PDF - Deliverables\\Publication\\ABC School Annual Magazine 2026 v2.pdf",
       extension: "pdf",
       fileSizeBytes: 84100000,
       sizeBytes: 84100000,
@@ -252,8 +252,8 @@ export function setupBrowserMockBridge() {
       filename: "Apex Healthcare Emergency Signage 2026 v1.ai",
       originalName: "emergency board apex 2026 v1.ai",
       currentName: "Apex Healthcare Emergency Signage 2026 v1.ai",
-      path: "D:\\Clients\\Apex Healthcare\\2026\\Signage\\Apex Healthcare Emergency Signage 2026 v1.ai",
-      currentPath: "D:\\Clients\\Apex Healthcare\\2026\\Signage\\Apex Healthcare Emergency Signage 2026 v1.ai",
+      path: "D:\\Clients\\Apex Healthcare\\2026\\AI - Illustrator Artwork\\Signage\\Apex Healthcare Emergency Signage 2026 v1.ai",
+      currentPath: "D:\\Clients\\Apex Healthcare\\2026\\AI - Illustrator Artwork\\Signage\\Apex Healthcare Emergency Signage 2026 v1.ai",
       extension: "ai",
       fileSizeBytes: 38200000,
       sizeBytes: 38200000,
@@ -606,15 +606,35 @@ export function setupBrowserMockBridge() {
             const ver = versionMatch ? Number(versionMatch[1]) : 1;
             const category = lower.includes("card") ? "ID Card" : lower.includes("sign") ? "Signage" : lower.includes("magazine") ? "Publication" : "Design";
 
+            const fileTypeFolder =
+              ext === "cdr"
+                ? "CDR - CorelDRAW Designs"
+                : ext === "psd"
+                ? "PSD - Photoshop Documents"
+                : ext === "ai"
+                ? "AI - Illustrator Artwork"
+                : ext === "indd"
+                ? "INDD - InDesign Layouts"
+                : ext === "pdf"
+                ? "PDF - Deliverables"
+                : ["png", "jpg", "jpeg", "webp", "svg"].includes(ext)
+                ? "Images & Assets"
+                : ["xlsx", "xls", "csv"].includes(ext)
+                ? "Spreadsheets & Data"
+                : "Other Files";
+
+            const canonicalFilename = `${matchedClient.name} ${category} ${year} v${ver}.${ext}`;
+            const targetPath = `${settings.storage.organizationRoot}\\${matchedClient.name}\\${year}\\${fileTypeFolder}\\${category}\\${canonicalFilename}`;
+
             const newFile = {
               id: `file-${Date.now()}`,
               clientId: matchedClient.id,
               projectId: `proj-sim-${Date.now()}`,
-              filename: `${matchedClient.name} ${category} ${year} v${ver}.${ext}`,
+              filename: canonicalFilename,
               originalName: rawName,
-              currentName: `${matchedClient.name} ${category} ${year} v${ver}.${ext}`,
-              path: `${settings.storage.organizationRoot}\\${matchedClient.name}\\${year}\\${category}\\${matchedClient.name} ${category} ${year} v${ver}.${ext}`,
-              currentPath: `${settings.storage.organizationRoot}\\${matchedClient.name}\\${year}\\${category}\\${matchedClient.name} ${category} ${year} v${ver}.${ext}`,
+              currentName: canonicalFilename,
+              path: targetPath,
+              currentPath: targetPath,
               extension: ext,
               fileSizeBytes: payload?.sizeBytes || 18500000,
               sizeBytes: payload?.sizeBytes || 18500000,
@@ -629,7 +649,7 @@ export function setupBrowserMockBridge() {
               year: year,
               sha256Hash: "b6c97a5f3d2e1048491827461928471928374619283746192837461928374619",
               versionChain: [
-                { version: ver, name: `${matchedClient.name} ${category} ${year} v${ver}.${ext}`, date: "Just now", isCurrent: true },
+                { version: ver, name: canonicalFilename, date: "Just now", isCurrent: true },
               ],
               createdAt: new Date().toISOString(),
               updatedAt: new Date().toISOString(),
@@ -762,20 +782,41 @@ export function setupBrowserMockBridge() {
             reviewQueue.splice(foundIdx, 1);
             const client = clients.find((c) => c.id === payload.clientId);
             const project = projects.find((p) => p.id === payload.projectId);
+            const ext = (item.originalName.split(".").pop() || "cdr").toLowerCase();
+            const fileTypeFolder =
+              ext === "cdr"
+                ? "CDR - CorelDRAW Designs"
+                : ext === "psd"
+                ? "PSD - Photoshop Documents"
+                : ext === "ai"
+                ? "AI - Illustrator Artwork"
+                : ext === "indd"
+                ? "INDD - InDesign Layouts"
+                : ext === "pdf"
+                ? "PDF - Deliverables"
+                : ["png", "jpg", "jpeg", "webp", "svg"].includes(ext)
+                ? "Images & Assets"
+                : ["xlsx", "xls", "csv"].includes(ext)
+                ? "Spreadsheets & Data"
+                : "Other Files";
+
+            const canonicalFilename = `${client?.name || "Client"} ${project?.name || payload.category || "Deliverable"} ${payload.year || 2026} v${payload.versionNumber || 1}.${ext}`;
+            const targetPath = `${settings.storage.organizationRoot}\\${client?.name || "Client"}\\${payload.year || 2026}\\${fileTypeFolder}\\${payload.category || "Design"}\\${canonicalFilename}`;
+
             files.unshift({
               id: `file-${Date.now()}`,
               clientId: payload.clientId,
               projectId: payload.projectId,
-              filename: item.originalName,
+              filename: canonicalFilename,
               originalName: item.originalName,
-              currentName: item.originalName,
-              path: `${settings.storage.organizationRoot}\\${client?.name || "Client"}\\${payload.year || 2026}\\${payload.category || "Design"}\\${item.originalName}`,
-              currentPath: `${settings.storage.organizationRoot}\\${client?.name || "Client"}\\${payload.year || 2026}\\${payload.category || "Design"}\\${item.originalName}`,
-              extension: item.originalName.split(".").pop() || "dat",
-              fileSizeBytes: item.detectedMetadata?.sizeBytes || 5000000,
-              sizeBytes: item.detectedMetadata?.sizeBytes || 5000000,
-              version: 1,
-              versionNumber: 1,
+              currentName: canonicalFilename,
+              path: targetPath,
+              currentPath: targetPath,
+              extension: ext,
+              fileSizeBytes: item.detectedMetadata?.sizeBytes || 5400000,
+              sizeBytes: item.detectedMetadata?.sizeBytes || 5400000,
+              version: payload.versionNumber || 1,
+              versionNumber: payload.versionNumber || 1,
               status: "ORGANIZED",
               classificationConfidence: 1.0,
               clientName: client?.name || "Client",
@@ -784,7 +825,7 @@ export function setupBrowserMockBridge() {
               categoryName: payload.category || "Design",
               year: payload.year || 2026,
               sha256Hash: "a1b2c3d4e5f67890123456789abcdef0123456789abcdef0123456789abcdef0",
-              versionChain: [{ version: 1, name: item.originalName, date: "Just now", isCurrent: true }],
+              versionChain: [{ version: payload.versionNumber || 1, name: canonicalFilename, date: "Just now", isCurrent: true }],
               createdAt: new Date().toISOString(),
               updatedAt: new Date().toISOString(),
             });

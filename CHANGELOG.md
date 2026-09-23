@@ -10,6 +10,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Search Overhaul, Windows Explorer Preview Canvas, Desktop Logos, File Type Ingestion & Canonical Renaming**:
+  - **Search Overhaul & Global Recursive Discovery**: Upgraded the search experience in `App.tsx` and `ExplorerView.tsx` so typing in the search box queries all indexed files and client folders across the controlled drive recursively, matching filenames, client names, project categories, extensions, years, and versions. Displayed full file paths during search and automated preview opening upon selection.
+  - **Windows File Explorer Preview Canvas**: Built `FilePreviewCanvas.tsx` embedded in `InspectorPanel.tsx` and `Search.tsx`, rendering rich realistic visual design previews:
+    - *CorelDRAW (`.cdr`)*: Student ID card with student photo avatar, school header, data fields, barcode, security watermark, CR80 credit card dimensions, and CMYK color palette swatches; emergency signage with ISO safety icons; brochure cover.
+    - *Photoshop (`.psd`)*: Layered artboard preview with a 5-layer hierarchy list (Overlay, Vector Logo, Typography, Retouched Photo, Background), RGB/CMYK color space, and 300 DPI badge.
+    - *Illustrator (`.ai` / `.eps`)*: Vector artboard preview with vector curves, bounding box, Pantone spot color swatches, and CMYK tags.
+    - *PDF (`.pdf`)*: Multi-page document sheet mockup with header, text columns, pagination, and PDF/X certification badge.
+    - *Spreadsheets (`.xlsx` / `.csv`)*: Interactive data table sheet preview with column headers, cell grid, and row counts.
+    - *Images (`.png` / `.jpg` / `.webp`)*: High-res picture canvas with checkered transparency frame.
+  - **Desktop Vector Logos Everywhere**: Standardized authentic vector icons (`FileFormatIcon.tsx`) across Search results (`Search.tsx`), Recent files (`HomeView.tsx`), Review Queue table and heuristics pane (`ReviewQueue.tsx`), and Inspector header (`InspectorPanel.tsx`), eliminating old generic icons or plain text tags.
+  - **Accurate File Sizes**: Ensured accurate file size calculations and formatting across all views and files (e.g. `23.4 MB`, `80.2 MB`, `4.0 MB`, `15.4 MB`), eliminating missing sizes or `—` dashes.
+  - **Folder Organization Divided by Client AND File Type**:
+    - Added `{FileType}` / `{Format}` token extraction and `FILE_TYPE_FOLDER_NAMES` dictionary in `template-engine.ts` (`CDR - CorelDRAW Designs`, `AI - Illustrator Artwork`, `PSD - Photoshop Documents`, `PDF - Deliverables`, `Spreadsheets & Data`, `Images & Assets`).
+    - Added unit test in `tests/naming.test.ts` verifying file type folder token rendering.
+    - Updated `mock-bridge.ts` simulated ingestion, review resolution, and client subfolders in `App.tsx` so deliverables are organized into `Clients/{Client}/{Year}/{FileType}/{Category}`.
+  - **Intelligent Canonical Renaming Formatter**:
+    - Implemented `canonicalizeFilename` in `template-engine.ts`, `packages/shared/src/constants.ts`, and browser-safe `canonical-renamer.ts`.
+    - Automatically parses raw user filenames (e.g. `abc id v2 final.cdr`), detects client, project category, year, and version, and normalizes them into standard canonical format `{Client} {Project} {Year} v{Version}.{ext}` (e.g. `ABC School Student ID Card 2026 v2.cdr`).
+    - Integrated into inline rename (`F2`), context menu rename, and simulated ingest.
 - **Sidebar Controlled Drive Filter & Internal Folders Presentation**:
   - Filtered the navigation tree under "This PC" to display exclusively the active selected/controlled drive (`controlledDrive`), removing all other unselected drives (e.g. `Local Disk (C:)`) to prevent clutter.
   - Formatted the selected drive's internal quadrant folders cleanly inside the tree: `Inbox` (watcher folder), `Clients` (expandable directory listing client folders with their visual color/emblems), `Archive`, and `Review Queue` (with badge counter).

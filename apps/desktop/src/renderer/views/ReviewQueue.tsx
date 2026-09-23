@@ -13,6 +13,7 @@ import {
   Calendar,
   FolderTree,
   ExternalLink,
+  X,
 } from "lucide-react";
 import { Badge, Modal, EmptyState, FileFormatIcon } from "../components/ui/index.js";
 import { useToast } from "../components/ui/Toast.js";
@@ -285,24 +286,38 @@ export const ReviewQueue: React.FC = () => {
 
       {/* Right Side: Classification & Destination Inspector Pane */}
       {selectedItem && (
-        <aside className="review-inspector-pane">
-          <div className="inspector-title-bar">
-            <span style={{ fontWeight: 600, fontSize: 13 }}>Classification Heuristics</span>
-            <Badge variant="amber" size="sm">
-              {Math.round((selectedItem.suggestedConfidence || selectedItem.confidenceScore || 0.65) * 100)}% Match
-            </Badge>
+        <aside className="review-inspector-pane animate-fade-in">
+          <div className="inspector-header">
+            <div className="inspector-title">
+              <Sparkles size={14} className="inspector-title-icon" color="var(--brand-primary)" />
+              <span>Classification Inspector</span>
+            </div>
+            <button
+              type="button"
+              className="inspector-close-btn"
+              onClick={() => setSelectedItemId(null)}
+              title="Close Pane"
+            >
+              <X size={15} />
+            </button>
           </div>
 
-          <div className="inspector-scroll-area">
+          <div className="inspector-body">
             {/* File identity header */}
-            <div className="file-identity-box">
+            <div className="inspector-preview-card">
               <FileFormatIcon extension={selectedItem.originalName.split(".").pop()} size="lg" />
-              <div style={{ minWidth: 0, flex: 1 }}>
-                <div className="inspect-filename" title={selectedItem.originalName}>
+              <div className="inspector-file-name-block">
+                <h3 className="inspector-file-name" title={selectedItem.originalName}>
                   {selectedItem.originalName}
-                </div>
-                <div className="inspect-sub">
-                  Detected in Inbox • {selectedItem.detectedMetadata?.sizeBytes ? `${(selectedItem.detectedMetadata.sizeBytes / (1024 * 1024)).toFixed(1)} MB` : "15.4 MB"} • {selectedItem.filePath || selectedItem.originalPath}
+                </h3>
+                <div className="inspector-version-tag">
+                  <span>Detected in Inbox</span>
+                  {selectedItem.detectedMetadata?.sizeBytes && (
+                    <>
+                      <span className="dot-sep">•</span>
+                      <span>{(selectedItem.detectedMetadata.sizeBytes / (1024 * 1024)).toFixed(1)} MB</span>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
@@ -310,7 +325,7 @@ export const ReviewQueue: React.FC = () => {
             {/* Inference rationale */}
             <div className="rationale-box">
               <div className="rationale-title">
-                <AlertTriangle size={13} color="var(--accent-amber)" />
+                <AlertTriangle size={13} color="var(--accent-amber-text, #92400e)" />
                 <span>Inference Rationale</span>
               </div>
               <p className="rationale-text">
@@ -321,106 +336,106 @@ export const ReviewQueue: React.FC = () => {
             </div>
 
             {/* Destination Configuration Form */}
-            <div className="classification-form">
-              <div className="form-field">
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
-                  <label className="field-label">Target Client</label>
-                  <button
-                    type="button"
-                    className="btn-link-action"
-                    onClick={() => setShowAddClientModal(true)}
+            <div className="inspector-meta-group">
+              <div className="inspector-meta-heading">Destination Assignment</div>
+              <div className="classification-form">
+                <div className="form-field">
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 2 }}>
+                    <label className="field-label">Target Client Folder</label>
+                    <button
+                      type="button"
+                      className="btn-link-action"
+                      onClick={() => setShowAddClientModal(true)}
+                    >
+                      <UserPlus size={12} />
+                      <span>New Client</span>
+                    </button>
+                  </div>
+                  <select
+                    className="select-input"
+                    value={selectedClientMap[selectedItem.id] || ""}
+                    onChange={(e) =>
+                      setSelectedClientMap((prev) => ({ ...prev, [selectedItem.id]: e.target.value }))
+                    }
                   >
-                    <UserPlus size={12} />
-                    <span>New Client</span>
-                  </button>
-                </div>
-                <select
-                  className="select-input"
-                  value={selectedClientMap[selectedItem.id] || ""}
-                  onChange={(e) =>
-                    setSelectedClientMap((prev) => ({ ...prev, [selectedItem.id]: e.target.value }))
-                  }
-                >
-                  <option value="" disabled>
-                    -- Select Target Client Folder --
-                  </option>
-                  {clients.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.name} ({c.code || c.name})
+                    <option value="" disabled>
+                      -- Select Target Client Folder --
                     </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="form-field">
-                <label className="field-label">Project Subfolder</label>
-                <select
-                  className="select-input"
-                  value={selectedProjectMap[selectedItem.id] || ""}
-                  onChange={(e) =>
-                    setSelectedProjectMap((prev) => ({ ...prev, [selectedItem.id]: e.target.value }))
-                  }
-                >
-                  <option value="">Default Design Deliverable</option>
-                  {filteredProjects.map((p) => (
-                    <option key={p.id} value={p.id}>
-                      {p.year ? `${p.year} \\ ` : ""}{p.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
-                <div className="form-field">
-                  <label className="field-label">Year</label>
-                  <input
-                    type="number"
-                    className="input-text"
-                    value={yearMap[selectedItem.id] || 2026}
-                    onChange={(e) =>
-                      setYearMap((prev) => ({ ...prev, [selectedItem.id]: Number(e.target.value) }))
-                    }
-                  />
+                    {clients.map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.name}{c.code && c.code !== c.name ? ` (${c.code})` : ""}
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
                 <div className="form-field">
-                  <label className="field-label">Version Number</label>
-                  <input
-                    type="number"
-                    min={1}
-                    className="input-text"
-                    value={versionMap[selectedItem.id] || 1}
+                  <label className="field-label">Project Subfolder</label>
+                  <select
+                    className="select-input"
+                    value={selectedProjectMap[selectedItem.id] || ""}
                     onChange={(e) =>
-                      setVersionMap((prev) => ({ ...prev, [selectedItem.id]: Number(e.target.value) }))
+                      setSelectedProjectMap((prev) => ({ ...prev, [selectedItem.id]: e.target.value }))
+                    }
+                  >
+                    <option value="">Default Design Deliverable</option>
+                    {filteredProjects.map((p) => (
+                      <option key={p.id} value={p.id}>
+                        {p.year ? `${p.year} \\ ` : ""}{p.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+                  <div className="form-field">
+                    <label className="field-label">Year</label>
+                    <input
+                      type="number"
+                      className="input-text"
+                      value={yearMap[selectedItem.id] || 2026}
+                      onChange={(e) =>
+                        setYearMap((prev) => ({ ...prev, [selectedItem.id]: Number(e.target.value) }))
+                      }
+                    />
+                  </div>
+
+                  <div className="form-field">
+                    <label className="field-label">Version</label>
+                    <input
+                      type="number"
+                      min={1}
+                      className="input-text"
+                      value={versionMap[selectedItem.id] || 1}
+                      onChange={(e) =>
+                        setVersionMap((prev) => ({ ...prev, [selectedItem.id]: Number(e.target.value) }))
+                      }
+                    />
+                  </div>
+                </div>
+
+                {/* Learn alias toggle */}
+                <div className="learn-alias-row">
+                  <input
+                    type="checkbox"
+                    id={`learn-${selectedItem.id}`}
+                    checked={learnAliasMap[selectedItem.id] ?? true}
+                    onChange={(e) =>
+                      setLearnAliasMap((prev) => ({ ...prev, [selectedItem.id]: e.target.checked }))
                     }
                   />
+                  <label htmlFor={`learn-${selectedItem.id}`} className="learn-label">
+                    <Sparkles size={13} color="var(--brand-primary)" />
+                    <span>Remember filename alias to auto-classify future files</span>
+                  </label>
                 </div>
-              </div>
 
-              {/* Learn alias toggle */}
-              <div className="learn-alias-row">
-                <input
-                  type="checkbox"
-                  id={`learn-${selectedItem.id}`}
-                  checked={learnAliasMap[selectedItem.id] ?? true}
-                  onChange={(e) =>
-                    setLearnAliasMap((prev) => ({ ...prev, [selectedItem.id]: e.target.checked }))
-                  }
-                />
-                <label htmlFor={`learn-${selectedItem.id}`} className="learn-label">
-                  <Sparkles size={13} color="var(--brand-primary)" />
-                  <span>Remember filename alias to auto-classify future files</span>
-                </label>
-              </div>
-
-              {/* Target Final Path Preview */}
-              <div className="target-path-preview">
-                <div className="preview-label">Target Destination:</div>
-                <div className="preview-path code-font">
-                  D:\Clients\
-                  {clients.find((c) => c.id === selectedClientMap[selectedItem.id])?.name || "[Client]"}\
-                  {yearMap[selectedItem.id] || 2026}\
-                  {selectedItem.originalName}
+                {/* Target Final Path Preview */}
+                <div className="target-path-preview">
+                  <div className="preview-label">Target Destination:</div>
+                  <code className="preview-path code-font">
+                    {`Clients\\${clients.find((c) => c.id === selectedClientMap[selectedItem.id])?.name || "[Client]"}\\${yearMap[selectedItem.id] || 2026}\\${selectedItem.originalName}`}
+                  </code>
                 </div>
               </div>
             </div>
@@ -430,7 +445,7 @@ export const ReviewQueue: React.FC = () => {
             <button
               type="button"
               className="btn btn-primary"
-              style={{ width: "100%", justifyContent: "center" }}
+              style={{ width: "100%", justifyContent: "center", height: 36 }}
               onClick={() => handleResolve(selectedItem)}
               disabled={isResolving === selectedItem.id}
             >

@@ -75,6 +75,7 @@ export const AppContent: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState<SelectedItem>(null);
   const [appMode, setAppMode] = useState<"foreground" | "background">("foreground");
   const [viewportIsValid, setViewportIsValid] = useState(() => window.innerWidth >= 800);
+  const [sortField, setSortField] = useState<"name" | "type" | "modifiedAt" | "size">("name");
 
   // 4. Modal Dialog States
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
@@ -598,6 +599,8 @@ export const AppContent: React.FC = () => {
             controlledDriveLetter={controlledDrive.letter}
             appMode={appMode}
             onToggleAppMode={() => setAppMode((prev) => (prev === "foreground" ? "background" : "foreground"))}
+            sortField={sortField}
+            onSortBy={setSortField}
           />
 
           {/* Viewport Split: Main Content + Collapsible Details Pane */}
@@ -642,6 +645,8 @@ export const AppContent: React.FC = () => {
                   onShowInFolder={handleShowInFolder}
                   onRefresh={loadData}
                   onFolderAppearance={(folder) => handleOpenFolderCustomizer(folder)}
+                  sortField={sortField}
+                  onSortBy={setSortField}
                 />
               )}
 

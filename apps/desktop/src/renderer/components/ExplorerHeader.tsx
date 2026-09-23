@@ -75,6 +75,8 @@ interface ExplorerHeaderProps {
   controlledDriveLetter?: string;
   appMode?: "foreground" | "background";
   onToggleAppMode?: () => void;
+  sortField?: "name" | "type" | "modifiedAt" | "size";
+  onSortBy?: (field: "name" | "type" | "modifiedAt" | "size") => void;
 }
 
 export const ExplorerHeader: React.FC<ExplorerHeaderProps> = ({
@@ -110,6 +112,8 @@ export const ExplorerHeader: React.FC<ExplorerHeaderProps> = ({
   controlledDriveLetter = "D:",
   appMode = "foreground",
   onToggleAppMode,
+  sortField = "name",
+  onSortBy,
 }) => {
   const [isAddressInputMode, setIsAddressInputMode] = useState(false);
   const [rawAddress, setRawAddress] = useState("");
@@ -332,34 +336,46 @@ export const ExplorerHeader: React.FC<ExplorerHeaderProps> = ({
               <div className="dropdown-label">Sort by</div>
               <button
                 type="button"
-                className="win11-dropdown-item active"
-                onClick={() => setIsSortMenuOpen(false)}
+                className={`win11-dropdown-item ${sortField === "name" ? "active" : ""}`}
+                onClick={() => {
+                  onSortBy?.("name");
+                  setIsSortMenuOpen(false);
+                }}
               >
-                <Check size={13} />
+                {sortField === "name" ? <Check size={13} /> : <span className="item-spacer" />}
                 <span>Name</span>
               </button>
               <button
                 type="button"
-                className="win11-dropdown-item"
-                onClick={() => setIsSortMenuOpen(false)}
+                className={`win11-dropdown-item ${sortField === "modifiedAt" ? "active" : ""}`}
+                onClick={() => {
+                  onSortBy?.("modifiedAt");
+                  setIsSortMenuOpen(false);
+                }}
               >
-                <span className="item-spacer" />
+                {sortField === "modifiedAt" ? <Check size={13} /> : <span className="item-spacer" />}
                 <span>Date modified</span>
               </button>
               <button
                 type="button"
-                className="win11-dropdown-item"
-                onClick={() => setIsSortMenuOpen(false)}
+                className={`win11-dropdown-item ${sortField === "type" ? "active" : ""}`}
+                onClick={() => {
+                  onSortBy?.("type");
+                  setIsSortMenuOpen(false);
+                }}
               >
-                <span className="item-spacer" />
+                {sortField === "type" ? <Check size={13} /> : <span className="item-spacer" />}
                 <span>Type</span>
               </button>
               <button
                 type="button"
-                className="win11-dropdown-item"
-                onClick={() => setIsSortMenuOpen(false)}
+                className={`win11-dropdown-item ${sortField === "size" ? "active" : ""}`}
+                onClick={() => {
+                  onSortBy?.("size");
+                  setIsSortMenuOpen(false);
+                }}
               >
-                <span className="item-spacer" />
+                {sortField === "size" ? <Check size={13} /> : <span className="item-spacer" />}
                 <span>Size</span>
               </button>
             </div>

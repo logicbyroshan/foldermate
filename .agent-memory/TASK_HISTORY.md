@@ -662,4 +662,33 @@ Important decisions:
 - Removing redundant cards from inspector panels declutters the interface and keeps the user focused on actionable details (preview, actions, path, and version lineage) without repeating what is already displayed in the main table.
 - Using a high-contrast amber tone (`#d97706`) preserves FolderMate's signature amber brand identity while guaranteeing WCAG AA accessibility standards.
 
+### Review Queue Inspector Drawer Layout & Spacing Overhaul
+Task: Fix Review Queue inspector drawer layout, internal padding, margins, card containers, and polish sidebar/navbar/dropdown components.
+Reason: The Classification Inspector drawer in the Review Queue view lacked structured container classes and CSS rules, causing squished unpadded forms and inconsistent margins.
+Files/areas affected:
+- `apps/desktop/src/renderer/views/ReviewQueue.tsx`
+- `apps/desktop/src/renderer/index.css`
+- `CHANGELOG.md`
+- `.agent-memory/CURRENT_STATE.md`
+- `.agent-memory/TASK_HISTORY.md`
+What changed:
+- **Review Queue Inspector Drawer**:
+  - Implemented rigid 380px fixed width (`.review-inspector-pane`) with `16px` padding and `14px` gap between groupings.
+  - Added clean `.inspector-header` with Lucide `Sparkles` icon and `X` close button.
+  - Formatted file identity inside `.inspector-preview-card` with vector format icon (`CDR`, `PDF`) and version tag.
+  - Styled `.rationale-box` with amber accent warning border and clear inference text.
+  - Structured `.inspector-meta-group` and `.classification-form` with clean field labels, 36px select inputs, number inputs, learn alias checkbox row, and target destination preview code block.
+  - Positioned full-width primary "Approve & Move" button inside `.inspector-footer`.
+- **File Preview Canvas & Vector Intelligence Styles**:
+  - Added complete CSS rules for `FilePreviewCanvas.tsx` across CorelDRAW ID card mockups, emergency signage, brochure cover, Photoshop 5-layer hierarchy, Illustrator Pantone artwork, multi-page PDF sheet, Excel data table, image checkerboards, and 2x2 specs grid.
+- **Sidebar & Command Bar Active/Hover States**:
+  - Polished `.win11-sidebar`, `.win11-tree-row.selected` (with active gold background and 3px left border accent), `.win11-btn`, `.win11-icon-btn`, `.win11-dropdown`, and `.win11-dropdown-item` hover/active transitions.
+Testing performed:
+- `npm run build`: Monorepo workspaces compiled with 0 errors.
+- `npm test`: All 13 test suites (40 tests) passed 100%.
+- Verified in browser subagent on `http://localhost:5189/` across Review Queue, Home, and Explorer views.
+Important decisions:
+- Standardizing the review inspector layout to match `InspectorPanel.tsx` created consistent visual rhythm and solved all layout shifts and margin squishing across the application.
+
+
 

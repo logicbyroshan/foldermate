@@ -4187,10 +4187,10 @@ select option {
 .inspector-body {
   flex: 1;
   overflow-y: auto;
-  padding: 14px 16px;
+  padding: 12px 14px 14px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
 .inspector-file-details,
@@ -4509,6 +4509,163 @@ select option {
   max-width: 240px;
   line-height: 1.5;
   margin: 0;
+}
+
+/* ============================================================
+   INSPECTOR TWO-TAB STRIP — Preview | Intelligence
+   ============================================================ */
+.inspector-tab-strip {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--bg-canvas);
+  padding: 0 12px;
+  gap: 0;
+  min-height: 36px;
+  flex-shrink: 0;
+}
+
+.inspector-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 14px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.inspector-tab-btn:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+.inspector-tab-btn.active {
+  color: var(--brand-primary);
+  border-bottom-color: var(--brand-primary);
+  font-weight: 700;
+}
+
+/* Tab content wrapper — adds proper spacing inside each tab */
+.inspector-tab-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Preview Tab: mini identity strip above canvas ── */
+.inspector-preview-identity {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: var(--bg-canvas);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.inspector-preview-identity-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.preview-identity-ext {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.preview-identity-size {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.preview-identity-version {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--brand-primary);
+  background: var(--brand-primary-soft);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+
+/* ── Preview Tab: action buttons pinned below canvas ── */
+.inspector-preview-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+/* ── Preview Tab: Folder visual art ── */
+.inspector-folder-preview-art {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 28px 16px 20px;
+  background: linear-gradient(160deg, #fefce8 0%, #fff7ed 50%, #f0f9ff 100%);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+
+.inspector-folder-big-icon {
+  filter: drop-shadow(0 4px 12px rgba(245, 158, 11, 0.18));
+  transition: transform 0.2s ease;
+}
+
+.inspector-folder-big-icon:hover {
+  transform: scale(1.05) translateY(-2px);
+}
+
+.inspector-folder-preview-label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+}
+
+.folder-preview-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.folder-preview-category {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ── Inspector title: file name mode (compact) ── */
+.inspector-title-name {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 200px;
+  text-transform: none;
+  letter-spacing: 0;
 }
 
 .search-clear-btn {

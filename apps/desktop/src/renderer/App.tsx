@@ -226,7 +226,13 @@ export const AppContent: React.FC = () => {
   };
 
   const explorerEntries = useMemo((): ExplorerEntry[] => {
-    const isRoot = currentPath === "D:\\Clients" || currentPath === "root" || currentPath === "Clients";
+    const isRoot =
+      currentPath.toLowerCase() === `${controlledDrive.letter.toLowerCase()}\\clients` ||
+      currentPath.toLowerCase() === "d:\\clients" ||
+      currentPath === "root" ||
+      currentPath === "Clients" ||
+      currentPath === `${controlledDrive.letter}\\` ||
+      currentPath === controlledDrive.letter;
 
     if (isRoot) {
       const folderEntries: ExplorerFolderEntry[] = rawClients.map((c) => ({
@@ -305,21 +311,23 @@ export const AppContent: React.FC = () => {
           id: "arch-2025",
           name: "2025 Archived Deliverables",
           type: "folder",
-          color: "purple",
+          color: "#7c3aed",
+          emblem: "archive",
           projectCount: 8,
           fileCount: 34,
           modifiedAt: "Jan 15, 2026",
-          folderPath: "D:\\Archive\\2025",
+          folderPath: `${controlledDrive.letter}\\Archive\\2025`,
         },
         {
           id: "arch-2024",
           name: "2024 Archived Deliverables",
           type: "folder",
-          color: "purple",
+          color: "#7c3aed",
+          emblem: "archive",
           projectCount: 14,
           fileCount: 82,
           modifiedAt: "Dec 30, 2024",
-          folderPath: "D:\\Archive\\2024",
+          folderPath: `${controlledDrive.letter}\\Archive\\2024`,
         },
       ];
       return archiveFolders;
@@ -333,11 +341,12 @@ export const AppContent: React.FC = () => {
         id: p.id,
         name: `${p.year} \\ ${p.name}`,
         type: "folder",
-        color: matchedClient.color || "Amber",
+        color: matchedClient.color || "#f59e0b",
+        emblem: "project",
         projectCount: 1,
         fileCount: rawFiles.filter((f) => f.projectId === p.id).length,
         modifiedAt: "Yesterday",
-        folderPath: `D:\\Clients\\${matchedClient.name}\\${p.year}\\${p.name}`,
+        folderPath: `${controlledDrive.letter}\\Clients\\${matchedClient.name}\\${p.year}\\${p.name}`,
       }));
 
       const clientFiles: ExplorerFileEntry[] = rawFiles
@@ -464,9 +473,9 @@ export const AppContent: React.FC = () => {
   // Navigation Handlers
   const navigateToPath = (newPath: string) => {
     let normalized = newPath;
-    if (newPath === "clients" || newPath === "root") normalized = "D:\\Clients";
-    else if (newPath === "inbox") normalized = "C:\\FolderMate\\Inbox";
-    else if (newPath === "archive") normalized = "D:\\Archive";
+    if (newPath === "clients" || newPath === "root") normalized = `${controlledDrive.letter}\\Clients`;
+    else if (newPath === "inbox") normalized = `${controlledDrive.letter}\\Inbox`;
+    else if (newPath === "archive") normalized = `${controlledDrive.letter}\\Archive`;
 
     setCurrentPath(normalized);
     setCurrentView("explorer");

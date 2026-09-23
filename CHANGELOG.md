@@ -9,7 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Fixed
+### Added
+- **Windows 11 File Explorer Complete UI Transformation**:
+  - Completely overhauled FolderMate Desktop UI to eliminate legacy web dashboard mental models and establish an authentic, production-grade **Windows 11 File Explorer** experience.
+  - Set default application launch view to **File Explorer** at `D:\Clients`, immediately presenting directory contents, folders, and files upon startup.
+  - Implemented **Windows 11 Multi-Tab Bar** with active tab state, tab switching, tab close buttons (`✕`), new tab creation (`+` / `Ctrl+T`), and native window action controls (`─`, `▢`, `✕`).
+  - Added authentic two-tier Windows 11 command and navigation hierarchy:
+    - **Tier 1 (Fluent Command Bar)**: `+ New ▾` dropdown (Folder, Project Folder, Client Directory), native Windows action icons (`✂ Cut`, `📋 Copy`, `📄 Paste`, `🏷 Rename`, `🗑 Delete`), `⇅ Sort ▾` dropdown, `⊞ View ▾` dropdown with 6 scaling modes and Details pane toggle, `⋯ More ▾` options, right-side Details toggle button, and minimal background daemon heartbeat.
+    - **Tier 2 (Navigation & Address Bar)**: Standard navigation controls (`←`, `→`, `↑`, `↻`), segmented breadcrumbs (`This PC > Data Storage (D:) > Clients`) with `Ctrl+L` click-to-edit path text input with instant Enter navigation, and search box (`Ctrl+F`).
+  - Transformed left navigation pane into the authentic **Windows 11 Navigation Tree**: `⭐ Home`, `Quick access` (Inbox, Clients, Archive, Review Queue with badge counter), `This PC` (Local Disk C: with FolderMate/Inbox, Data Storage D: with expandable Clients and Archive), and bottom minimal Settings anchor. Removed all SaaS marketing and VIP Patron cards from the navigation tree.
+  - Redesigned `HomeView.tsx` into **Windows 11 Explorer Home**: Quick access pinned folder tiles (Inbox, Clients, Desktop, Downloads, Documents, Archive) with authentic folder icons and pin badges, and clean Recent Files details table. Removed SaaS metric KPI cards and live chat/event feed log widgets.
 - **Button and Modal Interaction Fixes**:
   - Added click-outside listeners, mutual exclusivity, and `Escape` key handlers to `ExplorerHeader.tsx` dropdowns (`isViewMenuOpen` view layout & scaling menu and `isPauseMenuOpen` daemon status menu).
   - Added backdrop click and `Escape` key listeners to `ActivationModal.tsx` when closable.

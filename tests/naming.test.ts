@@ -68,4 +68,18 @@ describe("TemplateEngine", () => {
     expect(folder).toContain("2026");
     expect(folder).toContain("ID Card");
   });
+
+  it("renders folder hierarchy divided by client and file type", () => {
+    const folder = engine.renderFolderPath("Clients/{Client}/{Year}/{FileType}/{Project}", {
+      clientName: "ABC School",
+      projectName: "ID Card",
+      year: 2026,
+      extension: ".cdr",
+    });
+
+    expect(folder).toContain("ABC School");
+    expect(folder).toContain("2026");
+    expect(folder).toContain("CDR - CorelDRAW Designs");
+    expect(folder).toContain("ID Card");
+  });
 });

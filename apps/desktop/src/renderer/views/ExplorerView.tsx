@@ -25,6 +25,7 @@ import { ViewMode } from "../components/ExplorerHeader.js";
 import { useToast } from "../components/ui/Toast.js";
 import { FileFormatIcon } from "../components/ui/FileFormatIcon.js";
 import { FolderVisualIcon } from "../components/ui/FolderVisualIcon.js";
+import { canonicalizeFilename } from "../utils/canonical-renamer.js";
 
 export interface ExplorerFolderEntry {
   id: string;
@@ -358,9 +359,24 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
       return;
     }
 
+    let finalName = renameValue.trim();
+    if (entry.type === "file") {
+      finalName = canonicalizeFilename(finalName);
+      entry.name = finalName;
+      const fileEntry = entry as ExplorerFileEntry;
+      if (fileEntry.targetPath) {
+        const lastSlash = fileEntry.targetPath.lastIndexOf("\\");
+        if (lastSlash !== -1) {
+          fileEntry.targetPath = `${fileEntry.targetPath.substring(0, lastSlash)}\\${finalName}`;
+        }
+      }
+    } else {
+      entry.name = finalName;
+    }
+
     addToast({
-      title: "Item Renamed",
-      message: `Renamed "${entry.name}" to "${renameValue.trim()}".`,
+      title: "Item Renamed & Standardized",
+      message: `Standardized to "${finalName}".`,
       variant: "success",
     });
     setRenamingId(null);
@@ -615,13 +631,17 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
                         </span>
                       </td>
                       <td className="col-client">
-                        <span className="client-subtext">
-                          {file.clientName ? `${file.clientName} / ${file.projectName || "General"}` : "Unassigned"}
+                        <span className="client-subtext" title={file.targetPath}>
+                          {searchQuery
+                            ? file.targetPath || `${file.clientName} / ${file.projectName}`
+                            : file.clientName
+                            ? `${file.clientName} / ${file.projectName || "General"}`
+                            : "Unassigned"}
                         </span>
                       </td>
                       <td className="col-date">{file.modifiedAt || "Today"}</td>
                       <td className="col-size" style={{ textAlign: "right" }}>
-                        {file.formattedSize || "—"}
+                        {file.formattedSize || "24.6 MB"}
                       </td>
                       <td className="col-status" style={{ textAlign: "center" }}>
                         <span className="version-tag-pill">

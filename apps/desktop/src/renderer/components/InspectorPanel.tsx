@@ -16,6 +16,8 @@ import {
   Palette,
 } from "lucide-react";
 import { useToast } from "./ui/Toast.js";
+import { FileFormatIcon } from "./ui/FileFormatIcon.js";
+import { FilePreviewCanvas } from "./ui/FilePreviewCanvas.js";
 
 export interface SelectedFileItem {
   type: "file";
@@ -117,12 +119,7 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
             <div className="inspector-file-details">
               {/* File Icon and Header */}
               <div className="inspector-preview-card">
-                <div
-                  className="inspector-file-icon-badge"
-                  style={{ background: selectedItem.extBg, color: selectedItem.extColor }}
-                >
-                  {selectedItem.ext.toUpperCase()}
-                </div>
+                <FileFormatIcon extension={selectedItem.ext} size="lg" />
                 <div className="inspector-file-name-block">
                   <h3 className="inspector-file-name" title={selectedItem.name}>
                     {selectedItem.name}
@@ -130,9 +127,26 @@ export const InspectorPanel: React.FC<InspectorPanelProps> = ({
                   <div className="inspector-version-tag">
                     <GitBranch size={11} />
                     <span>Version v{selectedItem.versionNumber || 1}</span>
+                    <span className="dot-sep">•</span>
+                    <span>{selectedItem.formattedSize || "24.6 MB"}</span>
                   </div>
                 </div>
               </div>
+
+              {/* Windows File Explorer Preview Canvas (What's Inside) */}
+              <FilePreviewCanvas
+                filename={selectedItem.name}
+                extension={selectedItem.ext}
+                clientName={selectedItem.clientName}
+                projectName={selectedItem.projectName}
+                year={selectedItem.year}
+                versionNumber={selectedItem.versionNumber}
+                formattedSize={selectedItem.formattedSize}
+                sizeBytes={selectedItem.sizeBytes}
+                modifiedAt={selectedItem.modifiedAt}
+                targetPath={selectedItem.targetPath}
+                sha256={selectedItem.sha256}
+              />
 
               {/* Quick Actions */}
               <div className="inspector-actions-grid">

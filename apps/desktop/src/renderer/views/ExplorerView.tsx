@@ -24,6 +24,7 @@ import { SelectedItem, SelectedFileItem, SelectedFolderItem } from "../component
 import { useToast } from "../components/ui/Toast.js";
 import { FileFormatIcon } from "../components/ui/FileFormatIcon.js";
 import { FolderVisualIcon } from "../components/ui/FolderVisualIcon.js";
+import { FileThumbnailCard } from "../components/ui/FileThumbnailCard.js";
 import { canonicalizeFilename } from "../utils/canonical-renamer.js";
 import {
   ExplorerFolderEntry,
@@ -723,18 +724,21 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
                         color={(entry as ExplorerFolderEntry).color || "#f59e0b"}
                         emblem={(entry as ExplorerFolderEntry).emblem}
                       />
-                    ) : (
+                    ) : viewMode === "small-icons" ? (
                       <FileFormatIcon
                         extension={(entry as ExplorerFileEntry).ext}
-                        size={
-                          viewMode === "small-icons"
-                            ? 28
-                            : viewMode === "medium-icons"
-                            ? 48
-                            : viewMode === "large-icons"
-                            ? 68
-                            : 96
-                        }
+                        size={28}
+                      />
+                    ) : (
+                      <FileThumbnailCard
+                        name={entry.name}
+                        ext={(entry as ExplorerFileEntry).ext}
+                        clientName={(entry as ExplorerFileEntry).clientName}
+                        projectName={(entry as ExplorerFileEntry).projectName}
+                        year={(entry as ExplorerFileEntry).year}
+                        versionNumber={(entry as ExplorerFileEntry).versionNumber}
+                        viewMode={viewMode}
+                        isSelected={isSelected}
                       />
                     )}
                   </div>

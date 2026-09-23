@@ -5305,5 +5305,370 @@ select option {
   text-overflow: ellipsis;
 }
 
+/* ============================================================
+   WINDOWS FILE EXPLORER THUMBNAIL CARDS & CORNER BADGES
+   ============================================================ */
+.file-thumbnail-surface {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.thumb-canvas-box {
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  position: relative;
+  overflow: hidden;
+  padding: 4px 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  transition: all 0.1s ease;
+}
+
+.thumb-corner-app-badge {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  background: #ffffff;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  padding: 1px;
+  border: 0.5px solid rgba(0, 0, 0, 0.08);
+}
+
+/* 1. CorelDRAW ID Card Thumbnail */
+.thumb-id-card-sheet {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: #ffffff;
+}
+
+.thumb-id-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1.5px solid #059669;
+  padding-bottom: 2px;
+}
+
+.thumb-org-name {
+  font-size: 6.5px;
+  font-weight: 800;
+  color: #0f172a;
+  max-width: 72%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.thumb-id-badge-tag {
+  font-size: 5px;
+  font-weight: 800;
+  background: #059669;
+  color: #ffffff;
+  padding: 0.5px 2px;
+  border-radius: 1.5px;
+  line-height: 1;
+}
+
+.thumb-id-content {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  margin: 2px 0;
+  flex: 1;
+}
+
+.thumb-photo-box {
+  width: 22px;
+  height: 28px;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.thumb-text-lines {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5px;
+  min-width: 0;
+}
+
+.thumb-line {
+  height: 2px;
+  background: #cbd5e1;
+  border-radius: 1px;
+}
+
+.thumb-line.bold {
+  height: 2.5px;
+  background: #059669;
+}
+
+.thumb-id-footer {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 1px;
+}
+
+.thumb-barcode-strip {
+  height: 4px;
+  background-image: repeating-linear-gradient(
+    90deg,
+    #0f172a 0px,
+    #0f172a 1px,
+    transparent 1px,
+    transparent 2px,
+    #0f172a 2px,
+    #0f172a 3.5px,
+    transparent 3.5px,
+    transparent 5px
+  );
+  width: 65%;
+}
+
+/* 2. CorelDRAW Signage Thumbnail */
+.thumb-signage-sheet {
+  height: 100%;
+  background: #1e293b;
+  border-radius: 2px;
+  padding: 3px 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: #ffffff;
+}
+
+.thumb-signage-top {
+  font-size: 5.5px;
+  font-weight: 800;
+  color: #f59e0b;
+}
+
+.thumb-signage-arrow {
+  font-size: 16px;
+  color: #22c55e;
+  line-height: 1;
+}
+
+.thumb-signage-text {
+  font-size: 5.5px;
+  color: #cbd5e1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 70%;
+}
+
+/* 3. CorelDRAW Brochure Thumbnail */
+.thumb-brochure-sheet {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.thumb-brochure-top {
+  font-size: 5.5px;
+  font-weight: 800;
+  color: #d97706;
+}
+
+.thumb-brochure-title {
+  font-size: 6.5px;
+  font-weight: 800;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 80%;
+}
+
+.thumb-brochure-banner {
+  height: 3px;
+  background: linear-gradient(90deg, #d97706, #f59e0b);
+  border-radius: 1px;
+  margin-bottom: 2px;
+}
+
+/* 4. Adobe PDF Sheet Thumbnail */
+.thumb-pdf-sheet {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: #ffffff;
+}
+
+.thumb-pdf-red-header {
+  height: 2.5px;
+  background: #ef4444;
+  border-radius: 1px;
+  margin-bottom: 1px;
+}
+
+.thumb-pdf-title {
+  font-size: 6.5px;
+  font-weight: 700;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 80%;
+}
+
+.thumb-pdf-table {
+  border: 1px solid #e2e8f0;
+  border-radius: 1px;
+  margin: 1px 0;
+  padding: 1px;
+}
+
+.thumb-table-row {
+  height: 2px;
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 1px;
+}
+
+/* 5. Photoshop Canvas Thumbnail */
+.thumb-psd-sheet {
+  height: 100%;
+  background: linear-gradient(135deg, #001e36, #0f172a);
+  border-radius: 2px;
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.thumb-psd-art-glow {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #31a8ff;
+  opacity: 0.35;
+  filter: blur(5px);
+  position: absolute;
+}
+
+.thumb-psd-title {
+  font-size: 7px;
+  font-weight: 800;
+  z-index: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 85%;
+}
+
+.thumb-psd-sub {
+  font-size: 5px;
+  color: #94a3b8;
+  z-index: 1;
+}
+
+/* 6. Illustrator Vector Thumbnail */
+.thumb-ai-sheet {
+  height: 100%;
+  border: 1px dashed #ea580c;
+  border-radius: 2px;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 7. Excel Sheet Thumbnail */
+.thumb-excel-sheet {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.thumb-excel-header-row {
+  display: grid;
+  grid-template-columns: 10px 1fr 1fr 1fr;
+  background: #f1f5f9;
+  font-size: 5px;
+  font-weight: 700;
+  color: #475569;
+}
+
+.thumb-excel-row {
+  display: grid;
+  grid-template-columns: 10px 1fr 1fr 1fr;
+  font-size: 5px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.th-cell,
+.td-cell {
+  padding: 0.5px 1px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.td-cell.status {
+  color: #16a34a;
+  font-weight: 700;
+}
+
+/* 8. Image Thumbnail */
+.thumb-img-sheet {
+  height: 100%;
+  position: relative;
+  border-radius: 2px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.thumb-img-checkerboard {
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(45deg, #e2e8f0 25%, transparent 25%, transparent 75%, #e2e8f0 75%, #e2e8f0),
+    repeating-linear-gradient(45deg, #e2e8f0 25%, #ffffff 25%, #ffffff 75%, #e2e8f0 75%, #e2e8f0);
+  background-size: 8px 8px;
+  opacity: 0.6;
+}
+
+.thumb-img-icon-center {
+  z-index: 1;
+}
+
+.thumb-generic-sheet {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
 
 

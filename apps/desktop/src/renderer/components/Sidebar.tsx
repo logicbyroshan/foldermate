@@ -158,7 +158,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   title={`Archive (${controlledDrive.letter}\\Archive)`}
                 >
                   <span className="tree-indent-spacer" />
-                  <Archive size={15} className="win11-tree-icon" color="#8b5cf6" />
+                  <Archive size={15} className="win11-tree-icon" color="#0284c7" />
                   <span className="win11-tree-label">Archive</span>
                 </div>
 
@@ -170,7 +170,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   title="Review Queue (Ambiguous Files)"
                 >
                   <span className="tree-indent-spacer" />
-                  <AlertCircle size={15} className="win11-tree-icon" color="#ef4444" />
+                  <AlertCircle size={15} className="win11-tree-icon" color="#d97706" />
                   <span className="win11-tree-label">Review Queue</span>
                   {pendingReviewCount > 0 && (
                     <span className="win11-badge-counter">{pendingReviewCount}</span>
@@ -325,7 +325,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       title={`Archive (${controlledDrive.letter}\\Archive)`}
                     >
                       <span className="tree-indent-spacer" />
-                      <Archive size={14} className="win11-tree-icon" color="#8b5cf6" />
+                      <Archive size={14} className="win11-tree-icon" color="#0284c7" />
                       <span className="win11-tree-label">Archive</span>
                     </div>
 
@@ -336,7 +336,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       title="Review Queue (Ambiguous Files)"
                     >
                       <span className="tree-indent-spacer" />
-                      <AlertCircle size={14} className="win11-tree-icon" color="#ef4444" />
+                      <AlertCircle size={14} className="win11-tree-icon" color="#d97706" />
                       <span className="win11-tree-label">Review Queue</span>
                       {pendingReviewCount > 0 && (
                         <span className="win11-badge-counter">{pendingReviewCount}</span>

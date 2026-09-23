@@ -4534,4 +4534,776 @@ select option {
   color: var(--text-primary);
 }
 
+/* ============================================================
+   FILE PREVIEW CANVAS & VECTOR INTELLIGENCE STYLES
+   ============================================================ */
+.file-preview-canvas {
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-canvas);
+  overflow: hidden;
+  margin: 0 0 2px 0;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.preview-canvas-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background-color: var(--bg-elevated);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.preview-canvas-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.preview-canvas-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+}
+
+.preview-canvas-badge.cdr {
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.preview-canvas-badge.psd {
+  background: rgba(59, 130, 246, 0.12);
+  color: #2563eb;
+  border: 1px solid rgba(59, 130, 246, 0.25);
+}
+
+.preview-canvas-badge.ai {
+  background: rgba(249, 115, 22, 0.12);
+  color: #ea580c;
+  border: 1px solid rgba(249, 115, 22, 0.25);
+}
+
+.preview-canvas-badge.pdf {
+  background: rgba(239, 68, 68, 0.12);
+  color: #dc2626;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+.preview-canvas-badge.excel {
+  background: rgba(16, 185, 129, 0.12);
+  color: #16a34a;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.preview-canvas-badge.img {
+  background: rgba(139, 92, 246, 0.12);
+  color: #7c3aed;
+  border: 1px solid rgba(139, 92, 246, 0.25);
+}
+
+.preview-canvas-badge.doc {
+  background: rgba(100, 116, 139, 0.12);
+  color: #475569;
+  border: 1px solid rgba(100, 116, 139, 0.25);
+}
+
+.preview-canvas-sub {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.preview-canvas-dimensions {
+  font-size: 9.5px;
+  font-family: ui-monospace, monospace;
+  color: var(--text-muted);
+  background: var(--bg-surface);
+  padding: 2px 6px;
+  border-radius: 3px;
+  border: 1px solid var(--border-subtle);
+  white-space: nowrap;
+}
+
+.preview-viewport-box {
+  padding: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, rgba(241, 245, 249, 0.5), rgba(226, 232, 240, 0.4));
+  min-height: 140px;
+}
+
+/* 1. CorelDRAW ID Card Mockup */
+.cdr-id-card-mockup {
+  width: 100%;
+  max-width: 270px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+}
+
+.id-card-lanyard-hole {
+  width: 24px;
+  height: 5px;
+  background: #94a3b8;
+  border-radius: 4px;
+  margin: 0 auto 2px;
+}
+
+.id-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 2px solid #047857;
+  padding-bottom: 6px;
+}
+
+.id-card-logo-emblem {
+  font-size: 18px;
+}
+
+.id-card-org-names {
+  display: flex;
+  flex-direction: column;
+}
+
+.id-card-org-title {
+  font-size: 10px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: 0.02em;
+}
+
+.id-card-org-sub {
+  font-size: 7px;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.id-card-body {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.id-card-photo-frame {
+  width: 52px;
+  height: 64px;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.id-card-photo-avatar {
+  color: #94a3b8;
+}
+
+.id-card-photo-tag {
+  font-size: 6px;
+  font-weight: 800;
+  color: #64748b;
+  background: #e2e8f0;
+  width: 100%;
+  text-align: center;
+  padding: 1px 0;
+}
+
+.id-card-data-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.id-card-name {
+  font-size: 11px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.id-card-role {
+  font-size: 8px;
+  font-weight: 600;
+  color: #047857;
+  margin-bottom: 2px;
+}
+
+.id-card-field-row {
+  display: flex;
+  gap: 4px;
+  font-size: 7.5px;
+}
+
+.id-k {
+  color: #64748b;
+  font-weight: 600;
+}
+
+.id-v {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.id-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 4px;
+}
+
+.id-card-barcode-lines {
+  display: flex;
+  align-items: center;
+  gap: 1.5px;
+  height: 14px;
+  flex: 1;
+}
+
+.barcode-stripe {
+  width: 1.5px;
+  height: 100%;
+  background: #0f172a;
+}
+
+.barcode-stripe.thick {
+  width: 3px;
+}
+
+.barcode-stripe.thin {
+  width: 1px;
+}
+
+.barcode-number {
+  font-size: 6.5px;
+  font-family: monospace;
+  color: #64748b;
+  margin-left: 4px;
+}
+
+.id-card-auth-seal {
+  font-size: 6px;
+  font-weight: 800;
+  color: #047857;
+  border: 1px dashed #047857;
+  padding: 1px 4px;
+  border-radius: 2px;
+}
+
+/* 2. CorelDRAW Signage Mockup */
+.cdr-signage-mockup {
+  width: 100%;
+  background: #1e293b;
+  border: 2px solid #f59e0b;
+  border-radius: 6px;
+  color: #ffffff;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.signage-header-strip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 9px;
+  font-weight: 800;
+  color: #f59e0b;
+  border-bottom: 1px solid rgba(245, 158, 11, 0.3);
+  padding-bottom: 4px;
+}
+
+.signage-body {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.signage-main-arrow {
+  font-size: 22px;
+  color: #22c55e;
+}
+
+.signage-primary-text {
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.signage-sub-text {
+  font-size: 8px;
+  color: #94a3b8;
+}
+
+.signage-iso-badge {
+  font-size: 7px;
+  background: #22c55e;
+  color: #0f172a;
+  font-weight: 800;
+  padding: 1px 4px;
+  border-radius: 2px;
+  width: fit-content;
+  margin-top: 2px;
+}
+
+.signage-footer-strip {
+  font-size: 7px;
+  color: #94a3b8;
+  border-top: 1px solid #334155;
+  padding-top: 4px;
+  text-align: center;
+}
+
+/* 3. CorelDRAW Brochure Mockup */
+.cdr-brochure-mockup {
+  width: 100%;
+  max-width: 250px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  padding: 12px;
+  border-radius: 4px;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.brochure-client-tag {
+  font-size: 8px;
+  font-weight: 800;
+  color: #d97706;
+}
+
+.brochure-title {
+  font-size: 11px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 4px 0 6px;
+}
+
+.brochure-graphic-banner {
+  background: linear-gradient(90deg, #d97706, #f59e0b);
+  color: #ffffff;
+  font-size: 7.5px;
+  font-weight: 700;
+  padding: 3px 6px;
+  border-radius: 2px;
+  margin-bottom: 6px;
+}
+
+.summary-line {
+  height: 3px;
+  background: #e2e8f0;
+  border-radius: 2px;
+  margin-bottom: 3px;
+}
+
+/* 4. PSD Artboard Mockup */
+.psd-canvas-mockup {
+  width: 100%;
+  height: 110px;
+  background: linear-gradient(135deg, #0f172a, #1e1b4b);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border: 1px solid #334155;
+}
+
+.psd-artwork-center {
+  text-align: center;
+  color: #ffffff;
+}
+
+.psd-art-title {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+
+.psd-art-subtitle {
+  font-size: 8.5px;
+  color: #94a3b8;
+}
+
+.psd-badge-overlay {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  font-size: 7.5px;
+  background: rgba(59, 130, 246, 0.2);
+  border: 1px solid rgba(59, 130, 246, 0.4);
+  color: #60a5fa;
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-weight: 700;
+}
+
+.psd-layer-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.psd-layer-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  background: var(--bg-canvas);
+  border-radius: 4px;
+  font-size: 10.5px;
+}
+
+.layer-type-tag {
+  font-size: 8px;
+  font-weight: 800;
+  padding: 1px 4px;
+  border-radius: 2px;
+  background: rgba(59, 130, 246, 0.15);
+  color: #3b82f6;
+}
+
+.layer-type-tag.fx {
+  background: rgba(168, 85, 247, 0.15);
+  color: #a855f7;
+}
+
+.layer-type-tag.smart {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+}
+
+.layer-name {
+  flex: 1;
+  font-size: 10.5px;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.layer-state {
+  font-size: 9px;
+  color: var(--text-muted);
+}
+
+/* 5. AI Artboard Mockup */
+.ai-artboard-mockup {
+  width: 100%;
+  height: 110px;
+  background: #ffffff;
+  border: 1px dashed #ea580c;
+  border-radius: 4px;
+  padding: 8px;
+  position: relative;
+}
+
+.ai-anchor-point {
+  width: 5px;
+  height: 5px;
+  background: #ea580c;
+  position: absolute;
+}
+
+.ai-anchor-point.p1 { top: -3px; left: -3px; }
+.ai-anchor-point.p2 { top: -3px; right: -3px; }
+.ai-anchor-point.p3 { bottom: -3px; left: -3px; }
+.ai-anchor-point.p4 { bottom: -3px; right: -3px; }
+
+.ai-artboard-label {
+  font-size: 9px;
+  color: #0f172a;
+  margin-top: 4px;
+  text-align: center;
+}
+
+/* 6. PDF Sheet Mockup */
+.pdf-sheet-mockup {
+  width: 100%;
+  max-width: 240px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.pdf-red-strip {
+  height: 3px;
+  background: #ef4444;
+  border-radius: 2px;
+  margin-bottom: 3px;
+}
+
+.pdf-doc-title {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #0f172a;
+  display: block;
+}
+
+.pdf-doc-client {
+  font-size: 7.5px;
+  color: #64748b;
+  display: block;
+}
+
+.pdf-text-para {
+  height: 3px;
+  background: #e2e8f0;
+  border-radius: 2px;
+  margin-bottom: 2px;
+}
+
+.pdf-table-block {
+  border: 1px solid #e2e8f0;
+  border-radius: 2px;
+  margin: 3px 0;
+}
+
+.pdf-table-header-row {
+  height: 6px;
+  background: #cbd5e1;
+}
+
+.pdf-table-data-row {
+  height: 4px;
+  background: #f1f5f9;
+  border-top: 1px solid #e2e8f0;
+}
+
+.pdf-sheet-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 6.5px;
+  color: #94a3b8;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 3px;
+}
+
+/* 7. Excel Sheet Mockup */
+.excel-table-mockup {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9.5px;
+}
+
+.excel-row {
+  display: grid;
+  grid-template-columns: 20px 1fr 1fr 1fr 44px;
+  border-bottom: 1px solid #e2e8f0;
+  height: 19px;
+  align-items: center;
+}
+
+.excel-row.header-row {
+  background: #f1f5f9;
+  font-weight: 700;
+  color: #475569;
+  font-size: 8px;
+}
+
+.col-cell {
+  padding: 0 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.col-index {
+  text-align: center;
+  background: #e2e8f0;
+  font-size: 7.5px;
+  font-weight: 700;
+}
+
+.status-verified {
+  color: #16a34a;
+  font-weight: 700;
+  font-size: 7.5px;
+}
+
+/* 8. Image & Generic Mockups */
+.image-frame-mockup {
+  width: 100%;
+  height: 100px;
+  border-radius: 4px;
+  border: 1px solid var(--border-subtle);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.image-checkerboard-bg {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(45deg, #e2e8f0 25%, transparent 25%),
+    linear-gradient(-45deg, #e2e8f0 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #e2e8f0 75%),
+    linear-gradient(-45deg, transparent 75%, #e2e8f0 75%);
+  background-size: 12px 12px;
+  background-position: 0 0, 0 6px, 6px -6px, -6px 0px;
+  opacity: 0.5;
+}
+
+.image-artwork-content {
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.image-name-tag {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: var(--bg-elevated);
+  padding: 2px 6px;
+  border-radius: 3px;
+  border: 1px solid var(--border-subtle);
+}
+
+.generic-doc-mockup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 16px 0;
+}
+
+.generic-doc-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.generic-doc-sub {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+/* Palette Swatches & Specs Grid */
+.preview-canvas-palette-box {
+  padding: 8px 12px;
+  border-top: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+}
+
+.palette-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.copied-note {
+  font-size: 9px;
+  color: var(--status-success);
+  font-weight: 600;
+  margin-left: auto;
+}
+
+.swatches-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.swatch-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 6px;
+  background: var(--bg-canvas);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+.swatch-item:hover {
+  border-color: var(--brand-primary);
+  transform: translateY(-1px);
+}
+
+.swatch-color-chip {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.swatch-name {
+  font-size: 9px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.preview-specs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  padding: 8px 12px;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.spec-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 8px;
+  background: var(--bg-canvas);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+}
+
+.spec-k {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.spec-v {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
 

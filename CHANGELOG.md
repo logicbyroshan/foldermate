@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Review Queue Inspector Drawer Layout & Spacing Overhaul**:
+  - **Fixed 380px Width & 16px Padding**: Structured `.review-inspector-pane` with a rigid 380px width, 16px internal padding, and 14px gap between card groupings, eliminating unstyled collapsed margins and squished elements.
+  - **Classification Inspector Components**: Added standardized `.inspector-header` with Lucide `Sparkles` icon and `X` close button, `.inspector-preview-card` with file format vector badges (`CDR`, `PDF`), `.rationale-box` with amber warning styling, and full-width `.inspector-footer` primary action button.
+  - **File Preview Canvas & Vector Intelligence Styles**: Implemented comprehensive CSS rules in `index.css` for `FilePreviewCanvas.tsx` across all formats (CorelDRAW ID card mockup with student photo avatar and official seal, emergency signage, brochure cover, Photoshop 5-layer hierarchy, Illustrator Pantone artwork, multi-page PDF sheet, Excel table data grid, image checkerboards, and 2x2 specs grid).
+  - **Sidebar & Command Bar Active/Hover Polish**: Polished `.win11-sidebar`, `.win11-tree-row.selected` (with active gold background and 3px left border accent), `.win11-btn`, `.win11-icon-btn`, `.win11-dropdown`, and `.win11-dropdown-item` hover/active transitions.
 - **UI/UX Polish, High-Contrast Theming, Text Overflow Prevention & Redundant Info Elimination**:
   - **High-Contrast Primary Buttons & Form Selects**: Redefined `--brand-primary` to `#d97706` with pure `#ffffff` text and `#b45309` border, exceeding WCAG AA standards. Enhanced `.select-input` with custom SVG chevron arrow, proper right padding, and clean light-mode options, removing harsh native browser dropdown boxes.
   - **Table Hover Greyness Elimination**: Replaced dark `#f1f5f9` table row hover backgrounds with subtle, luminous Windows 11 Fluent tint `rgba(2, 132, 199, 0.04)` across Details view, Home recent files, Review Queue, and Sidebar navigation tree.

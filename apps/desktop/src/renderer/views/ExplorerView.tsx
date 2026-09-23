@@ -23,12 +23,15 @@ import {
 import { SelectedItem, SelectedFileItem, SelectedFolderItem } from "../components/InspectorPanel.js";
 import { ViewMode } from "../components/ExplorerHeader.js";
 import { useToast } from "../components/ui/Toast.js";
+import { FileFormatIcon } from "../components/ui/FileFormatIcon.js";
+import { FolderVisualIcon } from "../components/ui/FolderVisualIcon.js";
 
 export interface ExplorerFolderEntry {
   id: string;
   name: string;
   type: "folder";
   color?: string;
+  emblem?: string;
   clientCode?: string;
   projectCount?: number;
   fileCount?: number;
@@ -526,10 +529,10 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
                       >
                         <td className="col-name">
                           <div className="row-name-content">
-                            <Folder
+                            <FolderVisualIcon
+                              color={entry.color || "#f59e0b"}
+                              emblem={entry.emblem}
                               size={18}
-                              color={entry.color || "var(--brand-primary)"}
-                              className="folder-icon"
                             />
                             {isRenaming ? (
                               <input
@@ -583,12 +586,10 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
                     >
                       <td className="col-name">
                         <div className="row-name-content">
-                          <span
-                            className="file-format-badge"
-                            style={{ background: file.extBg, color: file.extColor }}
-                          >
-                            {file.ext.toUpperCase()}
-                          </span>
+                          <FileFormatIcon
+                            extension={file.ext}
+                            size={18}
+                          />
                           {isRenaming ? (
                             <input
                               ref={renameInputRef}
@@ -655,17 +656,16 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
                   onContextMenu={(e) => handleContextMenu(e, entry)}
                 >
                   {isFolder ? (
-                    <Folder size={18} color={(entry as ExplorerFolderEntry).color || "var(--brand-primary)"} />
+                    <FolderVisualIcon
+                      color={(entry as ExplorerFolderEntry).color || "#f59e0b"}
+                      emblem={(entry as ExplorerFolderEntry).emblem}
+                      size={18}
+                    />
                   ) : (
-                    <span
-                      className="file-format-badge-sm"
-                      style={{
-                        background: (entry as ExplorerFileEntry).extBg,
-                        color: (entry as ExplorerFileEntry).extColor,
-                      }}
-                    >
-                      {(entry as ExplorerFileEntry).ext.toUpperCase()}
-                    </span>
+                    <FileFormatIcon
+                      extension={(entry as ExplorerFileEntry).ext}
+                      size={18}
+                    />
                   )}
 
                   {isRenaming ? (
@@ -712,28 +712,32 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
                 >
                   <div className="icon-card-visual">
                     {isFolder ? (
-                      <Folder
+                      <FolderVisualIcon
                         size={
                           viewMode === "small-icons"
-                            ? 24
+                            ? 28
                             : viewMode === "medium-icons"
-                            ? 44
+                            ? 48
                             : viewMode === "large-icons"
-                            ? 64
+                            ? 68
                             : 96
                         }
-                        color={(entry as ExplorerFolderEntry).color || "var(--brand-primary)"}
+                        color={(entry as ExplorerFolderEntry).color || "#f59e0b"}
+                        emblem={(entry as ExplorerFolderEntry).emblem}
                       />
                     ) : (
-                      <div
-                        className="icon-card-file-badge"
-                        style={{
-                          background: (entry as ExplorerFileEntry).extBg,
-                          color: (entry as ExplorerFileEntry).extColor,
-                        }}
-                      >
-                        {(entry as ExplorerFileEntry).ext.toUpperCase()}
-                      </div>
+                      <FileFormatIcon
+                        extension={(entry as ExplorerFileEntry).ext}
+                        size={
+                          viewMode === "small-icons"
+                            ? 28
+                            : viewMode === "medium-icons"
+                            ? 48
+                            : viewMode === "large-icons"
+                            ? 68
+                            : 96
+                        }
+                      />
                     )}
                   </div>
 
@@ -885,8 +889,8 @@ export const ExplorerView: React.FC<ExplorerViewProps> = ({
                     }}
                   >
                     <div className="context-menu-item-left">
-                      <Sliders size={14} />
-                      <span>Folder Appearance</span>
+                      <Sliders size={14} color="var(--brand-primary)" />
+                      <span>Customize Folder (Color & Emblem)...</span>
                     </div>
                   </button>
 

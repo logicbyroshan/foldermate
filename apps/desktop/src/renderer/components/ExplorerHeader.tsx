@@ -550,12 +550,12 @@ export const ExplorerHeader: React.FC<ExplorerHeaderProps> = ({
         {onOpenDriveManager && (
           <button
             type="button"
-            className="win11-btn"
+            className="win11-btn responsive-compact-btn"
             onClick={onOpenDriveManager}
-            title="Controlled Drive Manager (Ctrl+Shift+D) - Assign drive volume, setup partition, or customize icon"
+            title={`Controlled Drive Manager (Ctrl+Shift+D) - Assign drive volume, setup partition, or customize icon (Drive ${controlledDriveLetter})`}
           >
             <HardDrive size={14} color="var(--brand-primary)" />
-            <span>Drive {controlledDriveLetter}</span>
+            <span className="cmd-btn-text">Drive {controlledDriveLetter}</span>
           </button>
         )}
 
@@ -563,12 +563,12 @@ export const ExplorerHeader: React.FC<ExplorerHeaderProps> = ({
         {onOpenFolderCustomizer && (
           <button
             type="button"
-            className="win11-btn"
+            className="win11-btn responsive-compact-btn"
             onClick={onOpenFolderCustomizer}
             title="Customize Folder (Ctrl+Shift+C) - Pick colors and emblem icons"
           >
             <Sliders size={14} color="#f59e0b" />
-            <span>Folder Style</span>
+            <span className="cmd-btn-text">Folder Style</span>
           </button>
         )}
 
@@ -576,12 +576,12 @@ export const ExplorerHeader: React.FC<ExplorerHeaderProps> = ({
         {onOpenDriveSearch && (
           <button
             type="button"
-            className="win11-btn"
+            className="win11-btn responsive-compact-btn"
             onClick={onOpenDriveSearch}
             title="Instant Drive Search (Ctrl+Shift+F) - Find any file across entire controlled drive"
           >
             <Search size={14} color="#0284c7" />
-            <span>Find File</span>
+            <span className="cmd-btn-text">Find File</span>
           </button>
         )}
 
@@ -593,14 +593,14 @@ export const ExplorerHeader: React.FC<ExplorerHeaderProps> = ({
           title={isInspectorOpen ? "Hide Details pane (Ctrl+I)" : "Show Details pane (Ctrl+I)"}
         >
           {isInspectorOpen ? <SidebarClose size={15} /> : <SidebarOpen size={15} />}
-          <span>Details</span>
+          <span className="cmd-btn-text">Details</span>
         </button>
 
         {/* Dual Mode Foreground/Background Indicator */}
         {onToggleAppMode && (
           <button
             type="button"
-            className="win11-btn"
+            className="win11-btn responsive-mode-btn"
             onClick={onToggleAppMode}
             title={
               appMode === "background"
@@ -623,9 +623,10 @@ export const ExplorerHeader: React.FC<ExplorerHeaderProps> = ({
                 background: appMode === "background" ? "#64748b" : "#16a34a",
                 display: "inline-block",
                 marginRight: 4,
+                flexShrink: 0,
               }}
             />
-            <span>{appMode === "background" ? "Background" : "Foreground"}</span>
+            <span className="cmd-btn-text">{appMode === "background" ? "Background" : "Foreground"}</span>
           </button>
         )}
 

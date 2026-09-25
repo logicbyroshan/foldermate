@@ -73,6 +73,7 @@ export const Modal: React.FC<ModalProps> = ({
             justifyContent: "space-between",
             padding: "18px 24px",
             borderBottom: "1px solid var(--border-subtle)",
+            flexShrink: 0,
           }}
         >
           <div>
@@ -92,6 +93,8 @@ export const Modal: React.FC<ModalProps> = ({
             display: "flex",
             flexDirection: "column",
             gap: 16,
+            flex: "1 1 auto",
+            minHeight: 0,
           }}
         >
           {children}
@@ -107,6 +110,7 @@ export const Modal: React.FC<ModalProps> = ({
               justifyContent: "flex-end",
               gap: 10,
               backgroundColor: "var(--bg-surface)",
+              flexShrink: 0,
             }}
           >
             {footer}

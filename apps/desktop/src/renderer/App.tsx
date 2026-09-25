@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Sidebar } from "./components/Sidebar.js";
 import { ExplorerHeader } from "./components/ExplorerHeader.js";
 import { InspectorPanel, SelectedItem } from "./components/InspectorPanel.js";

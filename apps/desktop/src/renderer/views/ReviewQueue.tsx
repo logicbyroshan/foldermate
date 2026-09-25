@@ -1,21 +1,13 @@
 import React, { useState, useEffect } from "react";
 import {
   CheckCircle,
-  ArrowRight,
-  FileQuestion,
-  Plus,
   Sparkles,
   UserPlus,
   Check,
   AlertTriangle,
-  FileText,
-  Layers,
-  Calendar,
-  FolderTree,
-  ExternalLink,
   X,
 } from "lucide-react";
-import { Badge, Modal, EmptyState, FileFormatIcon } from "../components/ui/index.js";
+import { Badge, Modal, FileFormatIcon } from "../components/ui/index.js";
 import { useToast } from "../components/ui/Toast.js";
 
 export const ReviewQueue: React.FC = () => {

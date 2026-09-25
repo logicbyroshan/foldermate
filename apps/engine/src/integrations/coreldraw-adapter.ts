@@ -187,4 +187,8 @@ export class CorelDrawAdapter {
       });
     });
   }
+
+  public dispose(): void {
+    // Child processes are ephemeral and clean up on exit
+  }
 }

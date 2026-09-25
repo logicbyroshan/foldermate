@@ -68,7 +68,7 @@ export class FilePipeline extends EventEmitter {
 
   private broadcastEvent(eventType: string, data: any): void {
     if (this.ipcServer) {
-      this.ipcServer.broadcast(eventType, data);
+      this.ipcServer.broadcastEvent(eventType, data);
     }
   }
 
@@ -93,7 +93,7 @@ export class FilePipeline extends EventEmitter {
 
     // 2. Register job handler for autonomous file pipeline execution
     this.queue.registerHandler("PROCESS_NEW_FILE", async (job) => {
-      const { filePath } = job.payload;
+      const { filePath } = job.payload as { filePath: string };
       const originalFilename = path.basename(filePath);
 
       // A. Check lock & stability

@@ -6,11 +6,7 @@ import {
   Search,
   FolderOpen,
   ExternalLink,
-  GitBranch,
-  Calendar,
-  Filter,
   X,
-  HardDrive,
 } from "lucide-react";
 import { useToast } from "./ui/Toast.js";
 

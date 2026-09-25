@@ -1,16 +1,7 @@
 import React, { useState } from "react";
 import {
-  FileText,
   Layers,
   Palette,
-  CheckCircle,
-  Shield,
-  Maximize2,
-  Copy,
-  Info,
-  Sparkles,
-  QrCode,
-  ZoomIn,
 } from "lucide-react";
 import { FileFormatIcon } from "./FileFormatIcon.js";
 

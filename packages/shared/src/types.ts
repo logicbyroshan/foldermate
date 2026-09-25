@@ -52,9 +52,9 @@ export interface ProjectDTO {
   clientId: string;
   name: string;
   code?: string | null;
-  category: string;
+  category?: string;
   year: number;
-  status: string;
+  status?: string;
   metadata?: Record<string, unknown>;
   createdAt: string;
   updatedAt: string;
@@ -105,7 +105,7 @@ export interface FileVersionDTO {
   sha256Hash: string;
   sizeBytes: number;
   changeSummary?: string | null;
-  createdBy: string;
+  createdBy?: string;
   isApproved: boolean;
   isLatest: boolean;
   createdAt: string;

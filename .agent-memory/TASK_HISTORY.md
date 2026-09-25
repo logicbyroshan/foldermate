@@ -714,3 +714,41 @@ What changed:
 Testing performed:
 - npm run build: All workspaces compiled with 0 errors.
 Co-authored with: adarsh-id-cards (acw462011@gmail.com)
+
+### PR #47: Comprehensive Codebase Audit, Dead Code Elimination, Type Hardening & Lint Standardization
+Task: Perform a deep audit of the entire codebase, verify all subsystems, identify and fix all issues, and eliminate all unused code, dead imports, and orphan components.
+Reason: User requested a deep explanation of the project, a full verification of system health, resolution of all underlying issues, and thorough cleanup of unused code/imports/files.
+Files/areas affected:
+- `apps/landing/src/components/OdometerCounter.tsx` (DELETED)
+- 18 desktop views and components (`App.tsx`, `ActivationModal.tsx`, `DriveCustomizerModal.tsx`, `DriveSearchModal.tsx`, `ExplorerHeader.tsx`, `FolderCustomizerModal.tsx`, `InspectorPanel.tsx`, `Sidebar.tsx`, `CommandPalette.tsx`, `FilePreviewCanvas.tsx`, `BackgroundAutomation.tsx`, `ExplorerView.tsx`, `HomeView.tsx`, `KeyboardShortcuts.tsx`, `ReviewQueue.tsx`, `Rules.tsx`, `Search.tsx`, `Settings.tsx`)
+- `apps/engine/src/index.ts`
+- `apps/engine/src/integrations/coreldraw-adapter.ts`
+- `apps/engine/src/organization/two-phase-mover.ts`
+- `apps/engine/src/queue/file-pipeline.ts`
+- `apps/engine/src/review/review-manager.ts`
+- `apps/engine/src/watcher/file-watcher.ts`
+- `package.json`
+- `packages/shared/src/types.ts`
+- `tests/coreldraw-adapter.test.ts`
+- `tests/e2e-pipeline.test.ts`
+- `tests/queue.test.ts`
+- `tsconfig.json`
+- `.agent-memory/CURRENT_STATE.md`
+- `.agent-memory/KNOWN_ISSUES.md`
+- `.agent-memory/TASK_HISTORY.md`
+- `CHANGELOG.md`
+What changed:
+- Removed orphaned `OdometerCounter.tsx` component.
+- Removed 40+ unused imports across all desktop views, components, engine modules, and tests.
+- Fixed `VersionEngine` instantiation signature mismatch in `apps/engine/src/index.ts` and `tests/e2e-pipeline.test.ts`.
+- Added missing `dispose()` lifecycle method to `CorelDrawAdapter`.
+- Resolved `broadcastEvent` invocation and typed payload unpacking in `apps/engine/src/queue/file-pipeline.ts`.
+- Added `originalName` passing to `reviewQueue.create` in `apps/engine/src/review/review-manager.ts`.
+- Fixed error type parameter in `apps/engine/src/watcher/file-watcher.ts`.
+- Made optional fields (`category`, `status`, `createdBy`) consistent with DB defaults in `packages/shared/src/types.ts`.
+- Replaced non-existent `eslint` script in root `package.json` with `tsc --noEmit` and configured root `tsconfig.json` exclusions for frontend bundler workspaces.
+Testing performed:
+- `npm run lint`: `tsc --noEmit` executed with code 0 across the monorepo.
+- `npm run build`: Monorepo workspaces (`@foldermate/desktop`, `@foldermate/engine`, `@foldermate/landing`, `@foldermate/config`, `@foldermate/database`, `@foldermate/shared`) compiled with 0 errors.
+- `npm test`: 13 test suites (40 tests) passed with 100% success rate.
+

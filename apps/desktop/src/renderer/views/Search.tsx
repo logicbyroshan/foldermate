@@ -6,17 +6,9 @@ import {
   Filter,
   Copy,
   Check,
-  FolderOpen,
   History,
-  Layers,
-  ShieldCheck,
-  Sparkles,
-  ArrowUpDown,
   Search as SearchIcon,
-  Tag,
-  Hash,
   Eye,
-  FileCode,
 } from "lucide-react";
 import {
   SearchBar,

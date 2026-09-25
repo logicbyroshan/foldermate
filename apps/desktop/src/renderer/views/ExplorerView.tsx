@@ -1,26 +1,17 @@
 import React, { useState, useMemo, useRef, useEffect, useCallback } from "react";
 import {
-  Folder,
-  FileText,
   GitBranch,
   ExternalLink,
   FolderOpen,
-  FileCode,
-  FileSpreadsheet,
-  FileImage,
-  FileArchive,
   Copy,
   Edit2,
-  Trash2,
   Eye,
   Sliders,
   Sparkles,
-  Info,
-  Check,
   LayoutList,
   LayoutGrid,
 } from "lucide-react";
-import { SelectedItem, SelectedFileItem, SelectedFolderItem } from "../components/InspectorPanel.js";
+import { SelectedItem } from "../components/InspectorPanel.js";
 import { useToast } from "../components/ui/Toast.js";
 import { FileFormatIcon } from "../components/ui/FileFormatIcon.js";
 import { FolderVisualIcon } from "../components/ui/FolderVisualIcon.js";

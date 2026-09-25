@@ -7,16 +7,12 @@ import {
   Layers,
   PauseCircle,
   PlayCircle,
-  Clock,
   CheckCircle2,
-  AlertTriangle,
   Zap,
   BatteryCharging,
   Sliders,
   FolderSync,
-  ShieldCheck,
   RefreshCw,
-  Folder,
 } from "lucide-react";
 import { Badge } from "../components/ui/Badge.js";
 import { useToast } from "../components/ui/Toast.js";

@@ -28,9 +28,7 @@ import {
   Sliders,
   Users,
   MoreHorizontal,
-  FileCode,
   Check,
-  CheckSquare,
   X,
 } from "lucide-react";
 import { LicenseStatus } from "@foldermate/shared";

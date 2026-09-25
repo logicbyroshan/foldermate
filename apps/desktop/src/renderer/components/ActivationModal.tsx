@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
 import {
-  ShieldCheck,
   Sparkles,
   Heart,
   ExternalLink,
   CheckCircle2,
-  Copy,
-  Check,
   Key,
   Lock,
   Globe,

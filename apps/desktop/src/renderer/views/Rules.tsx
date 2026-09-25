@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Sliders, Save, FolderTree, FolderCog, Plus, Trash2, Palette } from "lucide-react";
+import { Save, FolderCog, Plus, Trash2 } from "lucide-react";
 import { Button } from "../components/ui/Button.js";
 import { Card } from "../components/ui/Card.js";
 import { Input } from "../components/ui/Input.js";

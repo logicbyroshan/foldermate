@@ -5,14 +5,8 @@ import { DriveVisualIcon, DriveEmblem, DRIVE_EMBLEM_MAP } from "./ui/FolderVisua
 import {
   HardDrive,
   Check,
-  RotateCcw,
-  Sparkles,
   ExternalLink,
-  FolderTree,
   Search,
-  Database,
-  Shield,
-  Layers,
   HelpCircle,
 } from "lucide-react";
 import { useToast } from "./ui/Toast.js";

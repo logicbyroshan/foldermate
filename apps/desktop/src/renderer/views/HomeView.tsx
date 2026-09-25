@@ -1,18 +1,14 @@
 import React from "react";
 import {
-  Folder,
-  FolderOpen,
   Inbox,
   FolderTree,
   Archive,
   AlertCircle,
   Pin,
-  HardDrive,
   ArrowRight,
   Monitor,
   Download,
   FileText,
-  FileCode,
   FileImage,
   FileSpreadsheet,
 } from "lucide-react";

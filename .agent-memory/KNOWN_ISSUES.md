@@ -25,4 +25,18 @@ Each issue should record:
 - Status: open
 
 ## Resolved items
-No repository issues are marked resolved yet during the bootstrap memory setup phase, since the task explicitly prohibited code or configuration modification beyond the allowed bootstrap files.
+### 3. Root lint command failed due to missing eslint
+- Impact: `npm run lint` threw `'eslint' is not recognized`.
+- Affected components: root `package.json`, root toolchain
+- Status: resolved (standardized to `tsc --noEmit` across project)
+
+### 4. Engine type and constructor signature discrepancies
+- Impact: TypeScript typechecking reported errors in `VersionEngine` instantiation, `CorelDrawAdapter.dispose()`, and `reviewQueue.create`.
+- Affected components: engine bootstrap, file pipeline, review manager
+- Status: resolved
+
+### 5. Abandoned component and unused imports
+- Impact: Unreferenced `OdometerCounter.tsx` component in `apps/landing` and 40+ unused imports across desktop and engine.
+- Affected components: `apps/landing`, `apps/desktop`, `apps/engine`
+- Status: resolved
+

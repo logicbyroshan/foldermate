@@ -49,7 +49,7 @@ async function main() {
 
   // 4. Initialize Domain Subsystems for RPC Dispatcher
   const mover = new TwoPhaseMover(db, config);
-  const versionEngine = new VersionEngine(db.db, db.files, db.versions, db.events);
+  const versionEngine = new VersionEngine(db);
   const reviewManager = new ReviewManager(db, config);
   const corelAdapter = new CorelDrawAdapter();
   const classifier = new ClassificationPipeline(db);

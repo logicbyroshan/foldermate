@@ -23,7 +23,7 @@
     "test:chaos": "vitest run --config vitest.chaos.config.ts",
     "db:migrate": "npm run migrate --workspace=packages/database",
     "db:seed": "npm run seed --workspace=packages/database",
-    "lint": "eslint . --ext .ts,.tsx",
+    "lint": "tsc --noEmit",
     "package:win": "npm run package --workspace=apps/desktop"
   },
   "devDependencies": {

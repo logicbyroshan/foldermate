@@ -33,7 +33,7 @@ export class FileWatcher extends EventEmitter {
     this.watcher.on("add", (filePath: string) => this.handleFileEvent("add", filePath));
     this.watcher.on("change", (filePath: string) => this.handleFileEvent("change", filePath));
     this.watcher.on("unlink", (filePath: string) => this.handleUnlink(filePath));
-    this.watcher.on("error", (error: Error) => this.emit("error", error));
+    this.watcher.on("error", (error: any) => this.emit("error", error));
   }
 
   public async stop(): Promise<void> {

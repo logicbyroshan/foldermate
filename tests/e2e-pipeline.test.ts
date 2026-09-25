@@ -54,9 +54,12 @@ describe("FolderMate End-to-End Workflow & Pipeline Simulation", () => {
 
     config = {
       ...DEFAULT_CONFIG,
+      ingestion: {
+        ...DEFAULT_CONFIG.ingestion,
+        inboxPath: inboxDir,
+      },
       storage: {
         ...DEFAULT_CONFIG.storage,
-        inboxPath: inboxDir,
         organizationRoot: storageRoot,
         safeMode: false,
       },
@@ -76,7 +79,7 @@ describe("FolderMate End-to-End Workflow & Pipeline Simulation", () => {
 
     classificationPipeline = new ClassificationPipeline(dbManager);
     twoPhaseMover = new TwoPhaseMover(dbManager, config);
-    versionEngine = new VersionEngine(db, filesRepo, versionsRepo, eventsRepo);
+    versionEngine = new VersionEngine(dbManager);
     reviewManager = new ReviewManager(dbManager, config);
   });
 

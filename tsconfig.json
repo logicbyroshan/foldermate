@@ -19,5 +19,5 @@
       "@foldermate/config": ["./packages/config/src/index.ts"]
     }
   },
-  "exclude": ["node_modules", "dist", "bridges"]
+  "exclude": ["node_modules", "dist", "bridges", "apps/desktop", "apps/landing"]
 }

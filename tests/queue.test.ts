@@ -7,7 +7,7 @@ describe("JobQueue Priority & State Machine", () => {
     const executionOrder: string[] = [];
 
     queue.registerHandler("TEST_JOB", async (job) => {
-      executionOrder.push(job.payload.name);
+      executionOrder.push((job.payload as any).name);
       return { ok: true };
     });
 

@@ -1,3 +1,4 @@
+import path from "path";
 import { DatabaseManager } from "@foldermate/database";
 import { FolderMateConfig } from "@foldermate/config";
 import { ReviewQueueItemDTO } from "@foldermate/shared";
@@ -37,6 +38,7 @@ export class ReviewManager {
     const item = this.db.reviewQueue.create({
       fileId: params.fileId,
       originalPath: params.originalPath,
+      originalName: path.basename(params.originalPath),
       proposedClientId: params.proposedClientId,
       proposedProjectId: params.proposedProjectId,
       proposedYear: params.proposedYear,

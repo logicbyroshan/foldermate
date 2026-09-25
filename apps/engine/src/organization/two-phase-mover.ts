@@ -4,7 +4,7 @@ import path from "path";
 import crypto from "crypto";
 import { DatabaseManager } from "@foldermate/database";
 import { FolderMateConfig } from "@foldermate/config";
-import { HashMismatchError, SecurityPathError } from "@foldermate/shared";
+import { HashMismatchError } from "@foldermate/shared";
 import { assertPathWithinRoot } from "../naming/sanitizer.js";
 import { TemplateEngine } from "../naming/template-engine.js";
 

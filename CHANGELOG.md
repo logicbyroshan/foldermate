@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **PR #48 — Responsive 1180px Minimum Desktop Layout & Command Bar Flex Integrity**:
+  - **Command Bar Overflow Prevention**: Added `overflow-x: auto`, `overflow-y: hidden`, `scrollbar-width: none`, and `flex-wrap: nowrap` to `.win11-command-bar` so the toolbar invisibly scrolls horizontally rather than wrapping or clipping at minimum widths.
+  - **Button Flex Integrity**: Added `flex-shrink: 0` and `white-space: nowrap` to `.win11-btn`, `flex-shrink: 0` to `.win11-icon-btn`, `.win11-command-divider` (also `min-width: 1px`), `.win11-command-group`, `.command-bar-dropdown-wrap`, and `.win11-engine-indicator` — ensures no element compresses when space is tight.
+  - **Tab Strip**: Added `flex: 1`, `scrollbar-width: none`, `min-width: 0`, and `::-webkit-scrollbar { display: none }` to `.win11-tab-strip` for clean invisible overflow with multiple tabs open.
+  - **`@media (max-width: 1280px)`**: `.responsive-compact-btn` and `.responsive-mode-btn` hide their `.cmd-btn-text` labels and compress padding; engine indicator hides `.engine-pulse-text`; search box reduced to 190px max.
+  - **`@media (max-width: 1180px)`**: Sidebar narrows to 220px; inspector panel to 320px; review inspector pane to 340px; table cells reduce padding to 7-8px; filename ellipsis enforced at 200px max-width; tabs reduce to 110px–160px min/max-width with tighter padding; window control buttons shrink to 36px.
+  - **Modal Scroll Containment (`Modal.tsx`)**: Added `flexShrink: 0` to header and footer, `flex: 1 1 auto` + `minHeight: 0` to body so large modals scroll internally without overflowing the viewport.
+
 ### Added
 - **PR #47 — Comprehensive Codebase Audit, Dead Code Elimination, Type Hardening & Lint Standardization**:
   - **Dead Code & Orphan File Removal**: Deleted unreferenced `apps/landing/src/components/OdometerCounter.tsx` component leftover after the landing hero redesign.

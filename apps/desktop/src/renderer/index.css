@@ -179,6 +179,13 @@ kbd {
   gap: 2px;
   height: 100%;
   overflow-x: auto;
+  scrollbar-width: none;
+  min-width: 0;
+  flex: 1;
+}
+
+.win11-tab-strip::-webkit-scrollbar {
+  display: none;
 }
 
 .win11-tab {
@@ -525,6 +532,14 @@ kbd {
   gap: 4px;
   position: relative;
   background-color: var(--bg-surface);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  flex-wrap: nowrap;
+}
+
+.win11-command-bar::-webkit-scrollbar {
+  display: none;
 }
 
 .win11-btn {
@@ -541,6 +556,8 @@ kbd {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.1s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .win11-btn:hover {
@@ -575,6 +592,7 @@ kbd {
 .win11-icon-btn {
   width: 32px;
   height: 32px;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -598,7 +616,9 @@ kbd {
 
 .win11-command-divider {
   width: 1px;
+  min-width: 1px;
   height: 20px;
+  flex-shrink: 0;
   background-color: var(--border-subtle);
   margin: 0 4px;
 }
@@ -607,6 +627,7 @@ kbd {
   display: flex;
   align-items: center;
   gap: 2px;
+  flex-shrink: 0;
 }
 
 .win11-dropdown {
@@ -689,6 +710,8 @@ kbd {
   font-size: 11.5px;
   cursor: pointer;
   margin-left: 6px;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .engine-pulse-dot {
@@ -1345,6 +1368,7 @@ kbd {
 
 .command-bar-dropdown-wrap {
   position: relative;
+  flex-shrink: 0;
 }
 
 .command-bar-btn {
@@ -5826,6 +5850,116 @@ select option {
   justify-content: center;
 }
 
+/* ============================================================
+   RESPONSIVE DESIGN: 1180px MINIMUM DESKTOP & FLUID BREAKPOINTS
+   ============================================================ */
 
+/* 1. Moderate desktop screens (<= 1280px) */
+@media (max-width: 1280px) {
+  /* Hide verbose text labels on secondary quick action buttons */
+  .win11-btn.responsive-compact-btn {
+    padding: 0 8px;
+    gap: 0;
+  }
+  .win11-btn.responsive-compact-btn .cmd-btn-text {
+    display: none;
+  }
 
+  /* Dual-mode button compact view */
+  .win11-btn.responsive-mode-btn {
+    padding: 4px 7px;
+  }
+  .win11-btn.responsive-mode-btn .cmd-btn-text {
+    display: none;
+  }
 
+  /* Engine indicator compact dot pill */
+  .win11-engine-indicator {
+    padding: 0 8px;
+  }
+  .engine-pulse-text {
+    display: none;
+  }
+
+  /* Compact navigation search box */
+  .win11-search-box {
+    width: 190px;
+    max-width: 200px;
+  }
+}
+
+/* 2. Specific Minimum Desktop target (<= 1180px) */
+@media (max-width: 1180px) {
+  /* Sidebar compact width: gives 20px extra workspace */
+  .win11-sidebar {
+    width: 220px;
+    min-width: 220px;
+  }
+
+  /* Details Inspector Panel compact width */
+  .inspector-panel {
+    width: 320px;
+    min-width: 300px;
+  }
+
+  /* Review Queue classification drawer compact width */
+  .review-inspector-pane {
+    width: 340px;
+    min-width: 320px;
+    max-width: 340px;
+  }
+
+  /* Details pane toggle button: icon only on tight screens */
+  .win11-btn.right-btn {
+    padding: 0 8px;
+  }
+  .win11-btn.right-btn .cmd-btn-text {
+    display: none;
+  }
+
+  /* Quick access tiles in HomeView */
+  .win11-quick-access-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .quick-tile-name {
+    font-size: 12.5px;
+  }
+
+  .quick-tile-path {
+    font-size: 10.5px;
+  }
+
+  /* Details table column padding */
+  .explorer-table th,
+  .explorer-table td,
+  .win11-table th,
+  .win11-table td {
+    padding: 7px 10px;
+  }
+
+  /* Filename truncation */
+  .file-name-text {
+    max-width: 200px;
+  }
+
+  /* Search view card grid */
+  .search-results-table th,
+  .search-results-table td {
+    padding: 8px 10px;
+  }
+
+  /* Compact tabs to preserve space */
+  .win11-tab {
+    min-width: 110px;
+    max-width: 160px;
+    padding: 0 8px;
+    gap: 5px;
+  }
+
+  /* Window controls keep width */
+  .win11-control-btn {
+    width: 36px;
+  }
+}

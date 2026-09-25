@@ -5,9 +5,6 @@ import {
   RotateCcw,
   Check,
   Edit2,
-  Sliders,
-  Sparkles,
-  Command,
   X,
 } from "lucide-react";
 import { Badge } from "../components/ui/Badge.js";

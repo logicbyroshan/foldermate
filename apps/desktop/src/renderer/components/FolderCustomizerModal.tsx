@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Modal } from "./ui/Modal.js";
 import { Button } from "./ui/Button.js";
 import { FolderVisualIcon, FolderEmblem, EMBLEM_ICON_MAP } from "./ui/FolderVisualIcon.js";
-import { Palette, Sparkles, Check, RotateCcw } from "lucide-react";
+import { Check, RotateCcw } from "lucide-react";
 import { useToast } from "./ui/Toast.js";
 
 export const FOLDER_PRESET_COLORS = [

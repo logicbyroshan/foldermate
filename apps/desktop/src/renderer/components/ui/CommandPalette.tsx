@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Search, Home, Inbox, FolderTree, Sliders, Settings, FolderCog, Play, ArrowRight, Activity, Keyboard } from "lucide-react";
+import { Search, Home, Inbox, FolderTree, Sliders, Settings, Play, ArrowRight, Activity, Keyboard } from "lucide-react";
 
 export interface CommandPaletteProps {
   isOpen: boolean;

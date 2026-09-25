@@ -1,23 +1,16 @@
 import React, { useState } from "react";
 import {
   Home,
-  Folder,
   FolderOpen,
   FolderTree,
-  Search,
   Inbox,
   Settings,
   HardDrive,
   Star,
-  Heart,
-  Key,
-  ShieldCheck,
   ChevronRight,
   ChevronDown,
   Archive,
   AlertCircle,
-  Keyboard,
-  Activity,
   Sliders,
 } from "lucide-react";
 import { LicenseStatus } from "@foldermate/shared";

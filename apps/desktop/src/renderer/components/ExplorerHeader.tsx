@@ -18,11 +18,6 @@ import {
   Plus,
   ChevronRight,
   ChevronDown,
-  Scissors,
-  Copy,
-  Clipboard,
-  Edit2,
-  Trash2,
   ArrowUpDown,
   Sparkles,
   Sliders,
@@ -66,7 +61,6 @@ interface ExplorerHeaderProps {
   onNewClient?: () => void;
   onNewProject?: () => void;
   onScanNow?: () => void;
-  hasSelection?: boolean;
   onOpenDriveManager?: () => void;
   onOpenFolderCustomizer?: () => void;
   onOpenDriveSearch?: () => void;
@@ -103,7 +97,6 @@ export const ExplorerHeader: React.FC<ExplorerHeaderProps> = ({
   onNewClient,
   onNewProject,
   onScanNow,
-  hasSelection = false,
   onOpenDriveManager,
   onOpenFolderCustomizer,
   onOpenDriveSearch,
@@ -254,58 +247,6 @@ export const ExplorerHeader: React.FC<ExplorerHeaderProps> = ({
               </button>
             </div>
           )}
-        </div>
-
-        <div className="win11-command-divider" />
-
-        {/* Windows Standard File Operations: Cut, Copy, Paste, Rename, Delete */}
-        <div className="win11-command-group">
-          <button
-            type="button"
-            className="win11-icon-btn"
-            title="Cut (Ctrl+X)"
-            disabled={!hasSelection}
-            onClick={() => document.execCommand?.("cut")}
-          >
-            <Scissors size={15} />
-          </button>
-
-          <button
-            type="button"
-            className="win11-icon-btn"
-            title="Copy (Ctrl+C)"
-            disabled={!hasSelection}
-            onClick={() => document.execCommand?.("copy")}
-          >
-            <Copy size={15} />
-          </button>
-
-          <button
-            type="button"
-            className="win11-icon-btn"
-            title="Paste (Ctrl+V)"
-            onClick={() => document.execCommand?.("paste")}
-          >
-            <Clipboard size={15} />
-          </button>
-
-          <button
-            type="button"
-            className="win11-icon-btn"
-            title="Rename (F2)"
-            disabled={!hasSelection}
-          >
-            <Edit2 size={15} />
-          </button>
-
-          <button
-            type="button"
-            className="win11-icon-btn"
-            title="Delete (Del)"
-            disabled={!hasSelection}
-          >
-            <Trash2 size={15} />
-          </button>
         </div>
 
         <div className="win11-command-divider" />

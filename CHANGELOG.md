@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **PR #50 — Command Bar Streamlining & Dummy Explorer Button Removal**:
+  - **Cleaned Up Non-Functional Toolbar Buttons**: Removed non-functional dummy buttons (Cut, Copy, Paste, Rename, Delete) from `ExplorerHeader.tsx` Command Bar that were previously added to look like Windows File Explorer.
+  - **Cleaned Up Unused Imports & Props**: Removed unused `Scissors`, `Copy`, `Clipboard`, `Edit2`, `Trash2` icons from `ExplorerHeader.tsx` and removed the obsolete `hasSelection` prop from `App.tsx` and `ExplorerHeaderProps`.
+  - **Streamlined 100% Functional Controls**: Refined toolbar layout strictly to real FolderMate operations: `+ New ▾` (Folder/Project/Client), `Sort ▾` (Name/Date/Type/Size), `View ▾` (6 view modes + Details pane toggle), `More ▾` (Scan Inbox / Command Palette), `Drive D:` (Drive Manager), `Folder Style` (Folder Customizer), `Find File` (Drive Search Spotlight), `Details` toggle, `Foreground/Background` mode toggle, and `Watching Inbox` daemon indicator with pause menu.
+
 ### Added
 - **PR #49 — Professional Fluid Responsive Design & Dynamic Scaling System**:
   - **Fluid Clamp Typography**: Upgraded headings, subheadings, body paragraphs, and badges across the landing website (`apps/landing`) to responsive `clamp()` rules (`h1` clamp(1.85rem, 4.8vw, 4.1rem), `h2` clamp(1.5rem, 3.4vw, 2.75rem), `h3` clamp(1.12rem, 2vw, 1.45rem), `p` clamp(0.9rem, 1.1vw, 1.05rem), hero headline clamp(1.85rem, 4.8vw, 4.2rem)), ensuring smooth and proportional scaling across all viewport widths.

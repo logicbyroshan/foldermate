@@ -768,3 +768,25 @@ Testing performed:
 - `npm run build`: Monorepo workspaces (`@foldermate/desktop`, `@foldermate/engine`, `@foldermate/landing`, `@foldermate/config`, `@foldermate/database`, `@foldermate/shared`) compiled with 0 errors.
 - `npm test`: 13 test suites (40 tests) passed 100%.
 
+### PR #50: Command Bar Streamlining & Dummy Explorer Button Removal
+Task: Eliminate unused/cosmetic File Explorer dummy buttons (Cut, Copy, Paste, Rename, Delete) from `ExplorerHeader.tsx` and streamline toolbar controls to 100% functional FolderMate operations.
+Reason: User instructed to remove buttons that were only added for visual appearance of File Explorer without real functional implementation, keeping the desktop UI clean, functional, and uncluttered.
+Files/areas affected:
+- `apps/desktop/src/renderer/components/ExplorerHeader.tsx`
+- `apps/desktop/src/renderer/App.tsx`
+- `.agent-memory/CURRENT_STATE.md`
+- `.agent-memory/TASK_HISTORY.md`
+- `CHANGELOG.md`
+What changed:
+- **Removed Dummy Command Bar Buttons**:
+  - Deleted non-functional Cut (`<Scissors />`), Copy (`<Copy />`), Paste (`<Clipboard />`), Rename (`<Edit2 />`), and Delete (`<Trash2 />`) icon buttons and extra divider from `ExplorerHeader.tsx`.
+- **Cleaned Up Unused Imports & Props**:
+  - Removed unused Lucide icon imports from `ExplorerHeader.tsx`.
+  - Removed unused `hasSelection` prop from `ExplorerHeaderProps` and `App.tsx`.
+- **Streamlined Functional Toolbar**:
+  - Retained all real functional controls: `+ New ▾` (Folder/Project/Client), `Sort ▾` (Name/Date/Type/Size), `View ▾` (6 view modes + Details pane toggle), `More ▾` (Scan Inbox / Command Palette), `Drive D:` (Drive Manager), `Folder Style` (Folder Customizer), `Find File` (Drive Search Spotlight), `Details` toggle, `Foreground/Background` mode switch, and `Watching Inbox` daemon indicator with pause menu.
+Testing performed:
+- `npm run lint`: 0 type errors (`tsc --noEmit`).
+- `npm run build`: All 6 monorepo workspaces built with 0 errors.
+- `npm test`: All 40 Vitest tests passed 100%.
+

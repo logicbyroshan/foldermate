@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import TrustedBy from './components/TrustedBy';
@@ -10,8 +10,11 @@ import BlogSection from './components/BlogSection';
 import CtaBanner from './components/CtaBanner';
 import FaqSection from './components/FaqSection';
 import Footer from './components/Footer';
+import PrivacyModal from './components/PrivacyModal';
 
 export default function App() {
+  const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
+
   return (
     <div className="app-root">
       <Navbar />
@@ -26,7 +29,9 @@ export default function App() {
         <CtaBanner />
         <FaqSection />
       </main>
-      <Footer />
+      <Footer onOpenPrivacy={() => setIsPrivacyOpen(true)} />
+      <PrivacyModal isOpen={isPrivacyOpen} onClose={() => setIsPrivacyOpen(false)} />
     </div>
   );
 }
+

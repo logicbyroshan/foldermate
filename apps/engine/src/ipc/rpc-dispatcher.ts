@@ -5,6 +5,7 @@ import { VersionEngine } from "../versioning/version-engine.js";
 import { ReviewManager } from "../review/review-manager.js";
 import { CorelDrawAdapter } from "../integrations/coreldraw-adapter.js";
 import { ClassificationPipeline } from "../classification/classification-pipeline.js";
+import { PrivacyGovernanceEngine } from "../privacy/privacy-engine.js";
 
 export interface RPCContext {
   db: DatabaseManager;
@@ -14,6 +15,7 @@ export interface RPCContext {
   reviewManager: ReviewManager;
   corelAdapter: CorelDrawAdapter;
   classifier: ClassificationPipeline;
+  privacyEngine: PrivacyGovernanceEngine;
   triggerScan?: () => Promise<{ scanned: number }>;
 }
 
@@ -139,7 +141,97 @@ export async function dispatchRPCMethod(
       return { success: true, config: ctx.config };
     }
 
+    // 10. DPDP Act 2023 & DPDP Rules 2025 Privacy & Data Governance Methods
+    case "privacy.getGovernanceSummary": {
+      return await ctx.privacyEngine.getGovernanceSummary();
+    }
+
+    case "privacy.getNotice": {
+      return ctx.privacyEngine.getNotice();
+    }
+
+    case "privacy.recordConsent": {
+      return ctx.privacyEngine.recordConsent(params);
+    }
+
+    case "privacy.withdrawConsent": {
+      return ctx.privacyEngine.withdrawConsent(params.principalId, params.purposeId, params.reason);
+    }
+
+    case "privacy.listConsentRecords": {
+      return ctx.privacyEngine.listConsentRecords(params);
+    }
+
+    case "privacy.createDSR": {
+      return ctx.privacyEngine.createDSR(params);
+    }
+
+    case "privacy.listDSRs": {
+      return ctx.privacyEngine.listDSRs(params);
+    }
+
+    case "privacy.getDSRById": {
+      return ctx.privacyEngine.getDSRById(params.id);
+    }
+
+    case "privacy.generateDSRExport": {
+      return await ctx.privacyEngine.generateDSRExport(params.principalId);
+    }
+
+    case "privacy.executeDSRErasure": {
+      return await ctx.privacyEngine.executeDSRErasure(params.dsrId, params.principalId);
+    }
+
+    case "privacy.updateDSRStatus": {
+      return ctx.privacyEngine.updateDSRStatus(params.id, params.status, params.notes);
+    }
+
+    case "privacy.submitGrievance": {
+      return ctx.privacyEngine.submitGrievance(params);
+    }
+
+    case "privacy.listGrievances": {
+      return ctx.privacyEngine.listGrievances(params);
+    }
+
+    case "privacy.updateGrievance": {
+      return ctx.privacyEngine.updateGrievance(params.id, params.status, params.notes);
+    }
+
+    case "privacy.logBreachIncident": {
+      return ctx.privacyEngine.logBreachIncident(params);
+    }
+
+    case "privacy.listBreachIncidents": {
+      return ctx.privacyEngine.listBreachIncidents(params);
+    }
+
+    case "privacy.generateBreachNotification": {
+      return ctx.privacyEngine.generateBreachNotification(params.incidentId);
+    }
+
+    case "privacy.updateBreachStatus": {
+      return ctx.privacyEngine.updateBreachStatus(params.id, params.status, params.notes);
+    }
+
+    case "privacy.markBreachNotified": {
+      return ctx.privacyEngine.markBreachNotified(params.id, params.target);
+    }
+
+    case "privacy.listRetentionPolicies": {
+      return ctx.privacyEngine.listRetentionPolicies(params?.activeOnly);
+    }
+
+    case "privacy.updateRetentionPolicy": {
+      return ctx.privacyEngine.updateRetentionPolicy(params.id, params);
+    }
+
+    case "privacy.runRetentionCleanup": {
+      return await ctx.privacyEngine.runRetentionCleanup();
+    }
+
     default:
       throw new Error(`Method not found: ${method}`);
   }
 }
+

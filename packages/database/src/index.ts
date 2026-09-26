@@ -9,6 +9,11 @@ import { EventsRepository } from "./repositories/events.repository.js";
 import { SearchRepository } from "./repositories/search.repository.js";
 import { RulesRepository } from "./repositories/rules.repository.js";
 import { FolderRulesRepository } from "./repositories/folder-rules.repository.js";
+import { ConsentRepository } from "./repositories/consent.repository.js";
+import { DSRRepository } from "./repositories/dsr.repository.js";
+import { RetentionRepository } from "./repositories/retention.repository.js";
+import { GrievanceRepository } from "./repositories/grievance.repository.js";
+import { BreachRepository } from "./repositories/breach.repository.js";
 
 export * from "./connection.js";
 export * from "./migrations/migration-runner.js";
@@ -21,6 +26,11 @@ export * from "./repositories/events.repository.js";
 export * from "./repositories/search.repository.js";
 export * from "./repositories/rules.repository.js";
 export * from "./repositories/folder-rules.repository.js";
+export * from "./repositories/consent.repository.js";
+export * from "./repositories/dsr.repository.js";
+export * from "./repositories/retention.repository.js";
+export * from "./repositories/grievance.repository.js";
+export * from "./repositories/breach.repository.js";
 
 export class DatabaseManager {
   public readonly db: IDatabase;
@@ -33,6 +43,11 @@ export class DatabaseManager {
   public readonly search: SearchRepository;
   public readonly rules: RulesRepository;
   public readonly folderRules: FolderRulesRepository;
+  public readonly consent: ConsentRepository;
+  public readonly dsr: DSRRepository;
+  public readonly retention: RetentionRepository;
+  public readonly grievances: GrievanceRepository;
+  public readonly breaches: BreachRepository;
 
   constructor(options: DatabaseOptions = {}) {
     this.db = createDatabaseConnection(options);
@@ -45,6 +60,11 @@ export class DatabaseManager {
     this.search = new SearchRepository(this.db);
     this.rules = new RulesRepository(this.db);
     this.folderRules = new FolderRulesRepository(this.db);
+    this.consent = new ConsentRepository(this.db);
+    this.dsr = new DSRRepository(this.db);
+    this.retention = new RetentionRepository(this.db);
+    this.grievances = new GrievanceRepository(this.db);
+    this.breaches = new BreachRepository(this.db);
   }
 
   public runMigrations(customMigrationsDir?: string): string[] {
@@ -55,3 +75,4 @@ export class DatabaseManager {
     this.db.close();
   }
 }
+

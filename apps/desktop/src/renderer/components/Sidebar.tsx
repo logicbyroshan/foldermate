@@ -12,6 +12,7 @@ import {
   Archive,
   AlertCircle,
   Sliders,
+  ShieldCheck,
 } from "lucide-react";
 import { LicenseStatus } from "@foldermate/shared";
 import { DriveVisualIcon, FolderVisualIcon } from "./ui/index.js";
@@ -343,13 +344,25 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
       </div>
 
-      {/* Windows 11 Bottom Minimal Anchor: Settings */}
-      <div className="win11-sidebar-bottom">
+      {/* Windows 11 Bottom Minimal Anchor: Privacy & Settings */}
+      <div className="win11-sidebar-bottom" style={{ display: "flex", gap: 4 }}>
         <button
           type="button"
-          className="win11-sidebar-bottom-btn"
+          className={`win11-sidebar-bottom-btn ${currentView === "privacy" ? "active" : ""}`}
+          onClick={() => onSelectView("privacy")}
+          title="Privacy & DPDP Data Governance"
+          style={{ flex: 1 }}
+        >
+          <ShieldCheck size={15} color="#10b981" />
+          <span>Privacy</span>
+        </button>
+
+        <button
+          type="button"
+          className={`win11-sidebar-bottom-btn ${currentView === "settings" ? "active" : ""}`}
           onClick={() => onSelectView("settings")}
           title="FolderMate Settings"
+          style={{ flex: 1 }}
         >
           <Settings size={15} />
           <span>Settings</span>
@@ -358,3 +371,4 @@ export const Sidebar: React.FC<SidebarProps> = ({
     </aside>
   );
 };
+

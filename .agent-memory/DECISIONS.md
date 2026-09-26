@@ -28,10 +28,11 @@ Reason: A rich Windows File Explorer-style preview pane with realistic mockups (
 Alternatives: Relying on external OS thumbnail generation (which often fails on raw CDR/PSD files without shell extensions installed) or flat client directories without format separation was rejected.
 Consequences: All file selection across Explorer and Search displays the preview canvas. Folder hierarchy supports `Clients/{Client}/{Year}/{FileType}/{Category}`. Ingestion and renaming pipelines automatically convert raw names into standard `{Client} {Project} {Year} v{Version}.{ext}` format.
 
-## 2026-09-23
-Decision: Modular Domain Architecture, Service Decoupling, and Dead Code Elimination.
-Context: As the application evolved from an initial web dashboard into an authentic Windows 11 File Explorer, legacy views (`Dashboard.tsx`, `Clients.tsx`, `TopBar.tsx`, `CorelStatusWidget.tsx`) became obsolete and monolithic `App.tsx` accumulated mixed responsibilities (IPC calls, data mapping, tab management, history, view orchestration).
-Reason: A clean, modular architecture with dedicated domain layers (`types/explorer.ts`, `services/foldermate-api.ts`, `services/explorer-mapper.ts`, `hooks/useNavigation.ts`, `hooks/useFolderMateData.ts`, `utils/formatters.ts`) separates concerns, eliminates dead weight, maximizes component reusability, and guarantees maintainability while preserving 100% visual and functional fidelity.
-Alternatives: Keeping everything in a monolithic `App.tsx` and leaving unused legacy views in the repository was rejected as it leads to dead code rot, duplicate logic, and confusion for developers and agents.
-Consequences: `App.tsx` acts purely as a top-level orchestrator. All IPC interactions go through typed `FolderMateApi`. All Explorer entries are produced by pure mapper functions. Shared formatters are reused across all views.
+## 2026-09-26
+Decision: Digital Personal Data Protection Act, 2023 & DPDP Rules, 2025 Full-Stack Compliance Architecture & Offline-First Data Governance.
+Context: Indian legal requirements under the DPDP Act 2023 and DPDP Rules 2025 mandate strict data fiduciary responsibilities, itemised notices (Rule 3 in Eighth Schedule languages), verifiable parental consent for child data (Section 9), Data Principal Rights (DSR access/portability, correction, Section 12(3) two-phase secure erasure), statutory 90-day grievance redressal SLAs, Section 8(6) breach notifications to DPBI and Data Principals, and automated retention cleanup.
+Reason: Creative studios, print shops, and enterprise organizations using FolderMate process client PII, employee badges, and student records. Compliance must be built into the native desktop architecture and database schema rather than treated as a superficial web policy disclaimer.
+Alternatives: Relying on generic web cookie banners, external cloud SaaS compliance vendors, or fake compliance checkboxes was rejected as legally invalid and contrary to FolderMate's 100% offline-first privacy paradigm.
+Consequences: All personal data processing is governed by `PrivacyGovernanceEngine`, SQLite tables `consent_records`, `dsr_requests`, `retention_policies`, `privacy_grievances`, and `data_breach_incidents`. Data is sanitized from logs automatically, two-phase quarantine erasure protects file shreds, and all operations are accessible via typed IPC methods and Desktop `PrivacyCenter.tsx` / Web `PrivacyModal.tsx`.
+
 

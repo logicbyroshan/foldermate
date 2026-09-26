@@ -5,7 +5,7 @@ import { IDatabase } from "../connection.js";
 export class ClientsRepository {
   constructor(private db: IDatabase) {}
 
-  public create(client: Omit<ClientDTO, "id" | "createdAt" | "updatedAt"> & { id?: string }): ClientDTO {
+  public create(client: Partial<ClientDTO> & { name: string }): ClientDTO {
     const id = client.id || crypto.randomUUID();
     const now = new Date().toISOString();
     const aliasesJson = JSON.stringify(client.aliases || []);
@@ -66,6 +66,11 @@ export class ClientsRepository {
       return true;
     }
     return false;
+  }
+
+  public delete(id: string): boolean {
+    const result = this.db.prepare("DELETE FROM clients WHERE id = ?;").run(id);
+    return result.changes > 0;
   }
 
   private mapRow(row: any): ClientDTO {

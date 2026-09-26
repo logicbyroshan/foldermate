@@ -1,6 +1,8 @@
-import React from 'react';
+interface FooterProps {
+  onOpenPrivacy?: () => void;
+}
 
-export default function Footer() {
+export default function Footer({ onOpenPrivacy }: FooterProps) {
   return (
     <footer className="footer">
       <div className="container">
@@ -66,7 +68,23 @@ export default function Footer() {
             <h4 className="footer-col-title">RESOURCES</h4>
             <ul className="footer-links">
               <li><a href="#blog">🎨 CorelDRAW Workflow Tips</a></li>
-              <li><a href="#blog">🔒 Privacy &amp; Security Guide</a></li>
+              <li>
+                <button
+                  type="button"
+                  onClick={onOpenPrivacy}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    padding: 0,
+                    color: "inherit",
+                    font: "inherit",
+                    cursor: "pointer",
+                    textAlign: "left",
+                  }}
+                >
+                  🔒 DPDP Privacy Notice &amp; DSR Rights
+                </button>
+              </li>
               <li><a href="#blog">📊 Print Shop Case Study</a></li>
               <li><a href="#faq">❓ Frequently Asked Questions</a></li>
               <li>
@@ -80,6 +98,7 @@ export default function Footer() {
               </li>
             </ul>
           </div>
+
 
           {/* Column 4: Community & Connect */}
           <div className="footer-col">

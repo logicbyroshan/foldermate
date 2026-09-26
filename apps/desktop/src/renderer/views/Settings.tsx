@@ -41,6 +41,17 @@ export const Settings: React.FC<SettingsProps> = ({
   const [safeMode, setSafeMode] = useState(true);
   const [corelEnabled, setCorelEnabled] = useState(true);
   const [collisionPolicy, setCollisionPolicy] = useState("AUTO_INCREMENT");
+
+  // DPDP Privacy Governance State
+  const [fiduciaryName, setFiduciaryName] = useState("FolderMate Workspace Administrator");
+  const [fiduciaryEmail, setFiduciaryEmail] = useState("privacy@foldermate.local");
+  const [grievanceOfficerName, setGrievanceOfficerName] = useState("Data Protection & Grievance Redressal Officer");
+  const [grievanceOfficerEmail, setGrievanceOfficerEmail] = useState("grievance@foldermate.local");
+  const [grievanceOfficerPhone, setGrievanceOfficerPhone] = useState("+91-00000-00000");
+  const [retentionDaysStaging, setRetentionDaysStaging] = useState(7);
+  const [retentionDaysReview, setRetentionDaysReview] = useState(30);
+  const [logSanitization, setLogSanitization] = useState(true);
+
   const [isSaving, setIsSaving] = useState(false);
   const { showToast } = useToast();
 
@@ -55,6 +66,15 @@ export const Settings: React.FC<SettingsProps> = ({
           if (cfg?.storage?.safeMode !== undefined) setSafeMode(cfg.storage.safeMode);
           if (cfg?.storage?.collisionPolicy) setCollisionPolicy(cfg.storage.collisionPolicy);
           if (cfg?.coreldraw?.enabled !== undefined) setCorelEnabled(cfg.coreldraw.enabled);
+
+          if (cfg?.privacy?.fiduciaryName) setFiduciaryName(cfg.privacy.fiduciaryName);
+          if (cfg?.privacy?.fiduciaryContactEmail) setFiduciaryEmail(cfg.privacy.fiduciaryContactEmail);
+          if (cfg?.privacy?.grievanceOfficerName) setGrievanceOfficerName(cfg.privacy.grievanceOfficerName);
+          if (cfg?.privacy?.grievanceOfficerEmail) setGrievanceOfficerEmail(cfg.privacy.grievanceOfficerEmail);
+          if (cfg?.privacy?.grievanceOfficerPhone) setGrievanceOfficerPhone(cfg.privacy.grievanceOfficerPhone);
+          if (cfg?.privacy?.retentionDaysInboxStaging) setRetentionDaysStaging(cfg.privacy.retentionDaysInboxStaging);
+          if (cfg?.privacy?.retentionDaysReviewQueue) setRetentionDaysReview(cfg.privacy.retentionDaysReviewQueue);
+          if (cfg?.privacy?.logSanitizationEnabled !== undefined) setLogSanitization(cfg.privacy.logSanitizationEnabled);
         }
       } catch (err: any) {
         console.error("Failed to load settings:", err);
@@ -71,8 +91,18 @@ export const Settings: React.FC<SettingsProps> = ({
           ingestion: { inboxPath },
           storage: { organizationRoot, archiveRoot, safeMode, collisionPolicy },
           coreldraw: { enabled: corelEnabled },
+          privacy: {
+            fiduciaryName,
+            fiduciaryContactEmail: fiduciaryEmail,
+            grievanceOfficerName,
+            grievanceOfficerEmail,
+            grievanceOfficerPhone,
+            retentionDaysInboxStaging: retentionDaysStaging,
+            retentionDaysReviewQueue: retentionDaysReview,
+            logSanitizationEnabled: logSanitization,
+          },
         });
-        showToast("System configuration updated and applied to background engine.", "success");
+        showToast("System configuration and DPDP governance settings updated.", "success");
       }
     } catch (err: any) {
       showToast(err.message || "Failed to update configuration.", "error");
@@ -80,6 +110,7 @@ export const Settings: React.FC<SettingsProps> = ({
       setIsSaving(false);
     }
   };
+
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20, maxWidth: 900 }}>
@@ -409,6 +440,102 @@ export const Settings: React.FC<SettingsProps> = ({
           />
         </div>
       </Card>
+
+      {/* DPDP Act 2023 & DPDP Rules 2025 Data Governance Settings */}
+      <Card style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, borderBottom: "1px solid var(--border-subtle)", paddingBottom: 12 }}>
+          <ShieldCheck size={18} color="#10b981" />
+          <div>
+            <h3 style={{ fontSize: 14, fontWeight: 700, color: "var(--text-primary)" }}>
+              DPDP Act 2023 &amp; DPDP Rules 2025 Governance Configuration
+            </h3>
+            <span style={{ fontSize: 11, color: "var(--text-muted)" }}>
+              Data Fiduciary identity, statutory 90-day grievance redressal contact, and retention policy defaults.
+            </span>
+          </div>
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <Input
+              label="DATA FIDUCIARY LEGAL NAME"
+              value={fiduciaryName}
+              onChange={(e) => setFiduciaryName(e.target.value)}
+              placeholder="e.g. ABC Graphics & Printing Press Pvt Ltd"
+            />
+            <Input
+              label="DATA FIDUCIARY CONTACT EMAIL"
+              value={fiduciaryEmail}
+              onChange={(e) => setFiduciaryEmail(e.target.value)}
+              placeholder="e.g. privacy@domain.local"
+            />
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
+            <Input
+              label="GRIEVANCE OFFICER NAME (SEC 13)"
+              value={grievanceOfficerName}
+              onChange={(e) => setGrievanceOfficerName(e.target.value)}
+              placeholder="e.g. Data Protection Officer"
+            />
+            <Input
+              label="GRIEVANCE OFFICER EMAIL"
+              value={grievanceOfficerEmail}
+              onChange={(e) => setGrievanceOfficerEmail(e.target.value)}
+              placeholder="e.g. grievance@domain.local"
+            />
+            <Input
+              label="GRIEVANCE OFFICER PHONE"
+              value={grievanceOfficerPhone}
+              onChange={(e) => setGrievanceOfficerPhone(e.target.value)}
+              placeholder="e.g. +91-98765-43210"
+            />
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <Input
+              label="INBOX STAGING BUFFER RETENTION (DAYS)"
+              type="number"
+              value={String(retentionDaysStaging)}
+              onChange={(e) => setRetentionDaysStaging(Number(e.target.value) || 7)}
+            />
+            <Input
+              label="REVIEW QUEUE AUTO-PURGE RETENTION (DAYS)"
+              type="number"
+              value={String(retentionDaysReview)}
+              onChange={(e) => setRetentionDaysReview(Number(e.target.value) || 30)}
+            />
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "12px 14px",
+              backgroundColor: "var(--bg-surface)",
+              borderRadius: "var(--radius-md)",
+              border: "1px solid var(--border-subtle)",
+            }}
+          >
+            <div>
+              <div style={{ fontSize: 13, fontWeight: 600, color: "var(--text-primary)" }}>
+                Enable Automatic PII Log Sanitization (Phone/Email Masking)
+              </div>
+              <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 2 }}>
+                Masks email addresses, phone numbers, and authentication tokens in stdout/file logs.
+              </div>
+            </div>
+            <input
+              type="checkbox"
+              checked={logSanitization}
+              onChange={(e) => setLogSanitization(e.target.checked)}
+              style={{ width: 18, height: 18, accentColor: "#10b981", cursor: "pointer" }}
+            />
+          </div>
+        </div>
+      </Card>
     </div>
   );
 };
+

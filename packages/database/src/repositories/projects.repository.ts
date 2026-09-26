@@ -55,6 +55,11 @@ export class ProjectsRepository {
     return this.mapRow(row);
   }
 
+  public delete(id: string): boolean {
+    const result = this.db.prepare("DELETE FROM projects WHERE id = ?;").run(id);
+    return result.changes > 0;
+  }
+
   private mapRow(row: any): ProjectDTO {
     let metadata = {};
     try {

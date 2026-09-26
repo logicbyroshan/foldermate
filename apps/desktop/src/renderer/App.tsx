@@ -592,7 +592,6 @@ export const AppContent: React.FC = () => {
               setShowNewFolderModal(true);
             }}
             onScanNow={handleScanNow}
-            hasSelection={Boolean(selectedItem)}
             onOpenDriveManager={() => setIsDriveCustomizerOpen(true)}
             onOpenFolderCustomizer={() => handleOpenFolderCustomizer()}
             onOpenDriveSearch={() => setIsDriveSearchOpen(true)}

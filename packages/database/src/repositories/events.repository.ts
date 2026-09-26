@@ -5,7 +5,10 @@ import { IDatabase } from "../connection.js";
 export class EventsRepository {
   constructor(private db: IDatabase) {}
 
+  public create = this.record.bind(this);
+
   public record(event: {
+
     fileId?: string | null;
     eventType: EventType;
     oldState?: Record<string, unknown> | null;

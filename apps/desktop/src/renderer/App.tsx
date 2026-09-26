@@ -8,8 +8,10 @@ import { Search } from "./views/Search.js";
 import { ReviewQueue } from "./views/ReviewQueue.js";
 import { Rules } from "./views/Rules.js";
 import { Settings } from "./views/Settings.js";
+import { PrivacyCenter } from "./views/PrivacyCenter.js";
 import { BackgroundAutomation } from "./views/BackgroundAutomation.js";
 import { KeyboardShortcuts } from "./views/KeyboardShortcuts.js";
+
 import { ToastProvider, useToast, Modal, CommandPalette } from "./components/ui/index.js";
 import { ActivationModal } from "./components/ActivationModal.js";
 import { DriveCustomizerModal } from "./components/DriveCustomizerModal.js";
@@ -654,6 +656,7 @@ export const AppContent: React.FC = () => {
               {currentView === "automation" && <BackgroundAutomation />}
               {currentView === "shortcuts" && <KeyboardShortcuts />}
               {currentView === "rules" && <Rules />}
+              {currentView === "privacy" && <PrivacyCenter />}
               {currentView === "settings" && (
                 <Settings
                   licenseStatus={licenseStatus}
@@ -663,6 +666,7 @@ export const AppContent: React.FC = () => {
                   onSetThemePreference={handleSetThemePreference}
                 />
               )}
+
             </main>
 
             {/* Right-Side Windows 11 Details Pane */}

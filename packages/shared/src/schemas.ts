@@ -7,6 +7,10 @@ export const ClientSchema = z.object({
   aliases: z.array(z.string()).default([]),
   notes: z.string().nullable().optional(),
   isActive: z.boolean().default(true),
+  contactEmail: z.string().email().nullable().optional(),
+  contactPhone: z.string().nullable().optional(),
+  isChildData: z.boolean().default(false),
+  dataClassification: z.enum(["STANDARD", "PII", "RESTRICTED_CHILD_DATA"]).default("STANDARD"),
 });
 
 export const ProjectSchema = z.object({
@@ -40,6 +44,9 @@ export const FileRecordSchema = z.object({
   confidenceScore: z.number().min(0.0).max(1.0).default(1.0),
   sourceApp: z.string().nullable().optional(),
   isArchived: z.boolean().default(false),
+  isQuarantinedForErasure: z.boolean().default(false),
+  containsPii: z.boolean().default(false),
+  isChildData: z.boolean().default(false),
   organizedAt: z.string().nullable().optional(),
 });
 
@@ -52,3 +59,57 @@ export const ResolveReviewItemSchema = z.object({
   learnAlias: z.boolean().default(true),
   customName: z.string().optional(),
 });
+
+// DPDP Zod Validation Schemas
+export const RecordConsentSchema = z.object({
+  principalId: z.string().min(1),
+  principalType: z.enum(["client", "contact", "employee", "visitor", "parent_guardian"]).default("client"),
+  principalName: z.string().min(1),
+  principalContact: z.string().optional(),
+  purposeId: z.string().min(1),
+  purposeDescription: z.string().min(1),
+  noticeVersion: z.string().default("v1.0"),
+  lawfulBasis: z.enum(["consent", "legitimate_uses", "contractual", "legal_obligation"]).default("consent"),
+  isChildData: z.boolean().default(false),
+  parentalConsentVerified: z.boolean().default(false),
+  parentGuardianIdentifier: z.string().optional(),
+  metadata: z.record(z.unknown()).optional(),
+  expiresAt: z.string().optional(),
+});
+
+export const CreateDSRRequestSchema = z.object({
+  principalId: z.string().min(1),
+  principalName: z.string().min(1),
+  principalContact: z.string().min(1),
+  requestType: z.enum(["access", "correction", "erasure", "grievance", "nomination"]),
+  details: z.string().min(1),
+  correctionPayload: z.record(z.unknown()).optional(),
+  nomineePayload: z.record(z.unknown()).optional(),
+});
+
+export const CreateGrievanceSchema = z.object({
+  complainantName: z.string().min(1),
+  complainantContact: z.string().min(1),
+  category: z.enum(["consent_violation", "unauthorized_processing", "delayed_dsr", "child_data_concern", "security_leak", "other"]),
+  description: z.string().min(1),
+  grievanceOfficer: z.string().optional(),
+});
+
+export const CreateBreachIncidentSchema = z.object({
+  title: z.string().min(1),
+  severity: z.enum(["low", "medium", "high", "critical"]).default("medium"),
+  natureAndScope: z.string().min(1),
+  affectedDataCategories: z.array(z.string()).default([]),
+  estimatedAffectedPrincipals: z.number().int().nonnegative().default(0),
+  containmentActions: z.string().optional(),
+});
+
+export const CreateRetentionPolicySchema = z.object({
+  name: z.string().min(1),
+  category: z.enum(["inbox_staging", "review_queue", "organized_files", "file_versions", "audit_logs", "exports"]),
+  retentionDays: z.number().int().positive(),
+  action: z.enum(["delete", "archive", "flag_for_review"]).default("delete"),
+  justification: z.string().min(1),
+  isActive: z.boolean().default(true),
+});
+

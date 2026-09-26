@@ -12,6 +12,7 @@ import { VersionEngine } from "../apps/engine/src/versioning/version-engine.js";
 import { ReviewManager } from "../apps/engine/src/review/review-manager.js";
 import { CorelDrawAdapter } from "../apps/engine/src/integrations/coreldraw-adapter.js";
 import { ClassificationPipeline } from "../apps/engine/src/classification/classification-pipeline.js";
+import { PrivacyGovernanceEngine } from "../apps/engine/src/privacy/privacy-engine.js";
 
 describe("IPC Subsystem", () => {
   let tempDir: string;
@@ -44,6 +45,7 @@ describe("IPC Subsystem", () => {
     const reviewManager = new ReviewManager(dbManager, config);
     const corelAdapter = new CorelDrawAdapter();
     const classifier = new ClassificationPipeline(dbManager);
+    const privacyEngine = new PrivacyGovernanceEngine(dbManager, config);
 
     server = new IPCServer({
       pipePath: testPipePath,
@@ -56,6 +58,7 @@ describe("IPC Subsystem", () => {
         reviewManager,
         corelAdapter,
         classifier,
+        privacyEngine,
       },
     });
 

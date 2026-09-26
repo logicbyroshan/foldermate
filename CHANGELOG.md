@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **PR #51 — Digital Personal Data Protection Act 2023 & DPDP Rules 2025 Full-Stack Compliance Framework**:
+  - **Database Migration & Repositories (`packages/database`)**: Added migration `003_dpdp_compliance.sql` with tables for `consent_records`, `dsr_requests`, `retention_policies`, `privacy_grievances`, and `data_breach_incidents`. Created typed repositories for consent, DSR, retention, grievances, and breach tracking.
+  - **Runtime Contracts & Validation (`packages/shared`, `packages/config`)**: Added shared DTO types, audit event types, and Zod schemas for all privacy operations. Added `privacy` configuration block to `FolderMateConfigSchema`.
+  - **Privacy & Data Governance Engine (`apps/engine`)**: Built `PrivacyGovernanceEngine` supporting Rule 3 itemised privacy notices (in 22 Eighth Schedule languages), granular voluntary and verifiable parental consent (Section 9 for children/students), Section 11 machine-readable JSON data portability bundles, Section 12(3) two-phase secure erasure (with tombstone quarantine and audit trails), 90-day grievance SLA enforcement, Section 8(6) statutory breach drafts for DPBI & Data Principals, automated retention cleanup engine, and regex PII log sanitizer.
+  - **Named Pipe IPC Dispatches**: Added 15+ typed `privacy.*` RPC endpoints to `rpc-dispatcher.ts` with 256-bit token authentication.
+  - **Desktop UI (`apps/desktop`)**: Created comprehensive 6-tab `PrivacyCenter.tsx` (Notice & Governance, DSR Portal, Consent Registry, Retention & Cleanup, Grievances, Breach Response) with real-time IPC synchronization, wired into `Sidebar.tsx` and `Settings.tsx`.
+  - **Landing Page Integration (`apps/landing`)**: Built `PrivacyModal.tsx` containing the official DPDP notice, itemised purposes, DSR portal, and web grievance form, linked from the footer.
+  - **Comprehensive Compliance Documentation (`docs/DPDP_COMPLIANCE.md`)**: Documented complete data inventory, legal baseline mapping, DPIA assessment, and operational guidance.
+  - **Testing**: Added `tests/dpdp-privacy.test.ts` with 8 comprehensive integration tests covering the entire DPDP statutory lifecycle (all 48 Vitest tests passing, 0 lint errors).
+
 ### Changed
 - **PR #50 — Command Bar Streamlining & Dummy Explorer Button Removal**:
   - **Cleaned Up Non-Functional Toolbar Buttons**: Removed non-functional dummy buttons (Cut, Copy, Paste, Rename, Delete) from `ExplorerHeader.tsx` Command Bar that were previously added to look like Windows File Explorer.

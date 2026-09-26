@@ -5,7 +5,17 @@ import { IDatabase } from "../connection.js";
 export class FilesRepository {
   constructor(private db: IDatabase) {}
 
-  public create(file: Omit<FileRecordDTO, "id" | "createdAt" | "updatedAt"> & { id?: string }): FileRecordDTO {
+  public create(file: Partial<FileRecordDTO> & {
+    originalName: string;
+    currentName: string;
+    originalPath: string;
+    currentPath: string;
+    relativePath: string;
+    extension: string;
+    mimeType: string;
+    sizeBytes: number;
+    sha256Hash: string;
+  }): FileRecordDTO {
     const id = file.id || crypto.randomUUID();
     const now = new Date().toISOString();
 
@@ -159,6 +169,11 @@ export class FilesRepository {
     );
 
     return res.changes > 0;
+  }
+
+  public delete(id: string): boolean {
+    const result = this.db.prepare("DELETE FROM files WHERE id = ?;").run(id);
+    return result.changes > 0;
   }
 
   private mapRow(row: any): FileRecordDTO {

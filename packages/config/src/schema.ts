@@ -47,7 +47,23 @@ export const FolderMateConfigSchema = z.object({
     autoStartWithWindows: z.boolean().default(true),
     minimizeToTrayOnClose: z.boolean().default(true),
   }).default({}),
+
+  privacy: z.object({
+    fiduciaryName: z.string().default("FolderMate Workspace Administrator"),
+    fiduciaryContactEmail: z.string().default("privacy@foldermate.local"),
+    grievanceOfficerName: z.string().default("Data Protection & Grievance Redressal Officer"),
+    grievanceOfficerEmail: z.string().default("grievance@foldermate.local"),
+    grievanceOfficerPhone: z.string().default("+91-00000-00000"),
+    retentionDaysInboxStaging: z.number().int().min(1).max(365).default(7),
+    retentionDaysReviewQueue: z.number().int().min(1).max(365).default(30),
+    retentionDaysAuditLogs: z.number().int().min(30).max(1825).default(365),
+    childDataProtectionEnabled: z.boolean().default(true),
+    logSanitizationEnabled: z.boolean().default(true),
+    autoQuarantineOnErasure: z.boolean().default(true),
+    enableDataPortabilityExports: z.boolean().default(true),
+  }).default({}),
 });
 
 export type FolderMateConfig = z.infer<typeof FolderMateConfigSchema>;
 export const DEFAULT_CONFIG: FolderMateConfig = FolderMateConfigSchema.parse({});
+

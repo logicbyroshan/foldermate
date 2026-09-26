@@ -11,7 +11,9 @@ export type NavView =
   | "automation"
   | "rules"
   | "shortcuts"
+  | "privacy"
   | "settings";
+
 
 export type ViewMode =
   | "details"

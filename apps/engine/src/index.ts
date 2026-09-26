@@ -10,6 +10,7 @@ import { VersionEngine } from "./versioning/version-engine.js";
 import { ReviewManager } from "./review/review-manager.js";
 import { CorelDrawAdapter } from "./integrations/coreldraw-adapter.js";
 import { ClassificationPipeline } from "./classification/classification-pipeline.js";
+import { PrivacyGovernanceEngine } from "./privacy/privacy-engine.js";
 
 async function main() {
   console.log("==========================================");
@@ -53,6 +54,7 @@ async function main() {
   const reviewManager = new ReviewManager(db, config);
   const corelAdapter = new CorelDrawAdapter();
   const classifier = new ClassificationPipeline(db);
+  const privacyEngine = new PrivacyGovernanceEngine(db, config);
 
   // 5. Initialize & Start Named Pipe IPC Server
   const rpcContext: RPCContext = {
@@ -63,7 +65,9 @@ async function main() {
     reviewManager,
     corelAdapter,
     classifier,
+    privacyEngine,
   };
+
 
   const ipcServer = new IPCServer({ authManager, rpcContext });
 

@@ -790,3 +790,48 @@ Testing performed:
 - `npm run build`: All 6 monorepo workspaces built with 0 errors.
 - `npm test`: All 40 Vitest tests passed 100%.
 
+### PR #51: Digital Personal Data Protection Act 2023 & DPDP Rules 2025 Compliance Framework
+Task: Perform end-to-end data audit, mapping, gap analysis, and implementation of full DPDP Act 2023 and DPDP Rules 2025 statutory data governance, consent management, Data Principal Rights (DSR), 90-day SLA grievance redressal, DPBI breach intimation, automated retention engine, and security safeguards across the FolderMate monorepo.
+Reason: Mandatory statutory compliance under India's Digital Personal Data Protection Act, 2023 and DPDP Rules, 2025 for creative studios, printing presses, and enterprise deployments handling customer, student, and personal data.
+Files/areas affected:
+- `packages/database/src/migrations/003_dpdp_compliance.sql`
+- `packages/database/src/repositories/consent.repository.ts`
+- `packages/database/src/repositories/dsr.repository.ts`
+- `packages/database/src/repositories/retention.repository.ts`
+- `packages/database/src/repositories/grievance.repository.ts`
+- `packages/database/src/repositories/breach.repository.ts`
+- `packages/database/src/repositories/clients.repository.ts`
+- `packages/database/src/repositories/files.repository.ts`
+- `packages/database/src/repositories/projects.repository.ts`
+- `packages/database/src/index.ts`
+- `packages/shared/src/types.ts`
+- `packages/shared/src/schemas.ts`
+- `packages/config/src/schema.ts`
+- `apps/engine/src/privacy/privacy-engine.ts`
+- `apps/engine/src/ipc/rpc-dispatcher.ts`
+- `apps/engine/src/index.ts`
+- `apps/desktop/src/renderer/views/PrivacyCenter.tsx`
+- `apps/desktop/src/renderer/views/Settings.tsx`
+- `apps/desktop/src/renderer/components/Sidebar.tsx`
+- `apps/desktop/src/renderer/components/ui/Button.tsx`
+- `apps/desktop/src/renderer/services/foldermate-api.ts`
+- `apps/desktop/src/renderer/mock-bridge.ts`
+- `apps/landing/src/components/PrivacyModal.tsx`
+- `apps/landing/src/components/Footer.tsx`
+- `apps/landing/src/App.tsx`
+- `docs/DPDP_COMPLIANCE.md`
+- `tests/dpdp-privacy.test.ts`
+- `tests/ipc.test.ts`
+What changed:
+- **Database & Schemas**: Created migration `003_dpdp_compliance.sql` creating tables `consent_records`, `dsr_requests`, `retention_policies`, `privacy_grievances`, and `data_breach_incidents`. Implemented corresponding repositories and runtime Zod schemas.
+- **Engine Subsystem**: Implemented `PrivacyGovernanceEngine` supporting Rule 3 itemised notices in 22 Eighth Schedule languages, granular voluntary and verifiable parental consent (Section 9), Section 11 machine-readable JSON portability bundles, Section 12(3) two-phase secure erasure, 90-day grievance SLA tracking, Section 8(6) statutory breach drafts for DPBI & Data Principals, automated retention cleanup executor, and regex PII log sanitizer.
+- **IPC Interface**: Dispatched 15+ typed `privacy.*` RPC methods over Named Pipe IPC with 256-bit token authentication.
+- **Desktop UI**: Built 6-tab `PrivacyCenter.tsx` (Notice & Governance, DSR Portal, Consent Registry, Retention & Cleanup, Grievances, Breach Response), wired sidebar navigation and settings panel.
+- **Web Landing Page**: Built `PrivacyModal.tsx` with DPDP notice, itemised purposes, DSR portal, and web grievance submission form.
+- **Documentation**: Generated `docs/DPDP_COMPLIANCE.md` providing complete data inventory, DPIA assessment, and legal baseline mapping.
+- **Testing**: Added `tests/dpdp-privacy.test.ts` (8 comprehensive tests covering notice, consent, DSR, erasure, grievances, breach notices, log masking, and IPC dispatch).
+Testing performed:
+- `npm run lint`: 0 type errors (`tsc --noEmit`).
+- `npm run build`: All 6 monorepo workspaces built with 0 errors.
+- `npm test`: All 14 Vitest test suites (48 tests) passed 100%.
+

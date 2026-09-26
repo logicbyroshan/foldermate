@@ -905,10 +905,370 @@ export function setupBrowserMockBridge() {
           return { success: true };
         }
 
+        // DPDP Act 2023 & DPDP Rules 2025 Privacy & Data Governance Mocks
+        case "privacy.getGovernanceSummary":
+          return {
+            dpdpReadinessScore: 96,
+            totalDataPrincipals: clients.length + 2,
+            activeConsentRecords: 6,
+            withdrawnConsentRecords: 1,
+            pendingDSRRequests: 1,
+            completedDSRRequests: 3,
+            openGrievances: 0,
+            slaBreachedGrievances: 0,
+            totalBreachIncidents: 0,
+            activeRetentionPolicies: 4,
+            childDataProtectedCount: 2,
+            piiMaskingActive: true,
+            storageIsolationActive: true,
+            offlineFirstMode: true,
+          };
+
+        case "privacy.getNotice":
+          return {
+            version: "v1.0-DPDP-2026",
+            effectiveDate: "2026-09-26",
+            fiduciaryName: "FolderMate Workspace Administrator",
+            fiduciaryContact: "privacy@foldermate.local",
+            grievanceOfficerName: "Data Protection & Grievance Redressal Officer",
+            grievanceOfficerEmail: "grievance@foldermate.local",
+            grievanceOfficerPhone: "+91-98765-43210",
+            itemisedPurposes: [
+              {
+                purposeId: "file_organization",
+                purposeName: "Client & Project File Organization",
+                dataCollected: ["Client Names", "Project Titles", "File Paths", "Timestamps"],
+                lawfulBasis: "Legitimate Use / Contract Performance",
+                retentionPeriod: "Duration of active client engagement",
+                isChildDataApplicable: true,
+              },
+              {
+                purposeId: "metadata_indexing",
+                purposeName: "Local FTS5 Metadata Indexing",
+                dataCollected: ["Filenames", "Document Text", "Metadata Tags"],
+                lawfulBasis: "Legitimate Use",
+                retentionPeriod: "Duration of active workspace usage",
+                isChildDataApplicable: false,
+              },
+              {
+                purposeId: "ocr_text_extraction",
+                purposeName: "Document & ID Card Text Analysis",
+                dataCollected: ["Student/Staff Names", "ID Badges", "Document Text"],
+                lawfulBasis: "Consent (Revocable)",
+                retentionPeriod: "Active school/client year",
+                isChildDataApplicable: true,
+              },
+              {
+                purposeId: "community_rewards",
+                purposeName: "Community Tasks & Free Key Verification",
+                dataCollected: ["Public GitHub Username", "Community Task Status"],
+                lawfulBasis: "Voluntary Consent",
+                retentionPeriod: "14 days post verification",
+                isChildDataApplicable: false,
+              },
+              {
+                purposeId: "support_ticket",
+                purposeName: "Privacy & Technical Grievance Redressal",
+                dataCollected: ["Complainant Name", "Contact Email/Phone", "Grievance Description"],
+                lawfulBasis: "Section 13 DPDP Act 2023 Statutory Obligation",
+                retentionPeriod: "90 days post-resolution",
+                isChildDataApplicable: false,
+              },
+            ],
+            rightsSummary: [
+              "Right to Access Information regarding Personal Data & Processing Activities (Sec 11)",
+              "Right to Correction, Completion, and Updating of inaccurate Personal Data (Sec 12)",
+              "Right to Erasure / Deletion of Personal Data no longer required (Sec 12(3))",
+              "Right to Grievance Redressal with statutory resolution <= 90 days (Sec 13)",
+              "Right to Nominate an individual in the event of death or incapacity (Sec 14)",
+            ],
+            grievanceProcedure: "Contact the Grievance Redressal Officer at grievance@foldermate.local. Complaints are acknowledged within 48 hours and resolved within 90 days as mandated by DPDP Rules 2025.",
+            consentWithdrawalInstructions: "Consent can be withdrawn at any time via the Privacy Center. Processing will cease immediately upon withdrawal.",
+          };
+
+        case "privacy.listConsentRecords":
+          return [
+            {
+              id: "consent-1",
+              principalId: "client-1",
+              principalType: "client",
+              principalName: "ABC School",
+              principalContact: "admin@abcschool.edu",
+              purposeId: "ocr_text_extraction",
+              purposeDescription: "Student ID card raster & roster text analysis for batch generation",
+              status: "granted",
+              noticeVersion: "v1.0",
+              lawfulBasis: "consent",
+              isChildData: true,
+              parentalConsentVerified: true,
+              parentGuardianIdentifier: "PARENT-ROSTER-2026",
+              grantedAt: "2026-09-01T10:00:00.000Z",
+              createdAt: "2026-09-01T10:00:00.000Z",
+              updatedAt: "2026-09-01T10:00:00.000Z",
+            },
+            {
+              id: "consent-2",
+              principalId: "client-1",
+              principalType: "client",
+              principalName: "ABC School",
+              principalContact: "admin@abcschool.edu",
+              purposeId: "file_organization",
+              purposeDescription: "Autonomous filing and archiving of student publications and annual magazines",
+              status: "granted",
+              noticeVersion: "v1.0",
+              lawfulBasis: "contractual",
+              isChildData: true,
+              parentalConsentVerified: true,
+              grantedAt: "2026-09-01T10:00:00.000Z",
+              createdAt: "2026-09-01T10:00:00.000Z",
+              updatedAt: "2026-09-01T10:00:00.000Z",
+            },
+            {
+              id: "consent-3",
+              principalId: "client-2",
+              principalType: "client",
+              principalName: "Apex Healthcare",
+              principalContact: "operations@apexhealth.org",
+              purposeId: "file_organization",
+              purposeDescription: "Medical staff badge formatting and signage versioning",
+              status: "granted",
+              noticeVersion: "v1.0",
+              lawfulBasis: "consent",
+              isChildData: false,
+              parentalConsentVerified: false,
+              grantedAt: "2026-09-10T14:30:00.000Z",
+              createdAt: "2026-09-10T14:30:00.000Z",
+              updatedAt: "2026-09-10T14:30:00.000Z",
+            },
+          ];
+
+        case "privacy.recordConsent":
+          return {
+            id: `consent-${Date.now()}`,
+            principalId: payload.principalId,
+            principalType: payload.principalType || "client",
+            principalName: payload.principalName,
+            principalContact: payload.principalContact,
+            purposeId: payload.purposeId,
+            purposeDescription: payload.purposeDescription || "Recorded consent",
+            status: "granted",
+            noticeVersion: "v1.0",
+            lawfulBasis: payload.lawfulBasis || "consent",
+            isChildData: !!payload.isChildData,
+            parentalConsentVerified: !!payload.parentalConsentVerified,
+            parentGuardianIdentifier: payload.parentGuardianIdentifier,
+            grantedAt: new Date().toISOString(),
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          };
+
+        case "privacy.withdrawConsent":
+          return { success: true, count: 1 };
+
+        case "privacy.listDSRs":
+          return [
+            {
+              id: "dsr-1",
+              requestNumber: "DSR-2026-0001",
+              principalId: "client-1",
+              principalName: "ABC School (Parent Representative)",
+              principalContact: "guardian@abcschool.edu",
+              requestType: "access",
+              status: "completed",
+              details: "Request for comprehensive copy of all student design metadata and versions under Section 11.",
+              assignedTo: "Data Protection Officer",
+              dueDate: "2026-10-15T00:00:00.000Z",
+              completedAt: "2026-09-20T11:00:00.000Z",
+              resolutionSummary: "Delivered verified machine-readable JSON archive with full audit trail.",
+              createdAt: "2026-09-15T09:30:00.000Z",
+              updatedAt: "2026-09-20T11:00:00.000Z",
+            },
+            {
+              id: "dsr-2",
+              requestNumber: "DSR-2026-0002",
+              principalId: "client-2",
+              principalName: "Apex Healthcare (Staff Secretary)",
+              principalContact: "hr@apexhealth.org",
+              requestType: "correction",
+              status: "in_progress",
+              details: "Update phone number and designation details in hospital staff identity cards roster.",
+              assignedTo: "Data Protection Officer",
+              dueDate: "2026-10-25T00:00:00.000Z",
+              createdAt: "2026-09-25T14:15:00.000Z",
+              updatedAt: "2026-09-25T14:15:00.000Z",
+            },
+          ];
+
+        case "privacy.createDSR":
+          return {
+            id: `dsr-${Date.now()}`,
+            requestNumber: `DSR-2026-000${Math.floor(Math.random() * 900 + 100)}`,
+            principalId: payload.principalId,
+            principalName: payload.principalName,
+            principalContact: payload.principalContact,
+            requestType: payload.requestType,
+            status: "received",
+            details: payload.details,
+            assignedTo: "Data Protection Officer",
+            dueDate: new Date(Date.now() + 30 * 86400000).toISOString(),
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          };
+
+        case "privacy.generateDSRExport":
+          return {
+            exportMetadata: {
+              exportVersion: "DPDP-DSR-v1.0",
+              generatedAt: new Date().toISOString(),
+              dataPrincipalIdentifier: payload.principalId,
+              legalBasis: "Section 11 DPDP Act 2023 - Right to Access Personal Data",
+              fiduciaryName: "FolderMate Workspace",
+            },
+            principalDetails: clients.find((c) => c.id === payload.principalId) || { id: payload.principalId, name: "Data Principal" },
+            associatedProjects: projects.filter((p) => p.clientId === payload.principalId),
+            filesProcessed: files.filter((f) => f.clientId === payload.principalId),
+            consentAuditTrail: [
+              { purpose: "file_organization", status: "granted", grantedAt: "2026-09-01T10:00:00Z" }
+            ],
+          };
+
+        case "privacy.executeDSRErasure":
+          return { success: true, purgedFiles: 3, purgedRecords: 4 };
+
+        case "privacy.listGrievances":
+          return [
+            {
+              id: "grv-1",
+              ticketNumber: "GRV-2026-0001",
+              complainantName: "Dr. Rajesh Sharma",
+              complainantContact: "rajesh.sharma@apexhealth.org",
+              category: "unauthorized_processing",
+              description: "Inquiry regarding temporary CDR backup copy retention in workspace inbox.",
+              status: "resolved",
+              grievanceOfficer: "Grievance Redressal Officer",
+              resolutionNotes: "Explained local staging buffer auto-purge (7 days retention policy) and verified zero cloud transmission.",
+              slaDeadline: "2026-12-01T00:00:00.000Z",
+              resolvedAt: "2026-09-18T16:00:00.000Z",
+              createdAt: "2026-09-12T11:00:00.000Z",
+              updatedAt: "2026-09-18T16:00:00.000Z",
+            },
+          ];
+
+        case "privacy.submitGrievance":
+          return {
+            id: `grv-${Date.now()}`,
+            ticketNumber: `GRV-2026-000${Math.floor(Math.random() * 900 + 100)}`,
+            complainantName: payload.complainantName,
+            complainantContact: payload.complainantContact,
+            category: payload.category,
+            description: payload.description,
+            status: "open",
+            grievanceOfficer: "Grievance Redressal Officer",
+            slaDeadline: new Date(Date.now() + 90 * 86400000).toISOString(),
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          };
+
+        case "privacy.listBreachIncidents":
+          return [];
+
+        case "privacy.logBreachIncident":
+          return {
+            id: `inc-${Date.now()}`,
+            incidentNumber: `INC-2026-0001`,
+            title: payload.title,
+            severity: payload.severity || "medium",
+            natureAndScope: payload.natureAndScope,
+            affectedDataCategories: payload.affectedDataCategories || [],
+            estimatedAffectedPrincipals: payload.estimatedAffectedPrincipals || 0,
+            status: "detected",
+            containmentActions: payload.containmentActions || "Quarantined affected paths.",
+            dpbiNotified: false,
+            principalsNotified: false,
+            detectedAt: new Date().toISOString(),
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          };
+
+        case "privacy.generateBreachNotification":
+          return {
+            dpbiNotice: `FORM OF INTIMATION OF PERSONAL DATA BREACH TO THE DATA PROTECTION BOARD OF INDIA\n(Section 8(6) DPDP Act 2023)\nIncident: INC-2026-0001\nStatus: Contained & Triaged locally.`,
+            principalNotice: `NOTICE OF PERSONAL DATA SECURITY INCIDENT\nDear Client,\nWe have contained and resolved a security incident. Zero external data transmission occurred.`,
+          };
+
+        case "privacy.listRetentionPolicies":
+          return [
+            {
+              id: "ret-1",
+              name: "Inbox Temporary Staging Buffer",
+              category: "inbox_staging",
+              retentionDays: 7,
+              action: "delete",
+              justification: "Temporary unclassified staging files waiting for ingestion debounce or resolution.",
+              isActive: true,
+              lastRunAt: "2026-09-26T12:00:00.000Z",
+            },
+            {
+              id: "ret-2",
+              name: "Review Queue Ambiguous Files",
+              category: "review_queue",
+              retentionDays: 30,
+              action: "flag_for_review",
+              justification: "Low confidence items requiring human operator intervention before auto-purge.",
+              isActive: true,
+              lastRunAt: "2026-09-26T12:00:00.000Z",
+            },
+            {
+              id: "ret-3",
+              name: "Audit Event Security Logs",
+              category: "audit_logs",
+              retentionDays: 365,
+              action: "archive",
+              justification: "Statutory audit logs retained for security forensic compliance.",
+              isActive: true,
+              lastRunAt: "2026-09-26T12:00:00.000Z",
+            },
+            {
+              id: "ret-4",
+              name: "Data Subject Access Exports",
+              category: "exports",
+              retentionDays: 14,
+              action: "delete",
+              justification: "Ephemeral portable JSON/CSV export packages provided to Data Principals.",
+              isActive: true,
+              lastRunAt: "2026-09-26T12:00:00.000Z",
+            },
+          ];
+
+        case "privacy.runRetentionCleanup":
+          return [
+            {
+              policyId: "ret-1",
+              policyName: "Inbox Temporary Staging Buffer",
+              category: "inbox_staging",
+              itemsProcessed: 14,
+              itemsPurged: 3,
+              bytesFreed: 48500000,
+              executedAt: new Date().toISOString(),
+              durationMs: 42,
+            },
+            {
+              policyId: "ret-2",
+              policyName: "Review Queue Ambiguous Files",
+              category: "review_queue",
+              itemsProcessed: 2,
+              itemsPurged: 0,
+              bytesFreed: 0,
+              executedAt: new Date().toISOString(),
+              durationMs: 12,
+            },
+          ];
+
         default:
           return {};
       }
     },
+
 
     openPath: async (p: string) => {
       console.log(`[Browser Mock] Open folder path in Windows Explorer: ${p}`);

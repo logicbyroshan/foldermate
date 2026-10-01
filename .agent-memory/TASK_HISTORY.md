@@ -1,5 +1,26 @@
 # FolderMate Task History
 
+## 2026-10-01 — PR #53: Autonomous Top Bar Streamlining & Dummy Toolbar Option Removal
+Task: Remove artificial Explorer dummy buttons (+ New dropdown, Drive D:, Folder Style, Find File, Foreground/Background toggle) and streamline the top bar into a clean, unified, autonomous navigation and status header.
+Reason: FolderMate operates autonomously in the background; artificial manual creation buttons and double-stacked toolbars created visual clutter and diluted the product's autonomous daemon focus.
+Files/areas affected:
+- `apps/desktop/src/renderer/components/ExplorerHeader.tsx`
+- `apps/desktop/src/renderer/App.tsx`
+- `CHANGELOG.md`
+- `.agent-memory/CURRENT_STATE.md`
+- `.agent-memory/DECISIONS.md`
+- `.agent-memory/TASK_HISTORY.md`
+What changed:
+- **Streamlined Single-Row Header**: Consolidated navigation into a single 46px bar with essential autonomous controls: Back, Forward, Up, Refresh, interactive Address bar with `Ctrl+L`, Search with `Ctrl+F`, Sort dropdown, View layout dropdown, Details pane toggle (`Ctrl+I`), and Watching Inbox daemon status pill with pause/resume and instant scan trigger.
+- **Removed Artificial Clutter**: Eliminated `+ New ▾` dropdown, `Drive D:` button, `Folder Style` button, `Find File` button, `Foreground/Background` toggle, and redundant stacked divider toolbars.
+- **Clean Props & Types**: Removed unused callbacks and props from `ExplorerHeaderProps` and `App.tsx`.
+Testing performed:
+- Vitest automated test suite: `npm test` (15 test suites, 51/51 tests passing).
+- Type check: `npm run lint` (`tsc --noEmit`, 0 errors).
+- Workspace build: `npm run build` (all 6 workspaces built cleanly in 4.59s).
+Important decisions:
+- Emphasize FolderMate's autonomous background operation rather than manual Explorer creation tools.
+
 ## 2026-10-01 — PR #52: Drive-Centric Sidebar, Dedicated Partition Setup & System Software Detection Engine
 Task: Overhaul sidebar navigation to focus strictly on the Controlled Drive and defined operational directories; implement dedicated partition setup with Windows system OS protection (excluding C:) and safe legacy migration to Old/; add system-detected installed application icons.
 Reason: Simplify user workflow to manage one dedicated drive directly; guarantee zero data loss by migrating legacy items to Old/; ensure authentic software branding and visual fidelity.

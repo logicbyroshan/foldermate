@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **PR #53 — Clean Autonomous Top Bar & Clutter-Free Navigation Header**:
+  - **Single-Row Streamlined Navigation Header (`ExplorerHeader.tsx`)**: Replaced the crowded two-tier toolbar with a sleek, unified single-row autonomous header containing purely functional controls: Navigation arrows (`Back`, `Forward`, `Up`, `Refresh`), Drive-centric interactive Address & Breadcrumb Bar (`Ctrl+L`), Instant Search (`Ctrl+F`), `Sort` dropdown, `View` layout dropdown, `Details` pane inspector toggle, and the real-time `Watching Inbox` background daemon status pill with instant scan trigger.
+  - **Eliminated Dummy Toolbar Clutter**: Stripped out non-autonomous dummy manual buttons (`+ New ▾` folder/project/client modals, standalone `Drive D:` button, `Folder Style`, `Find File`, and `Foreground/Background` mode switch) that were previously added to mimic Explorer toolbars.
+  - **Cleaned Up Unused App Props (`App.tsx`)**: Removed orphaned handler props from `ExplorerHeader` invocation, maintaining a 100% clean and typed interface with 0 lint errors and all 51 Vitest tests passing.
+
 - **PR #52 — Drive-Centric Sidebar, Dedicated Partition Setup & System Software Detection Engine**:
   - **Drive-Centric Navigation Architecture (`Sidebar.tsx`)**: Removed `Home`, `Quick Access`, and `This PC` headings; sidebar root now directly renders the **Controlled Drive** (`Data Storage (D:)`), which expands into strictly the defined operational workflow folders: `Inbox` (with real-time `WATCHING` badge), `Clients` (expandable with client subfolders), `Review Queue` (with badge counter), `Archive`, and `Old` (preserving legacy files).
   - **Drive Setup, Permission & Safe Migration Engine (`DriveProvisioner`)**: Built `DriveProvisioner` (`apps/engine/src/organization/drive-provisioner.ts`) enforcing system safety (preventing whole-drive management of `C:` drive), safely moving all pre-existing files and non-FolderMate directories on the selected drive into `D:\Old\` with zero data loss, provisioning clean standard directories (`Inbox`, `Clients`, `Review`, `Archive`, `Old`), and binding the background watcher.

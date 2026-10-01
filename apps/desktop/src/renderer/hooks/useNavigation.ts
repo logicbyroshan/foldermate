@@ -174,20 +174,20 @@ export function useNavigation(options: UseNavigationOptions = {}) {
       ];
     }
 
-    // Windows 11 Explorer Breadcrumb Path: This PC > Drive > Folder
-    const crumbs: BreadcrumbItem[] = [{ id: "this-pc", label: "This PC", type: "root" }];
+    // Drive Explorer Breadcrumb Path: Drive (D:) > Folder > Subfolder
+    const crumbs: BreadcrumbItem[] = [];
     const parts = currentPath.split("\\").filter(Boolean);
     let acc = "";
     parts.forEach((p, idx) => {
       acc = idx === 0 ? p : `${acc}\\${p}`;
       crumbs.push({
         id: acc,
-        label: p,
+        label: idx === 0 ? `Drive (${p})` : p,
         type: idx === 0 ? "root" : idx === 1 ? "client" : "folder",
       });
     });
-    return crumbs;
-  }, [currentPath, currentView]);
+    return crumbs.length > 0 ? crumbs : [{ id: driveLetter, label: `Drive (${driveLetter})`, type: "root" }];
+  }, [currentPath, currentView, driveLetter]);
 
   return {
     currentView,

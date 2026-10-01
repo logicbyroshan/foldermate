@@ -1,5 +1,38 @@
 # FolderMate Task History
 
+## 2026-10-01 — PR #52: Drive-Centric Sidebar, Dedicated Partition Setup & System Software Detection Engine
+Task: Overhaul sidebar navigation to focus strictly on the Controlled Drive and defined operational directories; implement dedicated partition setup with Windows system OS protection (excluding C:) and safe legacy migration to Old/; add system-detected installed application icons.
+Reason: Simplify user workflow to manage one dedicated drive directly; guarantee zero data loss by migrating legacy items to Old/; ensure authentic software branding and visual fidelity.
+Files/areas affected:
+- `apps/desktop/src/renderer/components/Sidebar.tsx`
+- `apps/desktop/src/renderer/components/DriveCustomizerModal.tsx`
+- `apps/desktop/src/renderer/components/ui/FileFormatIcon.tsx`
+- `apps/desktop/src/renderer/services/explorer-mapper.ts`
+- `apps/desktop/src/renderer/hooks/useNavigation.ts`
+- `apps/desktop/src/renderer/mock-bridge.ts`
+- `apps/engine/src/organization/drive-provisioner.ts`
+- `apps/engine/src/integrations/software-detector.ts`
+- `apps/engine/src/ipc/rpc-dispatcher.ts`
+- `tests/drive-provisioner.test.ts`
+- `CHANGELOG.md`
+- `.agent-memory/CURRENT_STATE.md`
+- `.agent-memory/DECISIONS.md`
+- `.agent-memory/TASK_HISTORY.md`
+What changed:
+- **Sidebar Redesign**: Removed Home, Quick Access, and This PC headers. Top-level item is now the Controlled Drive (`Data Storage (D:)`), which expands into strictly: `Inbox` (with WATCHING badge), `Clients` (expandable with client subfolders), `Review Queue` (with badge counter), `Archive`, and `Old`.
+- **Drive Setup & Safe Migration Engine**: Built `DriveProvisioner` to safely move pre-existing files and non-FolderMate directories on the chosen volume into `D:\Old\` with zero data loss, provision clean directories (`Inbox`, `Clients`, `Review`, `Archive`, `Old`), enforce non-C drive partition management, and bind the background watcher.
+- **Windows Disk Management & Partition Guide**: Built into `DriveCustomizerModal.tsx` with 1-click Windows Disk Management launcher (`diskmgmt.msc`), step-by-step partition shrink guidance, and live drive capacity visualization.
+- **System Software & File Association Intelligence**: Built `SystemSoftwareDetector` and expanded `FileFormatIcon.tsx` to detect and render official application vector icons for CorelDRAW, Photoshop, Illustrator, InDesign, Acrobat, Excel, Word, PowerPoint, AutoCAD, and generic document formats, exposed via Named Pipe IPC (`system.getInstalledSoftware`, `system.getFileAssociations`).
+- **Domain Mapping & Breadcrumbs**: Updated `explorer-mapper.ts` and `useNavigation.ts` to support drive roots, `Old/` folder exploration, and breadcrumb path rendering (`Drive (D:) > ...`).
+Testing performed:
+- Vitest automated test suite: `npm test` (15 test suites, 51/51 tests passing).
+- Type check: `tsc --noEmit` (0 errors).
+- Workspace build: `npm run build` (all 6 workspaces built cleanly).
+- End-to-end browser subagent verification on `http://localhost:5188/` verifying the new drive-only sidebar, modal interactions, drive settings, and directory navigation across Inbox, Clients, and Old.
+Important decisions:
+- Drive C: is strictly locked and cannot be selected as the primary managed volume to protect Windows operating system integrity and system files.
+- Pre-existing files and non-FolderMate directories are moved into `Old/` with timestamp collision resolution rather than overwritten or deleted.
+
 ## 2026-09-14
 Task: Bootstrap persistent project memory and agent instructions.
 Reason: The repository required a clean, durable operating model for future work without modifying application code during the initial understanding phase.

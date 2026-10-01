@@ -230,8 +230,42 @@ export async function dispatchRPCMethod(
       return await ctx.privacyEngine.runRetentionCleanup();
     }
 
+    // 11. Controlled Drive Management & Provisioning
+    case "drives.list": {
+      const { DriveProvisioner } = await import("../organization/drive-provisioner.js");
+      return DriveProvisioner.listAvailableDrives();
+    }
+
+    case "drives.assign": {
+      const { DriveProvisioner } = await import("../organization/drive-provisioner.js");
+      return await DriveProvisioner.provisionDrive({
+        driveLetter: params.letter || params.driveLetter,
+        label: params.label,
+        color: params.color,
+        emblem: params.emblem,
+        config: ctx.config,
+      });
+    }
+
+    case "drives.reindex": {
+      const results = ctx.db.search.search(params.driveLetter || "D:", 1000);
+      return { success: true, indexedCount: results.length };
+    }
+
+    // 12. Installed Software & File Association Intelligence
+    case "system.getInstalledSoftware": {
+      const { SystemSoftwareDetector } = await import("../integrations/software-detector.js");
+      return SystemSoftwareDetector.getInstalledSoftware();
+    }
+
+    case "system.getFileAssociations": {
+      const { SystemSoftwareDetector } = await import("../integrations/software-detector.js");
+      return SystemSoftwareDetector.getFileAssociations();
+    }
+
     default:
       throw new Error(`Method not found: ${method}`);
   }
 }
+
 

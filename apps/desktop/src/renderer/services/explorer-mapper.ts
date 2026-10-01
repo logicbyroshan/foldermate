@@ -102,16 +102,79 @@ export function mapToExplorerEntries(params: ExplorerMappingParams): ExplorerEnt
     return [...matchingClientFolders, ...matchingFiles];
   }
 
-  // 2. ROOT / CLIENTS DIRECTORY
-  const isRoot =
+  // 2. DRIVE ROOT DIRECTORY (e.g. D:\ or D:)
+  const isDriveRoot =
+    currentPath.toLowerCase() === driveLetter.toLowerCase() ||
+    currentPath.toLowerCase() === `${driveLetter.toLowerCase()}\\` ||
+    currentPath.toLowerCase() === "d:" ||
+    currentPath.toLowerCase() === "d:\\";
+
+  if (isDriveRoot) {
+    const rootStandardFolders: ExplorerFolderEntry[] = [
+      {
+        id: "dir-inbox",
+        name: "Inbox",
+        type: "folder",
+        color: "#f59e0b",
+        emblem: "inbox",
+        fileCount: rawFiles.filter((f) => !f.clientId || f.path?.toLowerCase().includes("inbox")).length,
+        modifiedAt: "Just now",
+        folderPath: `${driveLetter}\\Inbox`,
+      },
+      {
+        id: "dir-clients",
+        name: "Clients",
+        type: "folder",
+        color: "#3b82f6",
+        emblem: "client",
+        fileCount: rawFiles.filter((f) => Boolean(f.clientId)).length,
+        projectCount: rawClients.length,
+        modifiedAt: "Today, 12:45 PM",
+        folderPath: `${driveLetter}\\Clients`,
+      },
+      {
+        id: "dir-review",
+        name: "Review",
+        type: "folder",
+        color: "#d97706",
+        emblem: "shield",
+        fileCount: 2,
+        modifiedAt: "5 mins ago",
+        folderPath: `${driveLetter}\\Review`,
+      },
+      {
+        id: "dir-archive",
+        name: "Archive",
+        type: "folder",
+        color: "#0284c7",
+        emblem: "archive",
+        fileCount: 6,
+        modifiedAt: "Yesterday",
+        folderPath: `${driveLetter}\\Archive`,
+      },
+      {
+        id: "dir-old",
+        name: "Old",
+        type: "folder",
+        color: "#64748b",
+        emblem: "backup",
+        fileCount: 12,
+        modifiedAt: "Pre-FolderMate Migration",
+        folderPath: `${driveLetter}\\Old`,
+      },
+    ];
+
+    return rootStandardFolders;
+  }
+
+  // 3. CLIENTS DIRECTORY (e.g. D:\Clients)
+  const isClientsRoot =
     currentPath.toLowerCase() === `${driveLetter.toLowerCase()}\\clients` ||
     currentPath.toLowerCase() === "d:\\clients" ||
     currentPath === "root" ||
-    currentPath === "Clients" ||
-    currentPath === `${driveLetter}\\` ||
-    currentPath === driveLetter;
+    currentPath === "Clients";
 
-  if (isRoot) {
+  if (isClientsRoot) {
     const folderEntries: ExplorerFolderEntry[] = rawClients.map((c) =>
       mapRawClientToExplorerFolder(c, rawProjects, rawFiles, driveLetter)
     );
@@ -123,7 +186,7 @@ export function mapToExplorerEntries(params: ExplorerMappingParams): ExplorerEnt
     return [...folderEntries, ...rootFileEntries];
   }
 
-  // 3. INBOX FOLDER
+  // 4. INBOX FOLDER
   if (currentPath.toLowerCase().includes("inbox")) {
     const inboxFiles: ExplorerFileEntry[] = rawFiles
       .filter((f) => !f.clientId || f.path?.toLowerCase().includes("inbox"))
@@ -133,7 +196,7 @@ export function mapToExplorerEntries(params: ExplorerMappingParams): ExplorerEnt
     return inboxFiles;
   }
 
-  // 4. ARCHIVE FOLDER
+  // 5. ARCHIVE FOLDER
   if (currentPath.toLowerCase().includes("archive")) {
     const archiveFolders: ExplorerFolderEntry[] = rawClients.map((c) => ({
       id: `arch-${c.id}`,
@@ -151,6 +214,61 @@ export function mapToExplorerEntries(params: ExplorerMappingParams): ExplorerEnt
     const archiveFiles: ExplorerFileEntry[] = rawFiles.slice(2, 6).map(mapRawFileToExplorerFile);
 
     return [...archiveFolders, ...archiveFiles];
+  }
+
+  // 6. OLD FOLDER (Pre-existing files moved safely)
+  if (currentPath.toLowerCase().includes("old") || currentPath.toLowerCase().includes("legacy")) {
+    const oldFolders: ExplorerFolderEntry[] = [
+      {
+        id: "old-1",
+        name: "Legacy Documents & Backups",
+        type: "folder",
+        color: "#64748b",
+        emblem: "backup",
+        fileCount: 8,
+        modifiedAt: "Migrated on Drive Setup",
+        folderPath: `${driveLetter}\\Old\\Legacy Documents & Backups`,
+      },
+      {
+        id: "old-2",
+        name: "Pre-2025 Graphic Archives",
+        type: "folder",
+        color: "#64748b",
+        emblem: "archive",
+        fileCount: 14,
+        modifiedAt: "Migrated on Drive Setup",
+        folderPath: `${driveLetter}\\Old\\Pre-2025 Graphic Archives`,
+      },
+    ];
+
+    const oldFiles: ExplorerFileEntry[] = [
+      {
+        id: "old-f1",
+        name: "Old Staff Directory 2024.xlsx",
+        type: "file",
+        ext: "xlsx",
+        extColor: "#107c41",
+        extBg: "rgba(16, 124, 65, 0.1)",
+        sizeBytes: 1240000,
+        formattedSize: "1.2 MB",
+        modifiedAt: "Oct 14, 2024",
+        targetPath: `${driveLetter}\\Old\\Old Staff Directory 2024.xlsx`,
+      },
+      {
+        id: "old-f2",
+        name: "Unsorted Designs 2023.zip",
+        type: "file",
+        ext: "zip",
+        extColor: "#f59e0b",
+        extBg: "rgba(245, 158, 11, 0.1)",
+        sizeBytes: 84500000,
+        formattedSize: "84.5 MB",
+        modifiedAt: "Aug 20, 2023",
+        targetPath: `${driveLetter}\\Old\\Unsorted Designs 2023.zip`,
+      },
+    ];
+
+    return [...oldFolders, ...oldFiles];
   }
 
   // 5. CLIENT SUBFOLDER: e.g. D:\Clients\Apex Healthcare\2026\AI - Illustrator Artwork

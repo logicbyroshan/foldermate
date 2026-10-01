@@ -330,7 +330,6 @@ export const FileFormatIcon: React.FC<FileFormatIconProps> = ({
         style={{ flexShrink: 0, ...style }}
       >
         <title>{`Microsoft Word Document (.${ext})`}</title>
-        {/* Document Sheet */}
         <path
           d="M6 3C6 1.89543 6.89543 1 8 1H21L27 7V29C27 30.1046 26.1046 31 25 31H8C6.89543 31 6 30.1046 6 29V3Z"
           fill="#ffffff"
@@ -338,12 +337,10 @@ export const FileFormatIcon: React.FC<FileFormatIconProps> = ({
           strokeWidth="1.2"
         />
         <path d="M21 1V7H27L21 1Z" fill="#185abd" />
-        {/* Document Lines */}
         <line x1="15" y1="13" x2="23" y2="13" stroke="#94a3b8" strokeWidth="1.2" strokeLinecap="round" />
         <line x1="15" y1="17" x2="23" y2="17" stroke="#94a3b8" strokeWidth="1.2" strokeLinecap="round" />
         <line x1="15" y1="21" x2="21" y2="21" stroke="#94a3b8" strokeWidth="1.2" strokeLinecap="round" />
 
-        {/* Word Blue 'W' App Badge Box */}
         <rect x="3" y="10" width="14" height="16" rx="3" fill="#185abd" />
         <text
           x="10"
@@ -360,8 +357,75 @@ export const FileFormatIcon: React.FC<FileFormatIconProps> = ({
     );
   }
 
-  // 9. Raster Graphic Images (.png, .jpg, .jpeg, .webp, .svg, .gif)
-  if (["png", "jpg", "jpeg", "webp", "gif", "svg"].includes(ext)) {
+  // 9. Microsoft 365 PowerPoint (.pptx, .ppt)
+  if (["pptx", "ppt", "ppsx"].includes(ext)) {
+    return (
+      <svg
+        width={pixelSize}
+        height={pixelSize}
+        viewBox="0 0 32 32"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className={`file-format-icon icon-ppt ${className}`}
+        style={{ flexShrink: 0, ...style }}
+      >
+        <title>{`Microsoft PowerPoint Presentation (.${ext})`}</title>
+        <path
+          d="M6 3C6 1.89543 6.89543 1 8 1H21L27 7V29C27 30.1046 26.1046 31 25 31H8C6.89543 31 6 30.1046 6 29V3Z"
+          fill="#ffffff"
+          stroke="#cbd5e1"
+          strokeWidth="1.2"
+        />
+        <path d="M21 1V7H27L21 1Z" fill="#c43e1c" />
+        <rect x="3" y="10" width="14" height="16" rx="3" fill="#c43e1c" />
+        <text
+          x="10"
+          y="22.5"
+          textAnchor="middle"
+          fontSize="10"
+          fontWeight="900"
+          fill="#ffffff"
+          fontFamily="'Segoe UI', Roboto, sans-serif"
+        >
+          P
+        </text>
+      </svg>
+    );
+  }
+
+  // 10. Autodesk AutoCAD (.dwg, .dxf)
+  if (["dwg", "dxf"].includes(ext)) {
+    return (
+      <svg
+        width={pixelSize}
+        height={pixelSize}
+        viewBox="0 0 32 32"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className={`file-format-icon icon-autocad ${className}`}
+        style={{ flexShrink: 0, ...style }}
+      >
+        <title>{`Autodesk AutoCAD Drawing (.${ext})`}</title>
+        <rect x="2" y="2" width="28" height="28" rx="6" fill="#e11d48" />
+        <rect x="2.5" y="2.5" width="27" height="27" rx="5.5" stroke="#fda4af" strokeWidth="1.2" />
+        <polygon points="16,6 24,24 8,24" fill="#ffffff" fillOpacity="0.3" stroke="#ffffff" strokeWidth="1.5" />
+        <text
+          x="16"
+          y="23"
+          textAnchor="middle"
+          fontSize="11"
+          fontWeight="900"
+          fill="#ffffff"
+          fontFamily="'Segoe UI', Roboto, sans-serif"
+        >
+          A
+        </text>
+      </svg>
+    );
+  }
+
+  // 11. Raster Graphic Images (.png, .jpg, .jpeg, .webp, .svg, .gif, .bmp, .tiff)
+  if (["png", "jpg", "jpeg", "webp", "gif", "svg", "bmp", "tiff"].includes(ext)) {
     return (
       <svg
         width={pixelSize}
@@ -373,12 +437,9 @@ export const FileFormatIcon: React.FC<FileFormatIconProps> = ({
         style={{ flexShrink: 0, ...style }}
       >
         <title>{`Image file (.${ext})`}</title>
-        {/* Windows 11 Photos Frame */}
         <rect x="3" y="3" width="26" height="26" rx="5" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1.2" />
         <rect x="4.5" y="4.5" width="23" height="23" rx="4" fill="url(#photo-gradient)" />
-        {/* Sun */}
         <circle cx="10" cy="11" r="2.5" fill="#fde047" />
-        {/* Mountains */}
         <path d="M5 24L12 15L17 21L21 16L27 24H5Z" fill="#ffffff" fillOpacity="0.9" />
         <defs>
           <linearGradient id="photo-gradient" x1="4.5" y1="4.5" x2="27.5" y2="27.5" gradientUnits="userSpaceOnUse">
@@ -390,8 +451,8 @@ export const FileFormatIcon: React.FC<FileFormatIconProps> = ({
     );
   }
 
-  // 10. Compressed Archives (.zip, .rar, .7z, .tar, .gz)
-  if (["zip", "rar", "7z", "tar", "gz"].includes(ext)) {
+  // 12. Compressed Archives (.zip, .rar, .7z, .tar, .gz, .iso)
+  if (["zip", "rar", "7z", "tar", "gz", "iso"].includes(ext)) {
     return (
       <svg
         width={pixelSize}
@@ -403,19 +464,51 @@ export const FileFormatIcon: React.FC<FileFormatIconProps> = ({
         style={{ flexShrink: 0, ...style }}
       >
         <title>{`Archive (.${ext})`}</title>
-        {/* Folder Back */}
         <path d="M3 7C3 5.89543 3.89543 5 5 5H12L15 8H27C28.1046 8 29 8.89543 29 10V25C29 26.1046 28.1046 27 27 27H5C3.89543 27 3 26.1046 3 25V7Z" fill="#f59e0b" />
-        {/* Zipper Teeth */}
         <rect x="14" y="6" width="4" height="2" fill="#334155" />
         <rect x="14" y="10" width="4" height="2" fill="#334155" />
         <rect x="14" y="14" width="4" height="2" fill="#334155" />
-        {/* Zipper Puller */}
         <rect x="13" y="18" width="6" height="6" rx="1.5" fill="#cbd5e1" stroke="#475569" strokeWidth="0.8" />
       </svg>
     );
   }
 
-  // 11. Default Windows 11 Document
+  // 13. Source Code & Data (.json, .txt, .xml, .html, .css, .js, .ts)
+  if (["json", "txt", "xml", "html", "css", "js", "ts"].includes(ext)) {
+    return (
+      <svg
+        width={pixelSize}
+        height={pixelSize}
+        viewBox="0 0 32 32"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className={`file-format-icon icon-code ${className}`}
+        style={{ flexShrink: 0, ...style }}
+      >
+        <title>{`Code / Document (.${ext})`}</title>
+        <path
+          d="M5 3C5 1.89543 5.89543 1 7 1H20.5L27 7.5V29C27 30.1046 26.1046 31 25 31H7C5.89543 31 5 30.1046 5 29V3Z"
+          fill="#ffffff"
+          stroke="#cbd5e1"
+          strokeWidth="1.2"
+        />
+        <path d="M20.5 1V7.5H27L20.5 1Z" fill="#64748b" />
+        <text
+          x="16"
+          y="21"
+          textAnchor="middle"
+          fontSize="9.5"
+          fontWeight="900"
+          fill="#0284c7"
+          fontFamily="monospace, sans-serif"
+        >
+          &lt;/&gt;
+        </text>
+      </svg>
+    );
+  }
+
+  // 14. Default Windows 11 Document
   return (
     <svg
       width={pixelSize}

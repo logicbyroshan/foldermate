@@ -1,18 +1,16 @@
 import React, { useState } from "react";
 import {
-  Home,
   FolderOpen,
-  FolderTree,
   Inbox,
   Settings,
-  HardDrive,
-  Star,
   ChevronRight,
   ChevronDown,
   Archive,
   AlertCircle,
   Sliders,
   ShieldCheck,
+  History,
+  FolderTree,
 } from "lucide-react";
 import { LicenseStatus } from "@foldermate/shared";
 import { DriveVisualIcon, FolderVisualIcon } from "./ui/index.js";
@@ -47,121 +45,196 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onSelectView,
   onNavigatePath,
   pendingReviewCount,
-  engineConnected,
-  licenseStatus,
-  onOpenActivation,
   clients = [],
   controlledDrive = {
     letter: "D:",
     label: "Data Storage",
-    color: "#3b82f6",
+    color: "#f59e0b",
     emblem: "hard-drive",
     totalGb: 512,
-    freeGb: 341,
+    freeGb: 348,
   },
   onOpenDriveCustomizer,
 }) => {
-  const [isControlledDriveExpanded, setIsControlledDriveExpanded] = useState(true);
+  const [isDriveExpanded, setIsDriveExpanded] = useState(true);
   const [isClientsExpanded, setIsClientsExpanded] = useState(true);
-  const [isQuickAccessExpanded, setIsQuickAccessExpanded] = useState(true);
-  const [isThisPcExpanded, setIsThisPcExpanded] = useState(true);
 
-  const isHomeActive = currentView === "home";
-  const isInboxActive =
+  const driveLetter = controlledDrive.letter || "D:";
+  const normalizedPath = (currentPath || "").toLowerCase();
+
+  const isDriveRootActive =
     currentView === "explorer" &&
-    currentPath.toLowerCase().includes("inbox");
+    (normalizedPath === driveLetter.toLowerCase() ||
+      normalizedPath === `${driveLetter.toLowerCase()}\\` ||
+      normalizedPath === "d:" ||
+      normalizedPath === "d:\\");
+
+  const isInboxActive =
+    currentView === "explorer" && normalizedPath.includes("inbox");
+
   const isClientsRootActive =
     currentView === "explorer" &&
-    (currentPath.toLowerCase() === `${controlledDrive.letter.toLowerCase()}\\clients` ||
-      currentPath.toLowerCase() === "clients" ||
-      currentPath.toLowerCase() === `${controlledDrive.letter.toLowerCase()}\\clients\\`);
+    (normalizedPath === `${driveLetter.toLowerCase()}\\clients` ||
+      normalizedPath === `${driveLetter.toLowerCase()}\\clients\\` ||
+      normalizedPath === "clients" ||
+      normalizedPath === "d:\\clients");
+
   const isArchiveActive =
+    currentView === "explorer" && normalizedPath.includes("archive");
+
+  const isOldActive =
     currentView === "explorer" &&
-    currentPath.toLowerCase().includes("archive");
-  const isReviewActive = currentView === "review" || currentPath.toLowerCase().includes("review");
+    (normalizedPath.includes("old") || normalizedPath.includes("legacy"));
+
+  const isReviewActive =
+    currentView === "review" || normalizedPath.includes("review");
 
   return (
-    <aside className="win11-sidebar">
-      {/* Windows 11 Tree Navigation Pane */}
+    <aside className="win11-sidebar" aria-label="FolderMate Navigation">
+      {/* Direct Controlled Drive Navigation Pane */}
       <div className="win11-nav-tree-scroll">
         <div className="win11-tree-root">
-          {/* 1. HOME NODE */}
-          <div
-            className={`win11-tree-row ${isHomeActive ? "selected" : ""}`}
-            onClick={() => onSelectView("home")}
-            role="button"
-            tabIndex={0}
-            title="Home"
-          >
-            <span className="tree-indent-spacer" />
-            <Home size={16} className="win11-tree-icon" color="var(--brand-primary)" />
-            <span className="win11-tree-label">Home</span>
-          </div>
-
-          {/* 2. QUICK ACCESS SECTION */}
+          {/* CONTROLLED DRIVE ROOT HEADER (Primary Storage Node) */}
           <div className="win11-tree-group">
             <div
-              className="win11-tree-row header-row"
-              onClick={() => setIsQuickAccessExpanded((prev) => !prev)}
+              className={`win11-tree-row ${isDriveRootActive ? "selected" : ""}`}
+              onClick={() => {
+                onNavigatePath(`${driveLetter}\\Clients`);
+              }}
+              role="button"
+              tabIndex={0}
+              title={`Controlled Drive: ${controlledDrive.label} (${driveLetter})`}
+              style={{ fontWeight: 600, fontSize: 13 }}
             >
               <button
                 type="button"
                 className="win11-expand-toggle"
                 onClick={(e) => {
                   e.stopPropagation();
-                  setIsQuickAccessExpanded((prev) => !prev);
+                  setIsDriveExpanded((prev) => !prev);
                 }}
+                title={isDriveExpanded ? "Collapse Drive" : "Expand Drive"}
               >
-                {isQuickAccessExpanded ? <ChevronDown size={13} /> : <ChevronRight size={13} />}
+                {isDriveExpanded ? <ChevronDown size={13} /> : <ChevronRight size={13} />}
               </button>
-              <Star size={15} className="win11-tree-icon" color="#eab308" />
-              <span className="win11-tree-label group-label">Quick access</span>
+
+              <DriveVisualIcon
+                color={controlledDrive.color || "#f59e0b"}
+                emblem={controlledDrive.emblem || "hard-drive"}
+                size={18}
+              />
+
+              <span className="win11-tree-label truncate">
+                {controlledDrive.label} ({driveLetter})
+              </span>
+
+              {onOpenDriveCustomizer && (
+                <button
+                  type="button"
+                  className="win11-mini-tool-btn"
+                  title="Drive Manager & Partition Settings"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onOpenDriveCustomizer();
+                  }}
+                  style={{
+                    marginLeft: "auto",
+                    background: "transparent",
+                    border: "none",
+                    cursor: "pointer",
+                    padding: "2px 4px",
+                    color: "var(--text-muted)",
+                    borderRadius: 3,
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <Sliders size={12} />
+                </button>
+              )}
             </div>
 
-            {isQuickAccessExpanded && (
-              <div className="win11-tree-subgroup">
+            {/* EXPANDABLE DRIVE DEFINED FOLDERS */}
+            {isDriveExpanded && (
+              <div className="win11-tree-subgroup level-2">
+                {/* 1. INBOX FOLDER (Watcher) */}
                 <div
                   className={`win11-tree-row ${isInboxActive ? "selected" : ""}`}
-                  onClick={() => onNavigatePath(`${controlledDrive.letter}\\Inbox`)}
+                  onClick={() => onNavigatePath(`${driveLetter}\\Inbox`)}
                   role="button"
                   tabIndex={0}
-                  title={`Inbox Watcher (${controlledDrive.letter}\\Inbox)`}
+                  title={`Active Ingestion Inbox (${driveLetter}\\Inbox)`}
                 >
                   <span className="tree-indent-spacer" />
                   <Inbox size={15} className="win11-tree-icon" color="#f59e0b" />
-                  <span className="win11-tree-label">Inbox (Watcher)</span>
+                  <span className="win11-tree-label">Inbox</span>
+                  <span
+                    className="win11-badge-counter"
+                    style={{ backgroundColor: "rgba(245, 158, 11, 0.15)", color: "#b45309", fontSize: 9, padding: "1px 5px" }}
+                  >
+                    WATCHING
+                  </span>
                 </div>
 
+                {/* 2. CLIENTS DIRECTORY & SUBFOLDERS */}
                 <div
                   className={`win11-tree-row ${isClientsRootActive ? "selected" : ""}`}
-                  onClick={() => onNavigatePath(`${controlledDrive.letter}\\Clients`)}
+                  onClick={() => onNavigatePath(`${driveLetter}\\Clients`)}
                   role="button"
                   tabIndex={0}
-                  title={`Clients Storage (${controlledDrive.letter}\\Clients)`}
+                  title={`Clients Storage Directory (${driveLetter}\\Clients)`}
                 >
-                  <span className="tree-indent-spacer" />
-                  <FolderTree size={15} className="win11-tree-icon" color="#3b82f6" />
-                  <span className="win11-tree-label">Clients Library</span>
+                  <button
+                    type="button"
+                    className="win11-expand-toggle"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsClientsExpanded((prev) => !prev);
+                    }}
+                    title={isClientsExpanded ? "Collapse Clients" : "Expand Clients"}
+                  >
+                    {isClientsExpanded ? <ChevronDown size={11} /> : <ChevronRight size={11} />}
+                  </button>
+                  <FolderOpen size={15} className="win11-tree-icon" color="#3b82f6" />
+                  <span className="win11-tree-label">Clients</span>
                 </div>
 
-                <div
-                  className={`win11-tree-row ${isArchiveActive ? "selected" : ""}`}
-                  onClick={() => onNavigatePath(`${controlledDrive.letter}\\Archive`)}
-                  role="button"
-                  tabIndex={0}
-                  title={`Archive (${controlledDrive.letter}\\Archive)`}
-                >
-                  <span className="tree-indent-spacer" />
-                  <Archive size={15} className="win11-tree-icon" color="#0284c7" />
-                  <span className="win11-tree-label">Archive</span>
-                </div>
+                {/* Client Workspaces List inside Clients */}
+                {isClientsExpanded && (
+                  <div className="win11-tree-subgroup level-3">
+                    {clients.map((c) => {
+                      const isClientActive =
+                        currentView === "explorer" &&
+                        normalizedPath.includes(c.name.toLowerCase());
+                      return (
+                        <div
+                          key={c.id}
+                          className={`win11-tree-row ${isClientActive ? "selected" : ""}`}
+                          onClick={() => onNavigatePath(`${driveLetter}\\Clients\\${c.name}`)}
+                          role="button"
+                          tabIndex={0}
+                          title={`Open ${c.name} (${driveLetter}\\Clients\\${c.name})`}
+                        >
+                          <span className="tree-indent-spacer" />
+                          <FolderVisualIcon
+                            color={c.color || "#f59e0b"}
+                            emblem={c.emblem}
+                            size={14}
+                          />
+                          <span className="win11-tree-label truncate">{c.name}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
 
+                {/* 3. REVIEW QUEUE FOLDER (Ambiguous / Quarantine) */}
                 <div
                   className={`win11-tree-row ${isReviewActive ? "selected" : ""}`}
                   onClick={() => onSelectView("review")}
                   role="button"
                   tabIndex={0}
-                  title="Review Queue (Ambiguous Files)"
+                  title={`Review Queue (${driveLetter}\\Review)`}
                 >
                   <span className="tree-indent-spacer" />
                   <AlertCircle size={15} className="win11-tree-icon" color="#d97706" />
@@ -170,181 +243,39 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     <span className="win11-badge-counter">{pendingReviewCount}</span>
                   )}
                 </div>
-              </div>
-            )}
-          </div>
 
-          {/* 3. THIS PC SECTION */}
-          <div className="win11-tree-group">
-            <div
-              className="win11-tree-row header-row"
-              onClick={() => setIsThisPcExpanded((prev) => !prev)}
-            >
-              <button
-                type="button"
-                className="win11-expand-toggle"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setIsThisPcExpanded((prev) => !prev);
-                }}
-              >
-                {isThisPcExpanded ? <ChevronDown size={13} /> : <ChevronRight size={13} />}
-              </button>
-              <HardDrive size={15} className="win11-tree-icon" color="var(--text-secondary)" />
-              <span className="win11-tree-label group-label">This PC</span>
-            </div>
-
-            {isThisPcExpanded && (
-              <div className="win11-tree-subgroup">
-                {/* Selected Controlled Drive ONLY */}
+                {/* 4. ARCHIVE FOLDER (Cold / Version Storage) */}
                 <div
-                  className={`win11-tree-row ${
-                    currentView === "explorer" && currentPath.toLowerCase().startsWith(controlledDrive.letter.toLowerCase()) && !isClientsRootActive
-                      ? "selected-parent"
-                      : ""
-                  }`}
-                  onClick={() => {
-                    setIsControlledDriveExpanded((prev) => !prev);
-                    onNavigatePath(`${controlledDrive.letter}\\Clients`);
-                  }}
-                  title={`Controlled Drive: ${controlledDrive.label} (${controlledDrive.letter})`}
+                  className={`win11-tree-row ${isArchiveActive ? "selected" : ""}`}
+                  onClick={() => onNavigatePath(`${driveLetter}\\Archive`)}
+                  role="button"
+                  tabIndex={0}
+                  title={`Archive & Version History (${driveLetter}\\Archive)`}
                 >
-                  <button
-                    type="button"
-                    className="win11-expand-toggle"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setIsControlledDriveExpanded((prev) => !prev);
-                    }}
-                  >
-                    {isControlledDriveExpanded ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
-                  </button>
-                  <DriveVisualIcon
-                    color={controlledDrive.color || "#3b82f6"}
-                    emblem={controlledDrive.emblem || "hard-drive"}
-                    size={16}
-                  />
-                  <span className="win11-tree-label truncate">
-                    {controlledDrive.label} ({controlledDrive.letter})
-                  </span>
-                  {onOpenDriveCustomizer && (
-                    <button
-                      type="button"
-                      className="win11-mini-tool-btn"
-                      title="Drive Manager & Partition Settings"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onOpenDriveCustomizer();
-                      }}
-                      style={{
-                        marginLeft: "auto",
-                        background: "transparent",
-                        border: "none",
-                        cursor: "pointer",
-                        padding: "2px 4px",
-                        color: "var(--text-muted)",
-                        borderRadius: 3,
-                      }}
-                    >
-                      <Sliders size={12} />
-                    </button>
-                  )}
+                  <span className="tree-indent-spacer" />
+                  <Archive size={15} className="win11-tree-icon" color="#0284c7" />
+                  <span className="win11-tree-label">Archive</span>
                 </div>
 
-                {/* Inside Folders of Selected Drive */}
-                {isControlledDriveExpanded && (
-                  <div className="win11-tree-subgroup level-2">
-                    {/* 1. Inbox Folder */}
-                    <div
-                      className={`win11-tree-row ${isInboxActive ? "selected" : ""}`}
-                      onClick={() => onNavigatePath(`${controlledDrive.letter}\\Inbox`)}
-                      title={`Inbox Watcher (${controlledDrive.letter}\\Inbox)`}
-                    >
-                      <span className="tree-indent-spacer" />
-                      <Inbox size={14} className="win11-tree-icon" color="#f59e0b" />
-                      <span className="win11-tree-label">Inbox</span>
-                    </div>
-
-                    {/* 2. Clients Directory & Subfolders */}
-                    <div
-                      className={`win11-tree-row ${isClientsRootActive ? "selected" : ""}`}
-                      onClick={() => onNavigatePath(`${controlledDrive.letter}\\Clients`)}
-                      title={`Clients Storage (${controlledDrive.letter}\\Clients)`}
-                    >
-                      <button
-                        type="button"
-                        className="win11-expand-toggle"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setIsClientsExpanded((prev) => !prev);
-                        }}
-                      >
-                        {isClientsExpanded ? <ChevronDown size={11} /> : <ChevronRight size={11} />}
-                      </button>
-                      <FolderOpen size={14} className="win11-tree-icon" color="#3b82f6" />
-                      <span className="win11-tree-label">Clients</span>
-                    </div>
-
-                    {/* Expandable Client Subfolders inside Clients */}
-                    {isClientsExpanded && (
-                      <div className="win11-tree-subgroup level-3">
-                        {clients.map((c) => {
-                          const isClientActive =
-                            currentView === "explorer" &&
-                            currentPath.toLowerCase().includes(c.name.toLowerCase());
-                          return (
-                            <div
-                              key={c.id}
-                              className={`win11-tree-row ${isClientActive ? "selected" : ""}`}
-                              onClick={() => onNavigatePath(`${controlledDrive.letter}\\Clients\\${c.name}`)}
-                              title={`Open ${c.name} (${controlledDrive.letter}\\Clients\\${c.name})`}
-                            >
-                              <span className="tree-indent-spacer" />
-                              <FolderVisualIcon
-                                color={c.color || "#f59e0b"}
-                                emblem={c.emblem}
-                                size={14}
-                              />
-                              <span className="win11-tree-label truncate">{c.name}</span>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )}
-
-                    {/* 3. Archive Folder */}
-                    <div
-                      className={`win11-tree-row ${isArchiveActive ? "selected" : ""}`}
-                      onClick={() => onNavigatePath(`${controlledDrive.letter}\\Archive`)}
-                      title={`Archive (${controlledDrive.letter}\\Archive)`}
-                    >
-                      <span className="tree-indent-spacer" />
-                      <Archive size={14} className="win11-tree-icon" color="#0284c7" />
-                      <span className="win11-tree-label">Archive</span>
-                    </div>
-
-                    {/* 4. Review Queue Folder */}
-                    <div
-                      className={`win11-tree-row ${isReviewActive ? "selected" : ""}`}
-                      onClick={() => onSelectView("review")}
-                      title="Review Queue (Ambiguous Files)"
-                    >
-                      <span className="tree-indent-spacer" />
-                      <AlertCircle size={14} className="win11-tree-icon" color="#d97706" />
-                      <span className="win11-tree-label">Review Queue</span>
-                      {pendingReviewCount > 0 && (
-                        <span className="win11-badge-counter">{pendingReviewCount}</span>
-                      )}
-                    </div>
-                  </div>
-                )}
+                {/* 5. OLD FOLDER (Pre-existing contents preserved safely) */}
+                <div
+                  className={`win11-tree-row ${isOldActive ? "selected" : ""}`}
+                  onClick={() => onNavigatePath(`${driveLetter}\\Old`)}
+                  role="button"
+                  tabIndex={0}
+                  title={`Old & Migrated Files (${driveLetter}\\Old)`}
+                >
+                  <span className="tree-indent-spacer" />
+                  <History size={15} className="win11-tree-icon" color="#64748b" />
+                  <span className="win11-tree-label">Old</span>
+                </div>
               </div>
             )}
           </div>
         </div>
       </div>
 
-      {/* Windows 11 Bottom Minimal Anchor: Privacy & Settings */}
+      {/* Windows 11 Bottom Minimal Bar: Privacy & Settings */}
       <div className="win11-sidebar-bottom" style={{ display: "flex", gap: 4 }}>
         <button
           type="button"
@@ -371,4 +302,3 @@ export const Sidebar: React.FC<SidebarProps> = ({
     </aside>
   );
 };
-

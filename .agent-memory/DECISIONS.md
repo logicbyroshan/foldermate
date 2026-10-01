@@ -34,11 +34,12 @@ Context: Indian legal requirements under the DPDP Act 2023 and DPDP Rules 2025 m
 Reason: Creative studios, print shops, and enterprise organizations using FolderMate process client PII, employee badges, and student records. Compliance must be built into the native desktop architecture and database schema rather than treated as a superficial web policy disclaimer.
 Alternatives: Relying on generic web cookie banners, external cloud SaaS compliance vendors, or fake compliance checkboxes was rejected as legally invalid and contrary to FolderMate's 100% offline-first privacy paradigm.
 ## 2026-10-01
-Decision: Streamline Top Bar to a Clean Single-Row Autonomous Navigation Header and Remove Artificial Manual Explorer Clutter.
-Context: The top area previously contained two stacked toolbars with dummy manual creation dropdowns (`+ New ▾`), extra buttons (`Drive D:`, `Folder Style`, `Find File`), dual-mode switches, and redundant dividers intended to superficially mimic generic Windows Explorer toolbars.
-Reason: FolderMate is an autonomous background automation platform where ingestion, classification, versioning, and folder structures are handled automatically by the daemon. Cluttering the UI with manual creation buttons and redundant action bars diluted the core product identity and created cognitive overload.
-Alternatives: Keeping the two-tier stacked command bar or adding more manual toolbar buttons was rejected as it conflicted with autonomous operation.
-Consequences: `ExplorerHeader.tsx` is streamlined into a single 46px navigation and status bar with essential controls: Back/Forward/Up/Refresh, interactive Address bar with `Ctrl+L`, Search with `Ctrl+F`, Sort dropdown, View layout dropdown, Details pane toggle (`Ctrl+I`), and Watching Inbox daemon status with pause/scan controls.
+Decision: Restrict Sidebar Tree Expansion Strictly to Drive Root and Explore Client Folders in Main Area.
+Context: Previously, the `Clients` folder inside the sidebar was also expandable via a nested dropdown accordion, which created nested tree clutter in the left sidebar.
+Reason: The left navigation pane is meant to provide top-level volume navigation. The 5 operational folders (`Inbox`, `Clients`, `Review Queue`, `Archive`, `Old`) are direct items under the drive. Internal directory contents—such as client subfolders, project folders, and deliverables—belong in the spacious main File Explorer workspace where rich metadata, visual icons, preview inspector, and view scaling modes are available.
+Alternatives: Retaining multi-level nested tree expanding in the sidebar was rejected due to sidebar clutter and horizontal truncation.
+Consequences: In the sidebar, only the Controlled Drive expands. Clicking `Clients` or any other folder opens its full contents in the main File Explorer view.
+
 
 
 

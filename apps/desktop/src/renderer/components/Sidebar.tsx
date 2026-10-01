@@ -10,10 +10,9 @@ import {
   Sliders,
   ShieldCheck,
   History,
-  FolderTree,
 } from "lucide-react";
 import { LicenseStatus } from "@foldermate/shared";
-import { DriveVisualIcon, FolderVisualIcon } from "./ui/index.js";
+import { DriveVisualIcon } from "./ui/index.js";
 import { NavView } from "../types/explorer.js";
 
 export type { NavView };
@@ -45,7 +44,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onSelectView,
   onNavigatePath,
   pendingReviewCount,
-  clients = [],
   controlledDrive = {
     letter: "D:",
     label: "Data Storage",
@@ -57,7 +55,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onOpenDriveCustomizer,
 }) => {
   const [isDriveExpanded, setIsDriveExpanded] = useState(true);
-  const [isClientsExpanded, setIsClientsExpanded] = useState(true);
 
   const driveLetter = controlledDrive.letter || "D:";
   const normalizedPath = (currentPath || "").toLowerCase();
@@ -77,7 +74,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
     (normalizedPath === `${driveLetter.toLowerCase()}\\clients` ||
       normalizedPath === `${driveLetter.toLowerCase()}\\clients\\` ||
       normalizedPath === "clients" ||
-      normalizedPath === "d:\\clients");
+      normalizedPath === "d:\\clients" ||
+      (!isInboxActive && !normalizedPath.includes("archive") && !normalizedPath.includes("old") && !normalizedPath.includes("review") && !isDriveRootActive));
 
   const isArchiveActive =
     currentView === "explorer" && normalizedPath.includes("archive");
@@ -154,7 +152,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               )}
             </div>
 
-            {/* EXPANDABLE DRIVE DEFINED FOLDERS */}
+            {/* EXPANDABLE DRIVE DEFINED FOLDERS (Direct 5 Operational Folders Only) */}
             {isDriveExpanded && (
               <div className="win11-tree-subgroup level-2">
                 {/* 1. INBOX FOLDER (Watcher) */}
@@ -176,7 +174,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   </span>
                 </div>
 
-                {/* 2. CLIENTS DIRECTORY & SUBFOLDERS */}
+                {/* 2. CLIENTS DIRECTORY (Opens client folders in main area) */}
                 <div
                   className={`win11-tree-row ${isClientsRootActive ? "selected" : ""}`}
                   onClick={() => onNavigatePath(`${driveLetter}\\Clients`)}
@@ -184,49 +182,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   tabIndex={0}
                   title={`Clients Storage Directory (${driveLetter}\\Clients)`}
                 >
-                  <button
-                    type="button"
-                    className="win11-expand-toggle"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setIsClientsExpanded((prev) => !prev);
-                    }}
-                    title={isClientsExpanded ? "Collapse Clients" : "Expand Clients"}
-                  >
-                    {isClientsExpanded ? <ChevronDown size={11} /> : <ChevronRight size={11} />}
-                  </button>
+                  <span className="tree-indent-spacer" />
                   <FolderOpen size={15} className="win11-tree-icon" color="#3b82f6" />
                   <span className="win11-tree-label">Clients</span>
                 </div>
-
-                {/* Client Workspaces List inside Clients */}
-                {isClientsExpanded && (
-                  <div className="win11-tree-subgroup level-3">
-                    {clients.map((c) => {
-                      const isClientActive =
-                        currentView === "explorer" &&
-                        normalizedPath.includes(c.name.toLowerCase());
-                      return (
-                        <div
-                          key={c.id}
-                          className={`win11-tree-row ${isClientActive ? "selected" : ""}`}
-                          onClick={() => onNavigatePath(`${driveLetter}\\Clients\\${c.name}`)}
-                          role="button"
-                          tabIndex={0}
-                          title={`Open ${c.name} (${driveLetter}\\Clients\\${c.name})`}
-                        >
-                          <span className="tree-indent-spacer" />
-                          <FolderVisualIcon
-                            color={c.color || "#f59e0b"}
-                            emblem={c.emblem}
-                            size={14}
-                          />
-                          <span className="win11-tree-label truncate">{c.name}</span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
 
                 {/* 3. REVIEW QUEUE FOLDER (Ambiguous / Quarantine) */}
                 <div

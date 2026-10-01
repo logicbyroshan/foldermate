@@ -870,8 +870,13 @@ export function setupBrowserMockBridge() {
           return drives;
 
         case "drives.assign": {
+          const targetLetter = (payload.letter || payload.driveLetter || "D:").toUpperCase();
+          if (targetLetter.startsWith("C")) {
+            throw new Error("Drive C: is your Windows System Volume. For safety and isolation, FolderMate cannot manage C: as a whole drive. Please select or create a dedicated partition (e.g. D:, E:, F:).");
+          }
+
           drives = drives.map((d) => {
-            const isMatch = d.letter.toUpperCase() === payload.letter.toUpperCase();
+            const isMatch = d.letter.toUpperCase() === targetLetter;
             return {
               ...d,
               isControlled: isMatch,
@@ -880,20 +885,70 @@ export function setupBrowserMockBridge() {
                     label: payload.label || d.label,
                     color: payload.color || d.color,
                     emblem: payload.emblem || d.emblem,
-                    rootFolder: `${payload.letter}\\${payload.label || "Data Storage"}`,
+                    rootFolder: `${targetLetter}\\${payload.label || "Data Storage"}`,
                   }
                 : {}),
             };
           });
-          return { success: true, drives };
+
+          // Simulate safe migration of existing non-FolderMate items to Old/
+          const oldFilesCount = 12;
+          return {
+            success: true,
+            driveLetter: targetLetter,
+            migratedOldItemsCount: oldFilesCount,
+            createdFolders: [
+              `${targetLetter}\\Inbox`,
+              `${targetLetter}\\Clients`,
+              `${targetLetter}\\Review`,
+              `${targetLetter}\\Archive`,
+              `${targetLetter}\\Old`,
+            ],
+            inboxPath: `${targetLetter}\\Inbox`,
+            organizationRoot: `${targetLetter}\\Clients`,
+            archiveRoot: `${targetLetter}\\Archive`,
+            oldPath: `${targetLetter}\\Old`,
+            drives,
+          };
         }
 
         case "drives.reindex": {
           return {
             success: true,
             indexedCount: files.length + 38,
-            message: `Scanned and indexed entire drive ${payload.letter}.`,
+            message: `Scanned and indexed entire drive ${payload.letter || "D:"}.`,
           };
+        }
+
+        case "system.getInstalledSoftware": {
+          return [
+            { id: "coreldraw", name: "CorelDRAW Graphics Suite", vendor: "Corel / Alludo", version: "2024 / 2023", supportedExtensions: ["cdr", "cmx", "cdt"], iconType: "cdr", isDetected: true },
+            { id: "photoshop", name: "Adobe Photoshop", vendor: "Adobe Inc.", version: "2024 / CC", supportedExtensions: ["psd", "psb"], iconType: "psd", isDetected: true },
+            { id: "illustrator", name: "Adobe Illustrator", vendor: "Adobe Inc.", version: "2024 / CC", supportedExtensions: ["ai", "ait", "eps"], iconType: "ai", isDetected: true },
+            { id: "indesign", name: "Adobe InDesign", vendor: "Adobe Inc.", version: "2024 / CC", supportedExtensions: ["indd", "idml"], iconType: "indd", isDetected: true },
+            { id: "acrobat", name: "Adobe Acrobat Reader / Pro DC", vendor: "Adobe Inc.", version: "DC / 2024", supportedExtensions: ["pdf"], iconType: "pdf", isDetected: true },
+            { id: "excel", name: "Microsoft Excel", vendor: "Microsoft Corporation", version: "Microsoft 365 / 2021", supportedExtensions: ["xlsx", "xls", "csv"], iconType: "excel", isDetected: true },
+            { id: "word", name: "Microsoft Word", vendor: "Microsoft Corporation", version: "Microsoft 365 / 2021", supportedExtensions: ["docx", "doc"], iconType: "word", isDetected: true },
+            { id: "powerpoint", name: "Microsoft PowerPoint", vendor: "Microsoft Corporation", version: "Microsoft 365 / 2021", supportedExtensions: ["pptx", "ppt"], iconType: "powerpoint", isDetected: true },
+            { id: "autocad", name: "Autodesk AutoCAD", vendor: "Autodesk Inc.", version: "2024", supportedExtensions: ["dwg", "dxf"], iconType: "autocad", isDetected: true },
+          ];
+        }
+
+        case "system.getFileAssociations": {
+          return [
+            { extension: "cdr", appName: "CorelDRAW Vector Drawing", iconName: "icon-cdr", isRegistered: true },
+            { extension: "psd", appName: "Adobe Photoshop Document", iconName: "icon-psd", isRegistered: true },
+            { extension: "ai", appName: "Adobe Illustrator Artwork", iconName: "icon-ai", isRegistered: true },
+            { extension: "eps", appName: "Encapsulated PostScript Vector", iconName: "icon-eps", isRegistered: true },
+            { extension: "indd", appName: "Adobe InDesign Document", iconName: "icon-indd", isRegistered: true },
+            { extension: "pdf", appName: "Adobe Acrobat PDF Document", iconName: "icon-pdf", isRegistered: true },
+            { extension: "xlsx", appName: "Microsoft Excel Worksheet", iconName: "icon-excel", isRegistered: true },
+            { extension: "docx", appName: "Microsoft Word Document", iconName: "icon-word", isRegistered: true },
+            { extension: "dwg", appName: "AutoCAD Drawing Database", iconName: "icon-autocad", isRegistered: true },
+            { extension: "png", appName: "Portable Network Graphics Image", iconName: "icon-img", isRegistered: true },
+            { extension: "jpg", appName: "JPEG High-Res Image", iconName: "icon-img", isRegistered: true },
+            { extension: "zip", appName: "Compressed Archive", iconName: "icon-zip", isRegistered: true },
+          ];
         }
 
         case "folders.customize": {

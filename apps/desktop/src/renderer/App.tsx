@@ -581,25 +581,8 @@ export const AppContent: React.FC = () => {
             licenseStatus={licenseStatus}
             onOpenActivation={() => setIsActivationModalOpen(true)}
             onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
-            onNewFolder={() => {
-              setNewFolderName("");
-              setShowNewFolderModal(true);
-            }}
-            onNewClient={() => {
-              setNewFolderName("");
-              setShowNewFolderModal(true);
-            }}
-            onNewProject={() => {
-              setNewFolderName("");
-              setShowNewFolderModal(true);
-            }}
             onScanNow={handleScanNow}
-            onOpenDriveManager={() => setIsDriveCustomizerOpen(true)}
-            onOpenFolderCustomizer={() => handleOpenFolderCustomizer()}
-            onOpenDriveSearch={() => setIsDriveSearchOpen(true)}
             controlledDriveLetter={controlledDrive.letter}
-            appMode={appMode}
-            onToggleAppMode={() => setAppMode((prev) => (prev === "foreground" ? "background" : "foreground"))}
             sortField={sortField}
             onSortBy={setSortField}
           />

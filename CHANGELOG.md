@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **PR #54 — Drive-Level Direct Folder Navigation & Client Main-Area Exploration**:
+  - **Flat Drive-Level Operational Folders in Sidebar (`Sidebar.tsx`)**: Refactored the navigation sidebar so only the Controlled Drive (`Data Storage (D:)`) is an expandable tree node. Removed nested accordion/chevron dropdowns from `Clients` and other internal folders.
+  - **Client Workspaces & Deliverables in Main Area**: Clicking `Clients` in the sidebar navigates to `D:\Clients` in the main File Explorer canvas, rendering all client workspaces (e.g. `Apex Healthcare`, `BrightMedia Studio`, `Horizon Global Tech`, `Zenith Retail`) directly in the main area with rich cards, client codes, and file counts. Clicking any client opens their subfolders and deliverables directly in the main area.
+  - **Verified Clean Build & Tests**: 0 lint errors, 100% clean build, and all 51 Vitest test suites passing.
+
 - **PR #53 — Clean Autonomous Top Bar & Clutter-Free Navigation Header**:
   - **Single-Row Streamlined Navigation Header (`ExplorerHeader.tsx`)**: Replaced the crowded two-tier toolbar with a sleek, unified single-row autonomous header containing purely functional controls: Navigation arrows (`Back`, `Forward`, `Up`, `Refresh`), Drive-centric interactive Address & Breadcrumb Bar (`Ctrl+L`), Instant Search (`Ctrl+F`), `Sort` dropdown, `View` layout dropdown, `Details` pane inspector toggle, and the real-time `Watching Inbox` background daemon status pill with instant scan trigger.
   - **Eliminated Dummy Toolbar Clutter**: Stripped out non-autonomous dummy manual buttons (`+ New ▾` folder/project/client modals, standalone `Drive D:` button, `Folder Style`, `Find File`, and `Foreground/Background` mode switch) that were previously added to mimic Explorer toolbars.

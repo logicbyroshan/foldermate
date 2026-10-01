@@ -1,5 +1,24 @@
 # FolderMate Task History
 
+## 2026-10-01 — PR #54: Drive-Level Direct Folder Navigation & Client Main-Area Exploration
+Task: Restrict sidebar tree expansion strictly to the Controlled Drive root node, removing nested sub-accordions from Clients and other internal folders, and displaying all client workspaces and deliverables in the main File Explorer area.
+Reason: User requested that inside the drive only the direct operational folders should be visible as a dropdown in the sidebar, rather than having nested dropdowns inside those folders. Internal folders should be opened and explored in the main area.
+Files/areas affected:
+- `apps/desktop/src/renderer/components/Sidebar.tsx`
+- `CHANGELOG.md`
+- `.agent-memory/CURRENT_STATE.md`
+- `.agent-memory/DECISIONS.md`
+- `.agent-memory/TASK_HISTORY.md`
+What changed:
+- **Flat Direct Folders in Sidebar**: Removed `isClientsExpanded` toggle and nested client subfolder rendering from `Sidebar.tsx`. The 5 operational folders (`Inbox`, `Clients`, `Review Queue`, `Archive`, `Old`) are flat direct children under `Data Storage (D:)`.
+- **Main Area Client Exploration**: Clicking `Clients` in the sidebar navigates to `D:\Clients` in the main File Explorer view where client workspaces are displayed as rich cards/tables with project and file counts, and clicking any client opens their deliverables in the main area.
+Testing performed:
+- Vitest automated test suite: `npm test` (15 test suites, 51/51 tests passing).
+- Type check: `npm run lint` (`tsc --noEmit`, 0 errors).
+- Workspace build: `npm run build` (all 6 workspaces built cleanly).
+Important decisions:
+- The sidebar provides top-level volume navigation; deep folder hierarchy and deliverables are explored in the main File Explorer view.
+
 ## 2026-10-01 — PR #53: Autonomous Top Bar Streamlining & Dummy Toolbar Option Removal
 Task: Remove artificial Explorer dummy buttons (+ New dropdown, Drive D:, Folder Style, Find File, Foreground/Background toggle) and streamline the top bar into a clean, unified, autonomous navigation and status header.
 Reason: FolderMate operates autonomously in the background; artificial manual creation buttons and double-stacked toolbars created visual clutter and diluted the product's autonomous daemon focus.
